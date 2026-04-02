@@ -76,6 +76,10 @@ Our current calendar is a patchwork of Roman emperors, papal decrees, and coloni
 | @500   | 12:00          | Noon |
 | @750   | 18:00          | Evening |
 
+#### 🕜 Analog Visualization
+The GHS includes a standard analog visualization logic for @Beats based on a 10-segment dial (0–9), where each segment represents 100 beats. See the [spec/time-beats.md](spec/time-beats.md) for the mechanical details.
+
+
 ---
 
 ## 📁 Repository Structure & Documentation
@@ -87,8 +91,11 @@ Explore the project to understand the math, philosophy, and code behind the stan
   * [Human Era (HE)](spec/era-he.md)
   * [Decimal Time (@Beats)](spec/time-beats.md)
   * [Timestamp Format](spec/timestamp-format.md)
+* **[`/tools`](tools/) — Official Tooling:**
+  * [CLI Converter](tools/cli/) - TypeScript-based desktop tool.
+  * [Analog Clock](tools/clock_analog/) - Web-based interactive visualization.
 * **[`/ideas`](ideas/) — Open Debates & Explorations:** Read our active discussions on [physics implications](ideas/physics-implications.md), [legacy system migrations](ideas/legacy-systems.md), and [global adoption strategies](ideas/adoption-strategy.md).
-* **[`/tools/cli`](tools/cli/) — Codebase:** The official TypeScript Converter and Command Line Interface.
+
 * **[`/data`](data/) — Machine-Readable Data:** Contains the `holidays.json` mapping cultural events to the GHS calendar.
 * **[`/docs`](docs/) — Historical Context:** [Why our legacy calendar is broken](docs/historical-context.md).
 
