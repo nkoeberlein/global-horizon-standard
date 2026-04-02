@@ -5,12 +5,12 @@ The `ghs` CLI tool provides a set of commands to interact with the Global Horizo
 ### `ghs` (or `ghs now`)
 The primary command. It outputs the current moment in its full GHS representation, including contextual information.
 * **Output Example:** `12026.01.13 @685`
-* **Context:** "Date: Tuesday, 13. March 12026 HE | Year Info: Normal Year (52 weeks)"
+* **Context:** "Date: Tuesday, 13 March 12026 HE | Year Info: Normal Year (52 weeks)"
 
 ### `ghs convert <date>`
 Converts any Gregorian date into the GHS time protocol.
 * **Input Example:** `ghs convert 1995-08-15`
-* **Output Example:** `11995.06.01 @000 (Tuesday, 01. August)`
+* **Output Example:** `11995.06.01 @000 (Tuesday, 1 August)`
 * **Features:** Supports standard ISO strings (e.g., `YYYY-MM-DD`) and Unix timestamps.
 
 ### `ghs cal [month] [year]`

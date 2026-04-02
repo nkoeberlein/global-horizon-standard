@@ -7,7 +7,7 @@
 
   <br />
 
-  <img src="https://img.shields.io/badge/Era-12026_HE-blue?style=for-the-badge" alt="Current Era" />
+  <img src="https://img.shields.io/badge/Leap-Aurora_Week-yellow?style=for-the-badge" alt="Leap Mechanism" />
   <img src="https://img.shields.io/badge/Calendar-13_×_28-orange?style=for-the-badge" alt="Calendar Structure" />
   <img src="https://img.shields.io/badge/Standard-GHS_1.0-brightgreen?style=for-the-badge" alt="GHS Version" />
 
@@ -29,8 +29,8 @@ The Global Horizon Standard is an open-source time protocol that corrects the lo
 | **Era** | Human Era (HE): +10,000 years to the Gregorian calendar. |
 | **Time** | @Beats: 1,000 decimal beats per day. Zero time zones. |
 | **Leap Mechanism** | Aurora Week: A 7-day intercalary week every 5–6 years. |
-| **Year Start** | The spring equinox (March 21 Gregorian). |
-| **Timestamp** | `12026.01.09 @875` (Big-Endian, globally unambiguous). |
+| **Year Start** | The spring equinox (21 March Gregorian). |
+| **Timestamp** | `12026.01.15 @685` (GHS Core standard). |
 
 ---
 
@@ -38,9 +38,9 @@ The Global Horizon Standard is an open-source time protocol that corrects the lo
 
 Our current calendar is a patchwork of Roman emperors, papal decrees, and colonial power. GHS fixes the core architectural flaws of legacy timekeeping:
 
-* **Illogical Months:** "September" literally means "7th month," yet it is the 9th. GHS heals this etymology — September is the 7th month again.
+* **Illogical Months:** "September" literally means "7th month", yet it is currently the 9th. GHS heals this etymology — September is month 7 again.
 * **Asymmetrical Lengths:** Memorizing 28, 29, 30, and 31 days is obsolete. In GHS, every month is exactly 4 weeks (28 days).
-* **Arbitrary Year Start:** January 1st has no astronomical significance. GHS starts the year when nature does — at the northern spring equinox.
+* **Arbitrary Year Start:** 1 January has no astronomical significance. GHS starts the year when nature does — at the northern spring equinox.
 * **Time Zone Chaos:** 24+ local time zones, daylight saving switches, and geopolitical borders dictate our clocks. GHS replaces it all with a single, borderless global pulse.
 * **Divided History:** The BC/AD split fractures human civilization around a single religious event. The Human Era (HE) unites 12,000 years of progress into one continuous timeline.
 
@@ -52,20 +52,20 @@ Our current calendar is a patchwork of Roman emperors, papal decrees, and coloni
 
 | #  | Name      | Season | Gregorian (Approx.)   | Note |
 |----|-----------|--------|-----------------------|------|
-| 01 | March     | Spring | Mar 21 – Apr 17       | Year begins |
-| 02 | April     | Spring | Apr 18 – May 15       | |
-| 03 | May       | Spring | May 16 – Jun 12       | |
-| 04 | June      | Summer | Jun 13 – Jul 10       | |
-| 05 | July      | Summer | Jul 11 – Aug 7        | |
-| 06 | August    | Summer | Aug 8 – Sep 4         | |
-| 07 | September | Autumn | Sep 5 – Oct 2         | *septem = 7* |
-| 08 | October   | Autumn | Oct 3 – Oct 30        | *octo = 8* |
-| 09 | November  | Autumn | Oct 31 – Nov 27       | *novem = 9* |
-| 10 | December  | Winter | Nov 28 – Dec 25       | *decem = 10* |
-| 11 | January   | Winter | Dec 26 – Jan 22       | |
-| 12 | February  | Winter | Jan 23 – Feb 19       | |
-| 13 | **Luna** | Winter | Feb 20 – Mar 19       | The 13th month |
-| —  | **Aurora**| —      | *(A.1–A.7)* | *Leap years only* |
+| 01 | March     | Spring | 21 Mar – 17 Apr       | Year begins |
+| 02 | April     | Spring | 18 Apr – 15 May       | |
+| 03 | May       | Spring | 16 May – 12 Jun       | |
+| 04 | June      | Summer | 13 Jun – 10 Jul       | |
+| 05 | July      | Summer | 11 Jul – 7 Aug        | |
+| 06 | August    | Summer | 8 Aug – 4 Sep         | |
+| 07 | September | Autumn | 5 Sep – 2 Oct         | *septem = 7* |
+| 08 | October   | Autumn | 3 Oct – 30 Oct        | *octo = 8* |
+| 09 | November  | Autumn | 31 Oct – 27 Nov       | *novem = 9* |
+| 10 | December  | Winter | 28 Nov – 25 Dec       | *decem = 10* |
+| 11 | January   | Winter | 26 Dec – 22 Jan       | |
+| 12 | February  | Winter | 23 Jan – 19 Feb       | |
+| 13 | **Luna** | Winter | 20 Feb – 19 Mar       | The 13th month |
+| —  | **Aurora**| —      | *(A1–A7)* | *Leap years only* |
 
 ### Decimal Time (@Beats)
 
@@ -111,7 +111,8 @@ npm link
 ```bash
 $ ghs                 # Outputs the current GHS time and context
 $ ghs beats           # Outputs strictly the current @Beats
-$ghs convert "2026-12-25"  # Converts a Gregorian date to GHS$ ghs cal 13 12026    # Displays a perfectly symmetrical terminal calendar
+$ ghs convert "2026-12-25"  # Gregorian to GHS
+$ ghs cal 13 12026    # Perfectly symmetrical calendar
 ```
 
 ---

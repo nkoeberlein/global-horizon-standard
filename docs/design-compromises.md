@@ -7,10 +7,10 @@ GHS makes deliberate compromises to ensure global adoption, predictability, and 
 ## 1. Algorithm > Astronomy
 
 ### The Choice
-We have anchored the GHS New Year strictly to **March 21st (Gregorian)** and the global time pulse to **UTC (0° Meridian)**.
+We have anchored the GHS New Year strictly to **21 March (Gregorian)** and the global time pulse to **UTC (0° Meridian)**.
 
 ### The Rationale
-A truly "natural" calendar would require the New Year to shift between March 19th and 21st based on the solar equinox.
+A truly "natural" calendar would require the New Year to shift between 19 and 21 March based on the solar equinox.
 - **Why we chose the fixed anchor**: If the New Year shifted astronomically, every software developer would need to embed complex astronomical lookup tables or depend on real-time external APIs to calculate the current date.
 - **Predictability**: For global planning, finance, and science, a deterministic algorithm is superior to a shifting astronomical event. GHS prioritizes human-readable and machine-calculable predictability.
 
