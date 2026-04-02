@@ -1,0 +1,43 @@
+{
+  "name": "ghs-cli",
+  "version": "1.0.0",
+  "description": "CLI for the Global Horizon Standard — 13-month calendar, @Beats decimal time, Human Era.",
+  "main": "dist/index.js",
+  "bin": {
+    "ghs": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^13.0.0",
+    "ghs-time": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.0",
+    "typescript": "^6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nkoeberlein/global-horizon-standard.git"
+  },
+  "homepage": "https://github.com/nkoeberlein/global-horizon-standard",
+  "bugs": {
+    "url": "https://github.com/nkoeberlein/global-horizon-standard/issues"
+  },
+  "keywords": [
+    "ghs",
+    "time",
+    "calendar",
+    "decimal-time",
+    "beats",
+    "human-era",
+    "cli"
+  ],
+  "author": "Nikolaus Köberlein",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
