@@ -1,10 +1,12 @@
 name: Update GHS Time Badge
 
-# When should this run?
 on:
   schedule:
     - cron: "*/15 * * * *" # Every 15 minutes
-  workflow_dispatch: # Allows you to start it manually with a button
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   update-badge:
@@ -32,7 +34,7 @@ jobs:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: ea238f96af6f644ffe06415ee941e7a6
           filename: ghs-time.json
-          label: GHS Now
+          label: GHS NOW
           message: ${{ steps.calc_time.outputs.time }}
           color: blueviolet
           labelColor: 555555
