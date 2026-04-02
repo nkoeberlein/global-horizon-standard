@@ -3,7 +3,7 @@
  *
  * Converts Gregorian dates to the GHS calendar system:
  * - Era: Human Era (HE) — Gregorian year + 10,000
- * - Calendar: 13 months × 28 days (New Earth style)
+ * - Calendar: 13 months × 28 days
  * - Time: @Beats (decimal time, 1 day = 1,000 beats)
  * - Leap mechanism: Aurora Week (71 weeks in 400 years)
  */
@@ -23,9 +23,6 @@ const MERIDIAN_OFFSET_HOURS = 0;
 /**
  * Checks whether a GHS year is an Aurora Year (leap year with 53 weeks).
  * Uses the 71/400 cycle for maximum astronomical stability.
- *
- * The Aurora Algorithm distributes 71 leap weeks as evenly as possible
- * across a 400-year cycle, producing intervals of 5 or 6 years.
  */
 export function isAuroraYear(yearHE: number): boolean {
   const epsilon = 156;
@@ -46,23 +43,24 @@ export function getDaysInYear(yearHE: number): number {
  */
 export function getGHSDate(inputDate: Date = new Date()) {
   const gregorianYear = inputDate.getUTCFullYear();
-  const yearHE = gregorianYear + 10000;
+
+  // Note: Using 'let' instead of 'const' so we can decrement it if needed
+  let yearHE = gregorianYear + 10000;
 
   // Reference point: spring equinox on March 21
   let startOfYear = new Date(Date.UTC(gregorianYear, 2, 21)); // Month 2 = March (0-indexed)
 
-  // If the date is before March 21, the GHS year started in the previous Gregorian year
+  // If the input date is before March 21, it belongs to the previous GHS year
   if (inputDate < startOfYear) {
     startOfYear = new Date(Date.UTC(gregorianYear - 1, 2, 21));
+    yearHE -= 1;
   }
 
-  // Calculate difference in days
+  // Calculate difference in days (absolute day count within the GHS year)
   const diffInMs = inputDate.getTime() - startOfYear.getTime();
   const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
   // GHS month and day (13 months × 28 days = 364 days)
-  // Days 0–363 belong to months 1–13
-  // Days 364–370 belong to the Aurora Week (A.1–A.7), outside any month
   const isAurora = diffInDays >= 364;
   const monthIndex = isAurora ? -1 : Math.floor(diffInDays / 28);
   const dayOfMonth = isAurora ? diffInDays - 364 + 1 : (diffInDays % 28) + 1;

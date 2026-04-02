@@ -34,3 +34,23 @@ The most realistic approach:
 4. **Hardware lifecycle**: Embedded systems convert naturally as hardware is replaced over 10–20 years.
 
 The Aurora Week provides a natural window for major system updates — a global maintenance period built into the calendar itself.
+
+## 5. The "13-Period" Advantage for Business
+
+While 13 is a prime number and cannot be divided into quarters of months, it perfectly aligns with **13-period accounting** — a system used successfully by companies like **Eastman Kodak Company** for over 60 years (1928–1989).
+
+### The Problem with Gregorian Months
+
+Today's accounting is plagued by "asymmetrical months":
+- October has 31 days, November 30, February 28.
+- Some months have 4 weekends, others 5.
+- Comparing "October this year" to "October last year" is often flawed because the number of working days and weekends differs.
+
+### The GHS Solution
+
+In GHS, every month (period) is exactly 28 days:
+- **Perfect Comparability**: Every month has exactly 4 weekends and 20 workdays.
+- **Scalable Analytics**: Payroll, rent, and revenue can be compared MoM (Month-over-Month) with zero statistical noise.
+- **Simplified Quarters**: A business quarter is defined as exactly **13 weeks** (91 days). While it ends mid-month (in the 4th month), it ensures every quarter has the exact same number of days and weeks.
+
+GHS doesn't just fix the calendar; it fixes the data quality of the global economy.
