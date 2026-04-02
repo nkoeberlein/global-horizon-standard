@@ -5,9 +5,6 @@ on:
     - cron: "*/15 * * * *" # Every 15 minutes
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   update-badge:
     runs-on: ubuntu-latest
@@ -20,12 +17,16 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Install Dependencies & Calculate Time
+      - name: Install & Build
+        run: |
+          npm install
+          npm run build:core
+          npm run build:cli
+
+      - name: Calculate GHS Time
         id: calc_time
         run: |
-          cd tools/cli
-          npm install
-          GHS_TIME=$(npx ts-node src/badge.ts)
+          GHS_TIME=$(node packages/cli/dist/badge.js)
           echo "time=$GHS_TIME" >> $GITHUB_OUTPUT
 
       - name: Update Gist
