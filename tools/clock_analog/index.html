@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog GHS Clock</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --clock-bg: #0b1120;
+            --day-hand: #f8fafc;
+            --beat-hand: #38bdf8;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--panel-bg);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin: 0 0 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* Clock SVG Styles */
+        .clock-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin-bottom: 2rem;
+        }
+
+        svg.clock {
+            width: 100%;
+            height: 100%;
+            background: var(--clock-bg);
+            border-radius: 50%;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5), 0 0 0 8px var(--panel-bg), 0 0 0 10px #334155;
+        }
+
+        .dial-mark {
+            stroke: var(--text-muted);
+            stroke-width: 2;
+        }
+
+        .dial-mark-sub {
+            stroke: #334155;
+            stroke-width: 1;
+        }
+
+        .dial-text {
+            fill: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: central;
+            font-family: monospace;
+        }
+
+        .hand {
+            stroke-linecap: round;
+            transform-origin: 100px 100px;
+        }
+
+        .hand-day {
+            stroke: var(--day-hand);
+            stroke-width: 6;
+        }
+
+        .hand-beat {
+            stroke: var(--beat-hand);
+            stroke-width: 2;
+        }
+
+        .center-dot {
+            fill: var(--accent);
+        }
+
+        /* Digital Display */
+        .digital-display {
+            font-family: monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Controls */
+        .controls {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .toggle-row span {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Slider styling */
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-header span:first-child {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #sliderValue {
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.4rem;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            padding: 0 4px;
+        }
+
+        .timeline-markers {
+            position: absolute;
+            top: -18px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2px;
+        }
+
+        .marker {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            position: relative;
+            font-family: monospace;
+        }
+
+        .marker::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 4px;
+            background: #334155;
+        }
+
+        .marker.active {
+            color: var(--text-muted);
+        }
+
+        .marker.active::after {
+            background: #475569;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #0b1120 0%, #1e3a8a 25%, #38bdf8 50%, #1e3a8a 75%, #0b1120 100%);
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #0b1120 0%, #1e3a8a 25%, #38bdf8 50%, #1e3a8a 75%, #0b1120 100%);
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            height: 22px;
+            width: 12px;
+            border-radius: 4px;
+            background: var(--text-main);
+            box-shadow: 0 0 10px var(--accent);
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            border: 1px solid var(--accent);
+        }
+
+        input[type=range]::-moz-range-thumb {
+            height: 22px;
+            width: 12px;
+            border-radius: 4px;
+            background: var(--text-main);
+            box-shadow: 0 0 10px var(--accent);
+            cursor: pointer;
+            border: 1px solid var(--accent);
+        }
+
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scaleY(1.2);
+            background: var(--accent);
+        }
+
+        input[type=range]:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        input[type=range]:disabled::-webkit-slider-thumb {
+            box-shadow: none;
+            background: #94a3b8;
+            border-color: #475569;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>GHS Analog Clock</h1>
+        <p class="subtitle">10-Base Decimal Time Interface</p>
+
+        <div class="clock-container">
+            <svg class="clock" viewBox="0 0 200 200" id="clockSvg">
+                <g id="dial"></g>
+
+                <line x1="100" y1="100" x2="100" y2="35" class="hand hand-day" id="dayHand" />
+                <line x1="100" y1="100" x2="100" y2="15" class="hand hand-beat" id="beatHand" />
+                <circle cx="100" cy="100" r="4" class="center-dot" />
+            </svg>
+        </div>
+
+        <div class="digital-display" id="digitalDisplay">@000.00</div>
+
+        <div class="controls">
+            <div class="toggle-row">
+                <span>Mode: <span id="modeLabel" style="color: var(--accent);">Live</span></span>
+                <label class="switch">
+                    <input type="checkbox" id="modeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <span>Linear GHS Timeline</span>
+                    <span id="sliderValue">@500</span>
+                </div>
+                <div class="timeline-wrapper">
+                    <div class="timeline-markers">
+                        <span class="marker active">@0</span>
+                        <span class="marker">@250</span>
+                        <span class="marker active">@500</span>
+                        <span class="marker">@750</span>
+                        <span class="marker active">@999</span>
+                    </div>
+                    <input type="range" id="beatSlider" min="0" max="999.9" step="0.1" value="500">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Draw the Base-10 Dial ---
+        const dialGroup = document.getElementById('dial');
+        const cx = 100, cy = 100, radius = 85;
+
+        // Draw 100 sub-marks (1 mark = 10 Beats)
+        for (let i = 0; i < 100; i++) {
+            const angle = (i / 100) * 360;
+            const isMain = i % 10 === 0;
+            const rad = (angle - 90) * (Math.PI / 180);
+
+            const innerR = isMain ? radius - 10 : radius - 4;
+            const x1 = cx + innerR * Math.cos(rad);
+            const y1 = cy + innerR * Math.sin(rad);
+            const x2 = cx + radius * Math.cos(rad);
+            const y2 = cy + radius * Math.sin(rad);
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x1); line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2); line.setAttribute("y2", y2);
+            line.setAttribute("class", isMain ? "dial-mark" : "dial-mark-sub");
+            dialGroup.appendChild(line);
+
+            // Add 0-9 Numbers
+            if (isMain) {
+                const textR = radius - 22;
+                const tx = cx + textR * Math.cos(rad);
+                const ty = cy + textR * Math.sin(rad);
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", tx); text.setAttribute("y", ty);
+                text.setAttribute("class", "dial-text");
+                text.textContent = i / 10;
+                // Fix orientation to make numbers upright
+                dialGroup.appendChild(text);
+            }
+        }
+
+        // --- 2. Clock Logic ---
+        const dayHand = document.getElementById('dayHand');
+        const beatHand = document.getElementById('beatHand');
+        const digitalDisplay = document.getElementById('digitalDisplay');
+
+        const modeToggle = document.getElementById('modeToggle');
+        const modeLabel = document.getElementById('modeLabel');
+        const beatSlider = document.getElementById('beatSlider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        let isManual = false;
+        let manualBeats = 500;
+
+        // Calculate current UTC Beats
+        function getLiveBeats() {
+            const now = new Date();
+            const totalSeconds = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + now.getUTCSeconds() + (now.getUTCMilliseconds() / 1000);
+            return totalSeconds / 86.4;
+        }
+
+        function updateClock(beats) {
+            // Format Digital Display
+            const beatsInt = Math.floor(beats).toString().padStart(3, '0');
+            const beatsDec = Math.floor((beats % 1) * 100).toString().padStart(2, '0');
+            digitalDisplay.textContent = `@${beatsInt}.${beatsDec}`;
+
+            // Calculate Angles
+            // Day Hand: 1 full rotation per day (1000 beats)
+            const dayAngle = (beats / 1000) * 360;
+
+            // Beat Hand: 1 full rotation per 100 beats
+            const beatAngle = ((beats % 100) / 100) * 360;
+
+            // Apply SVG Transforms
+            dayHand.style.transform = `rotate(${dayAngle}deg)`;
+            beatHand.style.transform = `rotate(${beatAngle}deg)`;
+        }
+
+        // Animation Loop
+        function tick() {
+            if (!isManual) {
+                const liveBeats = getLiveBeats();
+                updateClock(liveBeats);
+                // Update slider and label to track live time
+                beatSlider.value = liveBeats;
+                sliderValue.textContent = `@${Math.floor(liveBeats).toString().padStart(3, '0')}`;
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // --- 3. Event Listeners ---
+        modeToggle.addEventListener('change', (e) => {
+            isManual = e.target.checked;
+            beatSlider.disabled = !isManual;
+
+            if (isManual) {
+                modeLabel.textContent = "Manual";
+                modeLabel.style.color = "var(--text-muted)";
+                // Sync slider to current time when switching
+                beatSlider.value = getLiveBeats();
+                updateClock(parseFloat(beatSlider.value));
+            } else {
+                modeLabel.textContent = "Live (UTC)";
+                modeLabel.style.color = "var(--accent)";
+            }
+        });
+
+        beatSlider.addEventListener('input', (e) => {
+            const beats = parseFloat(e.target.value);
+            sliderValue.textContent = `@${Math.floor(beats).toString().padStart(3, '0')}`;
+            updateClock(beats);
+        });
+
+        // Start the clock
+        isManual = modeToggle.checked;
+        beatSlider.disabled = !isManual;
+        requestAnimationFrame(tick);
+    </script>
+</body>
+
+</html>

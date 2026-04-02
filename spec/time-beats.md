@@ -69,3 +69,25 @@ This means the beat has a fixed, invariant duration, independent of Earth's rota
 **Consequence**: Like the current UTC system, occasional **leap-beat adjustments** may be needed when cumulative differences between atomic time and Earth's rotation become significant. This is the same challenge that produces today's "leap seconds."
 
 **Rejected alternative**: A "rubber-band" beat that stretches or shrinks with the actual solar day (1 beat = exactly 1/1000 of that day's solar noon-to-noon duration). While aesthetically appealing, this would make the beat an unstable unit — unacceptable for science, navigation, and computing.
+
+## 7. Visualization: The Analog GHS Clock
+
+While @Beats are natively digital, a standard analog representation has been developed to provide a "sense of time" similar to traditional clocks.
+
+### The 10-Base Dial
+The GHS analog face is divided into **10 main segments**, numbered **0 to 9**. 
+- Each main segment represents **100 @Beats** (1/10th of a day).
+- Between each main segment are **9 sub-marks**, dividing every 100-beat section into 10-beat increments.
+
+### The Hand System
+A standard GHS analog clock uses two primary hands:
+
+1.  **Day Hand (Large / Outer)**: 
+    - Completes **one full rotation per day** (1,000 beats).
+    - Points to the current century of beats (e.g., at @350, it points midway between 3 and 4).
+2.  **Beat Hand (Small / Inner / Fast)**:
+    - Completes **one full rotation every 100 beats**.
+    - Provides high-resolution tracking of the current beat (e.g., at @350, it points exactly at the top/0 mark, as the current 100-beat cycle is at 50%).
+
+This dual-hand system allows for both a macroscopic view of the day's progress and a microscopic view of the passing beats, maintaining the decimal logic in a physical form.
+
