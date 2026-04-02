@@ -1,0 +1,30 @@
+{
+  "name": "ghs-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The official GHS web dashboard and landing page.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ghs-time": "*",
+    "ghs-ui": "*",
+    "lucide-react": "^1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@vitejs/plugin-react": "^6.0.1",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.0",
+    "vite": "^8.0.2"
+  }
+}
