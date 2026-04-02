@@ -15,7 +15,7 @@ The UN is the only institution capable of creating worldwide acceptance.
 While the UN handles politics, ISO handles technology.
 
 - **ISO 8601** is the current global standard for date/time formats (YYYY-MM-DD).
-- A new standard (e.g., ISO 8601:2028-GHS) would need to define how computers interpret "the 23rd of Luna" or "an Aurora Week."
+- A new standard (e.g., ISO 8601:2028-GHS) would need to define how computers interpret "23 Luna" or "an Aurora Week."
 - Every database, flight plan, banking system, and operating system worldwide would need updates.
 
 ## 3. Scientific Level: BIPM & IAU

@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The Global Horizon Standard divides the year into **13 months of exactly 28 days** (364 days). Every month begins on a Monday and ends on a Sunday. The year starts at the **spring equinox** (approximately March 21 in the Gregorian calendar).
+The Global Horizon Standard divides the year into **13 months of exactly 28 days** (364 days). Every month begins on a Monday and ends on a Sunday. The year starts at the **spring equinox** (approximately 21 March in the Gregorian calendar).
 
 To maintain alignment with the solar year (~365.2422 days), GHS uses the **Aurora Week** — a full 7-day leap week inserted every 5 to 6 years — instead of individual leap days.
 
@@ -58,10 +58,10 @@ The year's astronomical anchor points fall at predictable calendar positions:
 
 | GHS Date   | Event             | Astronomical Meaning   |
 |------------|-------------------|------------------------|
-| 01. March  | New Year          | Spring Equinox         |
-| 14. June   | Summer Festival   | Summer Solstice        |
-| 14. September | Autumn Festival | Autumn Equinox (sep = 7) |
-| 14. December  | Winter Festival | Winter Solstice (dec = 10) |
+| 1 March    | New Year          | Spring Equinox         |
+| 14 June    | Summer Festival   | Summer Solstice        |
+| 14 September | Autumn Festival | Autumn Equinox (sep = 7) |
+| 14 December  | Winter Festival | Winter Solstice (dec = 10) |
 
 Due to the ~1.24-day annual drift between the 364-day calendar and the solar year, these astronomical events shift by a few days over a 5–6 year cycle. The Aurora Week resets this drift periodically.
 
@@ -74,9 +74,9 @@ Due to the ~1.24-day annual drift between the 364-day calendar and the solar yea
 
 | Quarter | Months         | Weeks  |
 |---------|----------------|--------|
-| Q1      | March – May + 1 week of June | Weeks 1–13  |
-| Q2      | Rest of June – August + 1 week of September | Weeks 14–26 |
-| Q3      | Rest of September – November + 1 week of December | Weeks 27–39 |
+| Q1      | March – May + Week 1 of June | Weeks 1–13  |
+| Q2      | Rest of June – August + Week 1 of September | Weeks 14–26 |
+| Q3      | Rest of September – November + Week 1 of December | Weeks 27–39 |
 | Q4      | Rest of December – Luna | Weeks 40–52 |
 
 The Aurora Week (A.1–A.7), when it occurs, sits outside the quarterly and monthly structure entirely — a neutral bonus interval belonging to no month and no quarter.

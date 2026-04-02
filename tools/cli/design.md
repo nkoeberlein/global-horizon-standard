@@ -10,7 +10,7 @@ The goal is to provide a tool that can be easily installed via `npm install -g g
 ### `ghs now`
 The primary command. It outputs the current moment in its full GHS representation.
 - **Output Example:** `12026.01.13 @685.42`
-- **Context:** "Today is Tuesday, March 13th. Current year type: Common Year."
+- **Context:** "Today is Tuesday, 13 March. Current year type: Common Year."
 
 ### `ghs convert [date]`
 Converts any Gregorian date into GHS.
