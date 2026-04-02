@@ -17,7 +17,7 @@
 
 > **GHS is a planetary calendar and decimal time system.** It resolves the chaos of time zones, irregular months, and archaic leap rules by introducing a perfectly symmetrical 13-month calendar and a universal decimal time protocol (@Beats).
 
-The Global Horizon Standard is an open-source time protocol that corrects the logical errors of our current timekeeping. By combining a 13-month fixed calendar, the 12,000-year Human Era (HE), and a decimal world time (@Beats), GHS creates a universal standard for a digital and global society — synchronized with nature and freed from colonial boundaries.
+The Global Horizon Standard is an open-source time protocol that corrects the logical errors of our current timekeeping. By combining a 13-month fixed calendar, the 12,000-year Human Era (HE), and a decimal world time (@Beats), GHS creates a universal standard for a digital and global society — providing algorithmic stability and borderless synchronization.
 
 ---
 
@@ -41,7 +41,7 @@ Our current calendar is a patchwork of Roman emperors, papal decrees, and coloni
 * **Illogical Months:** "September" literally means "7th month," yet it is the 9th. GHS heals this etymology — September is the 7th month again.
 * **Asymmetrical Lengths:** Memorizing 28, 29, 30, and 31 days is obsolete. In GHS, every month is exactly 4 weeks (28 days).
 * **Arbitrary Year Start:** January 1st has no astronomical significance. GHS starts the year when nature does — at the northern spring equinox.
-* **Time Zone Chaos:** 24+ time zones, daylight saving switches, and a prime meridian chosen by colonial fiat. GHS replaces it all with a single global pulse.
+* **Time Zone Chaos:** 24+ local time zones, daylight saving switches, and geopolitical borders dictate our clocks. GHS replaces it all with a single, borderless global pulse.
 * **Divided History:** The BC/AD split fractures human civilization around a single religious event. The Human Era (HE) unites 12,000 years of progress into one continuous timeline.
 
 ---
