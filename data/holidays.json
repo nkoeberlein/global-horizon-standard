@@ -1,0 +1,212 @@
+{
+  "version": "1.0",
+  "calendar": "GHS",
+  "description": "Comprehensive reference of global, cultural, and religious holidays mapped to the Global Horizon Standard.",
+  "holidays": [
+    {
+      "name": "New Year (Equinox)",
+      "category": "Global",
+      "type": "fixed",
+      "date": "01.01",
+      "gregorian_equivalent": "March 21",
+      "description": "The first day of the year, aligned with the spring equinox. A celebration of renewal and the astronomical start of the cycle."
+    },
+    {
+      "name": "Earth Day",
+      "category": "Global",
+      "type": "fixed",
+      "date": "02.05",
+      "gregorian_equivalent": "April 22",
+      "description": "Global celebration focusing on environmental protection and planetary awareness."
+    },
+    {
+      "name": "Labor Day",
+      "category": "Global",
+      "type": "fixed",
+      "date": "02.14",
+      "gregorian_equivalent": "May 1",
+      "description": "International day honoring the labor movement and workers worldwide."
+    },
+    {
+      "name": "Summer Solstice Gala",
+      "category": "Global",
+      "type": "fixed",
+      "date": "04.14",
+      "gregorian_equivalent": "June 21",
+      "description": "Marks the longest day of the year (northern hemisphere). A festival of light and energy."
+    },
+    {
+      "name": "Autumn Equinox Festival",
+      "category": "Global",
+      "type": "fixed",
+      "date": "07.14",
+      "gregorian_equivalent": "September 22",
+      "description": "The balance point of the year. Day and night are equal. A celebration of harvest and equilibrium."
+    },
+    {
+      "name": "United Nations Day",
+      "category": "Global",
+      "type": "fixed",
+      "date": "08.22",
+      "gregorian_equivalent": "October 24",
+      "description": "Commemorates the creation of the United Nations and global diplomacy."
+    },
+    {
+      "name": "Winter Festival",
+      "category": "Global",
+      "type": "fixed",
+      "date": "09.28",
+      "gregorian_equivalent": "November 30",
+      "description": "A seasonal celebration near the end of November, replacing region-specific winter holidays with a shared global moment."
+    },
+    {
+      "name": "Winter Solstice Ceremony",
+      "category": "Global",
+      "type": "fixed",
+      "date": "10.14",
+      "gregorian_equivalent": "December 21",
+      "description": "The shortest day (northern hemisphere). Marking the return of the light."
+    },
+    {
+      "name": "International Women's Day",
+      "category": "Global",
+      "type": "fixed",
+      "date": "13.16",
+      "gregorian_equivalent": "March 8",
+      "description": "Global day celebrating the social, economic, cultural, and political achievements of women."
+    },
+    {
+      "name": "Luna Moon Month",
+      "category": "GHS Culture",
+      "type": "fixed",
+      "date": "13.01",
+      "endDate": "13.28",
+      "description": "The 13th and final month — Luna. A time of reflection, closure, and preparation before the Aurora Week and the new year."
+    },
+    {
+      "name": "Aurora Festival",
+      "category": "GHS Culture",
+      "type": "fixed",
+      "date": "A.01",
+      "endDate": "A.07",
+      "frequency": "Every 5-6 years (Aurora Years only)",
+      "description": "The Aurora Week — seven days of global pause, reflection, maintenance, and celebration before the new year begins."
+    },
+    {
+      "name": "Christmas",
+      "category": "Christianity",
+      "type": "fixed",
+      "date": "10.28",
+      "gregorian_equivalent": "December 25",
+      "description": "Christian holiday commemorating the birth of Jesus Christ."
+    },
+    {
+      "name": "Halloween / Reformation Day",
+      "category": "Culture / Christianity",
+      "type": "fixed",
+      "date": "09.01",
+      "gregorian_equivalent": "October 31",
+      "description": "Eve of All Hallows / Commemoration of the Protestant Reformation."
+    },
+    {
+      "name": "Valentine's Day",
+      "category": "Culture",
+      "type": "fixed",
+      "date": "12.23",
+      "gregorian_equivalent": "February 14",
+      "description": "Feast of Saint Valentine, globally recognized as a day of romance and love."
+    },
+    {
+      "name": "Day of the Dead (Dia de los Muertos)",
+      "category": "Culture",
+      "type": "fixed",
+      "date": "09.03",
+      "gregorian_equivalent": "November 2",
+      "description": "Mexican holiday honoring deceased loved ones."
+    },
+    {
+      "name": "Easter Sunday",
+      "category": "Christianity",
+      "type": "dynamic",
+      "rule": "First Sunday after the first full moon on or after GHS 01.01",
+      "description": "Celebrates the resurrection of Jesus Christ. Wanders between early March and late April."
+    },
+    {
+      "name": "Ramadan (Start)",
+      "category": "Islam",
+      "type": "dynamic",
+      "rule": "1st day of Ramadan (Islamic Lunar Calendar)",
+      "description": "A month of fasting, prayer, reflection, and community. Shifts backwards through the GHS calendar by roughly 11 days per year."
+    },
+    {
+      "name": "Eid al-Fitr",
+      "category": "Islam",
+      "type": "dynamic",
+      "rule": "1st day of Shawwal (Islamic Lunar Calendar)",
+      "description": "Festival of Breaking the Fast, marking the end of Ramadan."
+    },
+    {
+      "name": "Eid al-Adha",
+      "category": "Islam",
+      "type": "dynamic",
+      "rule": "10th day of Dhu al-Hijjah (Islamic Lunar Calendar)",
+      "description": "Feast of the Sacrifice, honoring the willingness of Ibrahim to sacrifice his son."
+    },
+    {
+      "name": "Passover (Pesach)",
+      "category": "Judaism",
+      "type": "dynamic",
+      "rule": "15th day of Nisan (Hebrew Lunisolar Calendar)",
+      "description": "Commemorates the liberation of the Israelites from slavery in Egypt."
+    },
+    {
+      "name": "Rosh Hashanah",
+      "category": "Judaism",
+      "type": "dynamic",
+      "rule": "1st day of Tishrei (Hebrew Lunisolar Calendar)",
+      "description": "The Jewish New Year."
+    },
+    {
+      "name": "Yom Kippur",
+      "category": "Judaism",
+      "type": "dynamic",
+      "rule": "10th day of Tishrei (Hebrew Lunisolar Calendar)",
+      "description": "Day of Atonement, the holiest day of the year in Judaism."
+    },
+    {
+      "name": "Hanukkah",
+      "category": "Judaism",
+      "type": "dynamic",
+      "rule": "25th day of Kislev (Hebrew Lunisolar Calendar)",
+      "description": "Festival of Lights, commemorating the rededication of the Second Temple."
+    },
+    {
+      "name": "Holi",
+      "category": "Hinduism",
+      "type": "dynamic",
+      "rule": "Phalguna Purnima (Hindu Lunisolar Calendar)",
+      "description": "Festival of Colors, celebrating spring, love, and new life."
+    },
+    {
+      "name": "Diwali",
+      "category": "Hinduism",
+      "type": "dynamic",
+      "rule": "Amavasya of Kartika (Hindu Lunisolar Calendar)",
+      "description": "Festival of Lights, symbolizing the spiritual victory of light over darkness."
+    },
+    {
+      "name": "Vesak",
+      "category": "Buddhism",
+      "type": "dynamic",
+      "rule": "First full moon in May equivalent (Buddhist Lunar Calendar)",
+      "description": "Commemorates the birth, enlightenment, and death of Gautama Buddha."
+    },
+    {
+      "name": "Lunar New Year",
+      "category": "Culture",
+      "type": "dynamic",
+      "rule": "1st day of the 1st month (Chinese Lunisolar Calendar)",
+      "description": "Celebrates the beginning of a new year on the traditional lunisolar calendar."
+    }
+  ]
+}

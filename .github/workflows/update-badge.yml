@@ -1,0 +1,38 @@
+name: Update GHS Time Badge
+
+# When should this run?
+on:
+  schedule:
+    - cron: "*/15 * * * *" # Every 15 minutes
+  workflow_dispatch: # Allows you to start it manually with a button
+
+jobs:
+  update-badge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install Dependencies & Calculate Time
+        id: calc_time
+        run: |
+          cd tools/cli
+          npm install
+          GHS_TIME=$(npx ts-node src/badge.ts)
+          echo "time=$GHS_TIME" >> $GITHUB_OUTPUT
+
+      - name: Update Gist
+        uses: Schneegans/dynamic-badges-action@v1.8.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: ea238f96af6f644ffe06415ee941e7a6
+          filename: ghs-time.json
+          label: GHS Now
+          message: ${{ steps.calc_time.outputs.time }}
+          color: blueviolet
+          labelColor: 555555

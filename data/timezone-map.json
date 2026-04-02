@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "calendar": "GHS",
+  "description": "Maps @Beat ranges to approximate local solar phases by longitude. Since GHS abolishes time zones, this file helps users understand their local daylight pattern relative to the global beat clock.",
+  "schema": {
+    "longitude_range": "Degrees east of Greenwich (0-360, where 180 = antimeridian)",
+    "solar_noon_beat": "The @Beat at which the sun is approximately at its highest point",
+    "daylight_start_beat": "Approximate @Beat of sunrise (varies by season)",
+    "daylight_end_beat": "Approximate @Beat of sunset (varies by season)"
+  },
+  "reference_points": [
+    {
+      "location": "London, UK",
+      "longitude": 0,
+      "solar_noon_beat": 500,
+      "typical_work_beats": "@375 – @750"
+    },
+    {
+      "location": "Berlin, Germany",
+      "longitude": 13,
+      "solar_noon_beat": 446,
+      "typical_work_beats": "@320 – @700"
+    },
+    {
+      "location": "Tokyo, Japan",
+      "longitude": 140,
+      "solar_noon_beat": 111,
+      "typical_work_beats": "@958 – @335"
+    },
+    {
+      "location": "New York, USA",
+      "longitude": 286,
+      "solar_noon_beat": 708,
+      "typical_work_beats": "@583 – @958"
+    },
+    {
+      "location": "Sydney, Australia",
+      "longitude": 151,
+      "solar_noon_beat": 81,
+      "typical_work_beats": "@928 – @305"
+    },
+    {
+      "location": "São Paulo, Brazil",
+      "longitude": 313,
+      "solar_noon_beat": 627,
+      "typical_work_beats": "@500 – @875"
+    }
+  ],
+  "formula": "solar_noon_beat = (500 - (longitude / 360) * 1000 + 1000) mod 1000"
+}

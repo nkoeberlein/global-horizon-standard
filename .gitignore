@@ -1,0 +1,40 @@
+# ==========================================
+# GHS - Global Horizon Standard .gitignore
+# ==========================================
+
+# 1. Node.js & NPM (applies to tools/cli/node_modules/ and future projects)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 2. Compiled Code
+# Ignores your tools/cli/dist/ folder and any future build folders
+dist/
+build/
+out/
+
+# 3. Local Environment Variables (for future API integrations)
+.env
+.env.local
+
+# 4. OS-specific Files (Windows / macOS artifacts)
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+
+# 5. Editor & IDE Files (VS Code, IntelliJ, etc.)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 6. Log Files
+logs/
+*.log
+
+# 7. Data Files
+archive/*
+assets/*
