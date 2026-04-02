@@ -1,0 +1,16 @@
+{
+  "name": "global-horizon-standard-repo",
+  "private": true,
+  "engines": {
+    "node": ">=25.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build:core": "npm run build --workspace=packages/core",
+    "build:cli": "npm run build --workspace=packages/cli",
+    "dev": "npm run build:core && npm run dev --workspace=packages/web",
+    "build": "npm run build:core && npm run build:cli && npm run build --workspace=packages/web"
+  }
+}
