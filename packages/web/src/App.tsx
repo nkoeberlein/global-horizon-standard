@@ -1,15 +1,29 @@
+import { Routes, Route } from 'react-router-dom';
+import { Layout } from './components/Layout';
 import { HeroSection } from './components/HeroSection';
 import { VisualizerSection } from './components/VisualizerSection';
 import { PhilosophySection } from './components/PhilosophySection';
-import { Footer } from './components/Footer';
+import { ImprintPage } from './pages/ImprintPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 
-export default function App() {
+function LandingPage() {
   return (
-    <div className="min-h-screen bg-cream">
+    <>
       <HeroSection />
       <VisualizerSection />
       <PhilosophySection />
-      <Footer />
-    </div>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/imprint" element={<ImprintPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+      </Routes>
+    </Layout>
   );
 }

@@ -1,4 +1,5 @@
 import { GitHubIcon } from './GitHubIcon';
+import { Link } from 'react-router-dom';
 
 export function Footer() {
   return (
@@ -30,17 +31,24 @@ export function Footer() {
               <GitHubIcon size={14} />
               GitHub
             </a>
-            <a
-              href="https://github.com/nkoeberlein/global-horizon-standard/blob/main/spec"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm font-sans transition-colors"
+            <Link
+              to="/imprint"
+              className="text-sm font-sans transition-colors"
               style={{ color: '#7a7265' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#2d2926')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#7a7265')}
+              onMouseEnter={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#2d2926')}
+              onMouseLeave={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#7a7265')}
             >
-              Specification
-            </a>
+              Imprint
+            </Link>
+            <Link
+              to="/privacy"
+              className="text-sm font-sans transition-colors"
+              style={{ color: '#7a7265' }}
+              onMouseEnter={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#2d2926')}
+              onMouseLeave={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#7a7265')}
+            >
+              Privacy
+            </Link>
           </nav>
 
           {/* Right: license */}
