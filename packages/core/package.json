@@ -1,0 +1,49 @@
+{
+  "name": "ghs-time",
+  "version": "1.0.0",
+  "description": "The official Global Horizon Standard (GHS) time converter — 13-month calendar, @Beats decimal time, Human Era.",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nkoeberlein/global-horizon-standard.git"
+  },
+  "homepage": "https://github.com/nkoeberlein/global-horizon-standard",
+  "bugs": {
+    "url": "https://github.com/nkoeberlein/global-horizon-standard/issues"
+  },
+  "keywords": [
+    "ghs",
+    "time",
+    "calendar",
+    "decimal-time",
+    "beats",
+    "human-era",
+    "13-months",
+    "aurora-week"
+  ],
+  "author": "Nikolaus Köberlein",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.0"
+  }
+}
