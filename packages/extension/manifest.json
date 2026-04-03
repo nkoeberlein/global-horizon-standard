@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "GHS - Global Horizon Standard",
+    "version": "1.0.0",
+    "description": "Die Weltzeit am Handgelenk Ihres Browsers. @Beats und 13-Monate-Kalender.",
+    "icons": {
+        "48": "icon.png",
+        "128": "icon.png"
+    },
+    "action": {
+        "default_popup": "src/popup/index.html",
+        "default_title": "GHS Time"
+    },
+    "background": {
+        "service_worker": "src/background.ts"
+    },
+    "permissions": [
+        "alarms",
+        "storage"
+    ]
+}
