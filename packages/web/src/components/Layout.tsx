@@ -18,9 +18,10 @@ export function Layout({ children }: { children: ReactNode }) {
       {!isHome && (
         <nav className="px-8 py-6 border-b border-[#e8e4db] bg-white/50 backdrop-blur-sm sticky top-0 z-50">
           <div className="max-w-6xl mx-auto flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2 group">
-              <span className="font-serif text-charcoal font-medium tracking-wide text-sm group-hover:text-yellow-700 transition-colors">GHS</span>
-              <span className="text-xs tracking-widest uppercase font-sans text-[#b0a898]">
+            <Link to="/" className="flex items-center gap-3 group">
+              <img src="/logo.png" alt="GHS Logo" className="w-8 h-8 object-contain" />
+              <span className="font-serif text-charcoal font-medium tracking-wide text-sm group-hover:text-yellow-700 transition-colors leading-none">GHS</span>
+              <span className="text-xs tracking-widest uppercase font-sans text-[#b0a898] mt-0.5 sm:inline hidden">
                 Global Horizon Standard
               </span>
             </Link>

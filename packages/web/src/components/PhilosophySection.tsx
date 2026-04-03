@@ -41,18 +41,23 @@ export function PhilosophySection() {
     <section className="px-6 py-24 md:py-32" style={{ background: '#f4f1ea' }}>
       <div className="max-w-6xl mx-auto">
 
-        {/* Heading */}
-        <div className="mb-20 max-w-xl">
-          <p className="text-xs tracking-[0.35em] uppercase mb-3 font-sans" style={{ color: '#9b9288' }}>
-            The Philosophy
-          </p>
-          <h2 className="section-heading mb-5">
-            Time redesigned for humanity.
-          </h2>
-          <p className="section-sub">
-            GHS reimagines the calendar from first principles — a system built on mathematical elegance,
-            natural rhythm, and a shared sense of history.
-          </p>
+        {/* Heading & Logo side-by-side */}
+        <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-16 mb-20 max-w-5xl">
+          <div className="shrink-0">
+            <img src="/logo-rectangular.png" alt="GHS Logo" className="w-64 md:w-80 opacity-90 object-contain" />
+          </div>
+          <div className="max-w-xl">
+            <p className="text-xs tracking-[0.35em] uppercase mb-3 font-sans" style={{ color: '#9b9288' }}>
+              The Philosophy
+            </p>
+            <h2 className="section-heading mb-5">
+              Time redesigned for humanity.
+            </h2>
+            <p className="section-sub">
+              GHS reimagines the calendar from first principles — a system built on mathematical elegance,
+              natural rhythm, and a shared sense of history.
+            </p>
+          </div>
         </div>
 
         {/* 2×2 Pillars grid */}

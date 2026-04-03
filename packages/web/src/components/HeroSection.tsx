@@ -40,9 +40,10 @@ export function HeroSection() {
 
       {/* Top nav */}
       <nav className="absolute top-0 left-0 right-0 flex items-center justify-between px-8 py-6">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="GHS Logo" className="w-8 h-8 object-contain" />
           <span className="font-serif text-charcoal font-medium tracking-wide text-sm">GHS</span>
-          <span className="text-cream-dark text-xs tracking-widest uppercase font-sans" style={{ color: '#b0a898' }}>
+          <span className="text-cream-dark text-xs tracking-widest uppercase font-sans sm:inline hidden" style={{ color: '#b0a898' }}>
             Global Horizon Standard
           </span>
         </div>
