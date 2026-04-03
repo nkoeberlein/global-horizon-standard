@@ -11,10 +11,10 @@ const Popup = () => {
     }, []);
 
     return (
-        <div className="w-64 p-4 bg-[#faf9f6] text-charcoal">
-            <h1 className="text-sm font-bold opacity-50 uppercase tracking-widest">Global Horizon Standard</h1>
+        <div className="w-80 p-4 bg-[#faf9f6] text-charcoal">
+            <h1 className="text-sm text-center font-bold opacity-50 uppercase tracking-widest">Global Horizon Standard</h1>
 
-            <div className="my-4">
+            <div className="my-4 text-center">
                 <div className="text-4xl font-mono font-bold text-yellow-600">
                     {now.beatsLong}
                 </div>
