@@ -1,0 +1,26 @@
+{
+    "name": "ghs-extension",
+    "private": true,
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build"
+    },
+    "dependencies": {
+        "ghs-time": "1.0.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.2.2",
+        "@types/chrome": "^0.1.38",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.1",
+        "tailwindcss": "^4.2.2",
+        "typescript": "^6.0.0",
+        "vite": "8.0.2",
+        "vite-plugin-web-extension": "4.5.0"
+    }
+}
