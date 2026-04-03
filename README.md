@@ -91,11 +91,15 @@ Explore the project to understand the math, philosophy, and code behind the stan
   * [Human Era (HE)](spec/era-he.md)
   * [Decimal Time (@Beats)](spec/time-beats.md)
   * [Timestamp Format](spec/timestamp-format.md)
-* **[`/tools`](tools/) — Official Tooling:**
-  * [CLI Converter](tools/cli/) - TypeScript-based desktop tool.
-  * [Analog Clock](tools/clock_analog/) - Web-based interactive visualization.
+* **[`/packages`](packages/) — Monorepo Packages:**
+  * [`ghs-time`](packages/core/) — Core TypeScript library: calendar conversion, @Beats, Human Era. Published as ESM + CJS.
+  * [`ghs-cli`](packages/cli/) — Terminal CLI (`ghs` command): convert dates, display current GHS time.
+  * [`ghs-api`](packages/api/) — Hono-based HTTP API serving GHS time and conversions.
+  * [`ghs-web`](packages/web/) — Official GHS web dashboard and landing page.
+  * [`ghs-ui`](packages/ui/) — Reusable UI component library shared across web and extension.
+  * [`ghs-extension`](packages/extension/) — Browser extension displaying live GHS time.
+  * [`clock_analog`](packages/clock_analog/) — Web-based analog @Beats clock visualization.
 * **[`/ideas`](ideas/) — Open Debates & Explorations:** Read our active discussions on [physics implications](ideas/physics-implications.md), [legacy system migrations](ideas/legacy-systems.md), and [global adoption strategies](ideas/adoption-strategy.md).
-
 * **[`/data`](data/) — Machine-Readable Data:** Contains the `holidays.json` mapping cultural events to the GHS calendar.
 * **[`/docs`](docs/) — Historical Context:** [Why our legacy calendar is broken](docs/historical-context.md).
 
@@ -108,10 +112,8 @@ Experience the Global Horizon Standard directly in your terminal. We provide a f
 
 **Installation:**
 ```bash
-cd tools/cli
 npm install
-npm run build
-npm link
+npm link packages/cli
 ```
 
 **Usage:**
