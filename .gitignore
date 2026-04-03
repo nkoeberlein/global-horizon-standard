@@ -2,37 +2,39 @@
 # GHS - Global Horizon Standard .gitignore
 # ==========================================
 
-# Dependencies
+# --- Dependencies ---
 node_modules/
+.pnp
+.pnp.*
 
-# Build output
+# --- Build & Output ---
 dist/
 build/
 out/
+bin/
+# TypeScript build info
 *.tsbuildinfo
-
-# Vite cache
+# Vite specific
 .vite/
+# Vercel / Netlify deployments
+.vercel
+.netlify
 
-# Environment variables
+# --- Testing & Coverage ---
+coverage/
+*.lcov
+.nyc_output
+junit.xml
+
+# --- Environment & Secrets ---
 .env
 .env.local
 .env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# OS artifacts
-.DS_Store
-.AppleDouble
-.LSOverride
-Thumbs.db
-ehthumbs.db
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
+# --- Debug & Logs ---
 logs/
 *.log
 npm-debug.log*
@@ -40,6 +42,28 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Data
-archive/*
-assets/*
+# --- OS Artifacts ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Editor / IDE ---
+# Wir ignorieren lokale Editor-Settings, 
+# außer du willst Shared-Settings im Team nutzen.
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# --- Data & Assets ---
+archive/
+assets/
+temp/
+tmp/
