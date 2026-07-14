@@ -7,12 +7,13 @@ GHS makes deliberate compromises to ensure global adoption, predictability, and 
 ## 1. Algorithm > Astronomy
 
 ### The Choice
-We have anchored the GHS New Year strictly to **21 March (Gregorian)** and the global time pulse to **UTC (0° Meridian)**.
+The GHS calendar is anchored at a **single epoch** — GHS 10001.01.01 = 21 March of year 1 CE (proleptic Gregorian), 00:00 UTC — and the global time pulse to **UTC (0° Meridian)**. All year starts follow deterministically by chaining the 364/371-day year lengths from the Aurora algorithm.
 
 ### The Rationale
-A truly "natural" calendar would require the New Year to shift between 19 and 21 March based on the solar equinox.
-- **Why we chose the fixed anchor**: If the New Year shifted astronomically, every software developer would need to embed complex astronomical lookup tables or depend on real-time external APIs to calculate the current date.
+A truly "natural" calendar would require the New Year to track the actual solar equinox via astronomical observation.
+- **Why we chose the algorithmic epoch**: If the New Year shifted astronomically, every software developer would need to embed complex astronomical lookup tables or depend on real-time external APIs to calculate the current date. With the epoch, the entire calendar derives from two integers and one modulo formula.
 - **Predictability**: For global planning, finance, and science, a deterministic algorithm is superior to a shifting astronomical event. GHS prioritizes human-readable and machine-calculable predictability.
+- **The trade-off**: GHS year starts are not pinned to one Gregorian date. They drift within a fixed 16–24 March window, centered on the spring equinox (~20 March), and the Aurora Week resets the drift every 5–6 years. An earlier draft anchored *every* year at 21 March — that variant silently made years 365/366 days long, broke the one-to-one mapping between real days and GHS dates, and made most of the Aurora Week unreachable. The epoch design fixes this: a GHS year is *always* exactly 364 or 371 days.
 
 ## 2. The Human-Centric Week
 

@@ -100,7 +100,7 @@ Explore the project to understand the math, philosophy, and code behind the stan
   * [`ghs-extension`](packages/extension/) — Browser extension displaying live GHS time.
   * [`clock_analog`](packages/clock_analog/) — Web-based analog @Beats clock visualization.
 * **[`/ideas`](ideas/) — Open Debates & Explorations:** Read our active discussions on [physics implications](ideas/physics-implications.md), [legacy system migrations](ideas/legacy-systems.md), and [global adoption strategies](ideas/adoption-strategy.md).
-* **[`/data`](data/) — Machine-Readable Data:** Contains the `holidays.json` mapping cultural events to the GHS calendar.
+* **[`/data`](data/) — Machine-Readable Data:** Contains `timezone-map.json` (local solar phases vs. @Beats). Holidays live in the `ghs-time` package (`HOLIDAYS`, `getHolidaysForYear`) with per-year computed Gregorian dates.
 * **[`/docs`](docs/) — Historical Context:** [Why our legacy calendar is broken](docs/historical-context.md).
 
 
@@ -119,9 +119,10 @@ npm link packages/cli
 **Usage:**
 ```bash
 $ ghs                 # Outputs the current GHS time and context
-$ ghs beats           # Outputs strictly the current @Beats
+$ ghs --json          # Outputs the current time as pure JSON
 $ ghs convert "2026-12-25"  # Gregorian to GHS
 $ ghs cal 13 12026    # Perfectly symmetrical calendar
+$ ghs holidays        # Fixed GHS holidays with computed Gregorian dates
 ```
 
 ---

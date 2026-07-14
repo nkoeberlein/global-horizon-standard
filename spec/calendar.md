@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The Global Horizon Standard divides the year into **13 months of exactly 28 days** (364 days). Every month begins on a Monday and ends on a Sunday. The year starts at the **spring equinox** (approximately 21 March in the Gregorian calendar).
+The Global Horizon Standard divides the year into **13 months of exactly 28 days** (364 days). Every month begins on a Monday and ends on a Sunday. The year starts near the **spring equinox**: year starts drift within a fixed window of **16–24 March** (Gregorian), centered on the equinox (~20 March), and the Aurora Week periodically resets the drift (see §5.5).
 
 To maintain alignment with the solar year (~365.2422 days), GHS uses the **Aurora Week** — a full 7-day leap week inserted every 5 to 6 years — instead of individual leap days.
 
@@ -26,6 +26,9 @@ To maintain alignment with the solar year (~365.2422 days), GHS uses the **Auror
 | 12 | February  | Winter | Jan 23 – Feb 19               |                             |
 | 13 | Luna      | Winter | Feb 20 – Mar 19               | The Moon Month (year's end) |
 | —  | Aurora    | —      | (7 days after Luna)            | A.1–A.7 (Aurora Years only) |
+
+> [!NOTE]
+> The Gregorian ranges are approximations. Because GHS years are exactly 364 or 371 days long while Gregorian years are 365/366, every fixed GHS date shifts by up to ±4 days against the Gregorian calendar over the 5–6-year Aurora cycle.
 
 Luna is placed as the **13th and final month**, restoring the Latin etymology that has been broken for over 2,000 years:
 
@@ -120,7 +123,15 @@ Where:
 
 This distributes the 71 leap weeks as evenly as possible, producing intervals of 5 or 6 years between Aurora Years.
 
-### 5.5 Reference Implementation
+### 5.5 Epoch & Reference Implementation
+
+The calendar is anchored at a **single epoch**:
+
+> **GHS 10001.01.01 = 21 March of year 1 CE (proleptic Gregorian), 00:00 UTC**
+>
+> — the year traditionally associated with the birth of Christ, and the first full year of the Human Era.
+
+Every other year start follows deterministically by chaining year lengths (364 or 371 days). Because any 400 consecutive GHS years sum to exactly 146,097 days — identical to the Gregorian 400-year cycle — year starts remain forever within the **16–24 March drift window**, centered on the spring equinox. In the modern era this calibration yields, e.g., **12026.01.01 = 18 March 2026**.
 
 ```typescript
 function isAuroraYear(yearHE: number): boolean {
@@ -131,7 +142,17 @@ function isAuroraYear(yearHE: number): boolean {
 function getDaysInYear(yearHE: number): number {
   return isAuroraYear(yearHE) ? 371 : 364;
 }
+
+const EPOCH_YEAR = 10001; // starts 0001-03-21T00:00Z (proleptic Gregorian)
+
+function yearStart(yearHE: number): Date {
+  // epoch + sum of getDaysInYear(y) for all years between epoch and yearHE
+  // (jump whole 400-year cycles of 146,097 days for efficiency)
+}
 ```
+
+> [!IMPORTANT]
+> Conversions must **not** anchor every year at a fixed Gregorian date (e.g. "each 21 March"). That would make GHS years 365/366 real days long, break the bijective day↔date mapping, and render the Aurora Week unreachable. The year length is *always* exactly 364 or 371 days.
 
 ### 5.6 The Aurora Week as Cultural Event
 
