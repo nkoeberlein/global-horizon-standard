@@ -1,0 +1,21 @@
+name: ghs_mobile
+description: GHS Time App — Global Horizon Standard clock and converter
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  home_widget: ^0.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  test: ^1.24.0
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
