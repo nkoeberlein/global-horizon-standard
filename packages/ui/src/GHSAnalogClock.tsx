@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
 import { getGHSDate } from 'ghs-time';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface GHSAnalogClockProps {
   size?: number;
@@ -29,9 +29,12 @@ function polarToXY(cx: number, cy: number, r: number, angleDeg: number) {
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 }
 
+// The beat hand only moves visibly about once per second — a 100 ms repaint
+// interval is indistinguishable from a 60 fps rAF loop and far cheaper.
+const REDRAW_INTERVAL_MS = 100;
+
 export function GHSAnalogClock({ size = 280 }: GHSAnalogClockProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -40,13 +43,8 @@ export function GHSAnalogClock({ size = 280 }: GHSAnalogClockProps) {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const w = size * dpr;
-    const h = size * dpr;
-    canvas.width = w;
-    canvas.height = h;
-    canvas.style.width = `${size}px`;
-    canvas.style.height = `${size}px`;
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, size, size);
 
     const cx = size / 2;
     const cy = size / 2;
@@ -130,7 +128,10 @@ export function GHSAnalogClock({ size = 280 }: GHSAnalogClockProps) {
     const dayHandBase = R * 0.12;
     const dayRad = ((dayAngleDeg - 90) * Math.PI) / 180;
     const dayTip = { x: cx + dayHandLen * Math.cos(dayRad), y: cy + dayHandLen * Math.sin(dayRad) };
-    const dayTail = { x: cx - dayHandBase * Math.cos(dayRad), y: cy - dayHandBase * Math.sin(dayRad) };
+    const dayTail = {
+      x: cx - dayHandBase * Math.cos(dayRad),
+      y: cy - dayHandBase * Math.sin(dayRad),
+    };
 
     ctx.save();
     ctx.lineCap = 'round';
@@ -150,8 +151,14 @@ export function GHSAnalogClock({ size = 280 }: GHSAnalogClockProps) {
     const beatHandLen = R * 0.78;
     const beatHandBase = R * 0.18;
     const beatRad = ((beatAngleDeg - 90) * Math.PI) / 180;
-    const beatTip = { x: cx + beatHandLen * Math.cos(beatRad), y: cy + beatHandLen * Math.sin(beatRad) };
-    const beatTail = { x: cx - beatHandBase * Math.cos(beatRad), y: cy - beatHandBase * Math.sin(beatRad) };
+    const beatTip = {
+      x: cx + beatHandLen * Math.cos(beatRad),
+      y: cy + beatHandLen * Math.sin(beatRad),
+    };
+    const beatTail = {
+      x: cx - beatHandBase * Math.cos(beatRad),
+      y: cy - beatHandBase * Math.sin(beatRad),
+    };
 
     ctx.save();
     ctx.lineCap = 'round';
@@ -179,27 +186,22 @@ export function GHSAnalogClock({ size = 280 }: GHSAnalogClockProps) {
     ctx.fill();
   }, [size]);
 
+  // Size the canvas backing store once per size/DPR change, not on every frame.
   useEffect(() => {
-    let running = true;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = `${size}px`;
+    canvas.style.height = `${size}px`;
+    draw();
+  }, [size, draw]);
 
-    function frame() {
-      if (!running) return;
-      draw();
-      rafRef.current = requestAnimationFrame(frame);
-    }
-
-    rafRef.current = requestAnimationFrame(frame);
-    return () => {
-      running = false;
-      cancelAnimationFrame(rafRef.current);
-    };
+  useEffect(() => {
+    const timer = setInterval(draw, REDRAW_INTERVAL_MS);
+    return () => clearInterval(timer);
   }, [draw]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{ display: 'block' }}
-      aria-label="GHS Analog Clock"
-    />
-  );
+  return <canvas ref={canvasRef} style={{ display: 'block' }} aria-label="GHS Analog Clock" />;
 }

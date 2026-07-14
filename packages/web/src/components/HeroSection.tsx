@@ -1,32 +1,21 @@
-import { useState, useEffect } from 'react';
-import { getGHSDate } from 'ghs-time';
+import { formatGHS, getGHSDate } from 'ghs-time';
 import { ArrowDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { GitHubIcon } from './GitHubIcon';
 
-const MONTH_ABBR = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Lun'];
-
-function toShorthand(d: ReturnType<typeof getGHSDate>): string {
-  if (d.isAuroraWeek) return `Aurora '${String(d.era).slice(-2)}`;
-  const abbr = MONTH_ABBR[(d.month ?? 1) - 1];
-  const yr = String(d.era).slice(-2);
-  return `${d.day} ${abbr} '${yr}`;
-}
+// beatsLong only changes every centibeat (864 ms) — no need for a 60 fps loop.
+const REFRESH_MS = 250;
 
 export function HeroSection() {
   const [ghs, setGhs] = useState(() => getGHSDate());
 
   useEffect(() => {
-    let raf: number;
-    function tick() {
-      setGhs(getGHSDate());
-      raf = requestAnimationFrame(tick);
-    }
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    const timer = setInterval(() => setGhs(getGHSDate()), REFRESH_MS);
+    return () => clearInterval(timer);
   }, []);
 
   const beatsDisplay = ghs.beatsLong; // "@045.23"
-  const shorthand = toShorthand(ghs);
+  const shorthand = formatGHS(ghs, 'short');
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
@@ -34,7 +23,8 @@ export function HeroSection() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(232,168,32,0.07) 0%, transparent 70%)',
+          background:
+            'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(232,168,32,0.07) 0%, transparent 70%)',
         }}
       />
 
@@ -43,7 +33,10 @@ export function HeroSection() {
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="GHS Logo" className="w-8 h-8 object-contain" />
           <span className="font-serif text-charcoal font-medium tracking-wide text-sm">GHS</span>
-          <span className="text-cream-dark text-xs tracking-widest uppercase font-sans sm:inline hidden" style={{ color: '#b0a898' }}>
+          <span
+            className="text-cream-dark text-xs tracking-widest uppercase font-sans sm:inline hidden"
+            style={{ color: '#b0a898' }}
+          >
             Global Horizon Standard
           </span>
         </div>
@@ -60,7 +53,6 @@ export function HeroSection() {
 
       {/* Hero content */}
       <div className="text-center max-w-3xl mx-auto pt-16">
-
         {/* Tagline */}
         <p
           className="text-xs font-sans tracking-[0.35em] uppercase mb-6"
@@ -79,7 +71,11 @@ export function HeroSection() {
             letterSpacing: '-0.02em',
           }}
         >
-          13 equal months,<br />decimal time,<br />one shared human era.
+          13 equal months,
+          <br />
+          decimal time,
+          <br />
+          one shared human era.
         </h1>
 
         {/* One-liner */}
@@ -92,8 +88,8 @@ export function HeroSection() {
             lineHeight: 1.7,
           }}
         >
-          GHS replaces irregular months and AM/PM with a symmetric 13×28 calendar
-          and @Beats — the same time, everywhere on Earth.
+          GHS replaces irregular months and AM/PM with a symmetric 13×28 calendar and @Beats — the
+          same time, everywhere on Earth.
         </p>
 
         {/* Gregorian ↔ GHS comparison */}
@@ -106,9 +102,21 @@ export function HeroSection() {
             className="grid grid-cols-[1fr_auto_1fr] items-center px-7 py-3"
             style={{ background: '#f4f1ea', borderBottom: '1px solid #e8e4db' }}
           >
-            <span className="text-xs tracking-widest uppercase text-left" style={{ color: '#b0a898' }}>Gregorian</span>
-            <span className="px-6" style={{ color: '#d4cfc4' }}>→</span>
-            <span className="text-xs tracking-widest uppercase text-right" style={{ color: '#c8903a' }}>GHS</span>
+            <span
+              className="text-xs tracking-widest uppercase text-left"
+              style={{ color: '#b0a898' }}
+            >
+              Gregorian
+            </span>
+            <span className="px-6" style={{ color: '#d4cfc4' }}>
+              →
+            </span>
+            <span
+              className="text-xs tracking-widest uppercase text-right"
+              style={{ color: '#c8903a' }}
+            >
+              GHS
+            </span>
           </div>
 
           {/* Date row */}
@@ -118,16 +126,27 @@ export function HeroSection() {
           >
             <div className="text-left">
               <div className="text-xl" style={{ color: '#5c5650' }}>
-                {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' })}
+                {new Date().toLocaleDateString('en-GB', {
+                  weekday: 'short',
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
               </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>Calendar date</div>
+              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
+                Calendar date
+              </div>
             </div>
-            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>→</span>
+            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
+              →
+            </span>
             <div className="text-right">
               <div className="text-xl" style={{ color: '#2d2926', fontWeight: 600 }}>
                 {ghs.weekday?.slice(0, 3)}, {shorthand}
               </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>13 × 28-day calendar</div>
+              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
+                13 × 28-day calendar
+              </div>
             </div>
           </div>
 
@@ -138,16 +157,30 @@ export function HeroSection() {
           >
             <div className="text-left">
               <div className="font-mono tabular-nums text-xl" style={{ color: '#5c5650' }}>
-                {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} UTC
+                {new Date().toLocaleTimeString('en-GB', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                })}{' '}
+                UTC
               </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>24 h · 60 min · 60 sec</div>
+              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
+                24 h · 60 min · 60 sec
+              </div>
             </div>
-            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>→</span>
+            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
+              →
+            </span>
             <div className="text-right">
-              <div className="font-mono tabular-nums text-xl" style={{ color: '#c8903a', fontWeight: 600 }}>
+              <div
+                className="font-mono tabular-nums text-xl"
+                style={{ color: '#c8903a', fontWeight: 600 }}
+              >
                 {beatsDisplay}
               </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>1 day = 1,000 @beats</div>
+              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
+                1 day = 1,000 @beats
+              </div>
             </div>
           </div>
 
@@ -157,14 +190,20 @@ export function HeroSection() {
               <div className="text-xl" style={{ color: '#5c5650' }}>
                 {new Date().getFullYear()} CE
               </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>Common Era</div>
+              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
+                Common Era
+              </div>
             </div>
-            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>→</span>
+            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
+              →
+            </span>
             <div className="text-right">
               <div className="text-xl" style={{ color: '#2d2926', fontWeight: 600 }}>
                 {ghs.era} HE
               </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>Human Era (+10,000)</div>
+              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
+                Human Era (+10,000)
+              </div>
             </div>
           </div>
         </div>
@@ -181,8 +220,8 @@ export function HeroSection() {
               color: '#faf9f6',
               letterSpacing: '0.03em',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#4a4035')}
-            onMouseLeave={e => (e.currentTarget.style.background = '#2d2926')}
+            onMouseEnter={(e) => (e.currentTarget.style.background = '#4a4035')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = '#2d2926')}
           >
             <GitHubIcon size={15} />
             View on GitHub
@@ -195,11 +234,11 @@ export function HeroSection() {
               color: '#5c5650',
               letterSpacing: '0.03em',
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = '#b0a898';
               e.currentTarget.style.color = '#2d2926';
             }}
-            onMouseLeave={e => {
+            onMouseLeave={(e) => {
               e.currentTarget.style.borderColor = '#d4cfc4';
               e.currentTarget.style.color = '#5c5650';
             }}
@@ -210,7 +249,10 @@ export function HeroSection() {
       </div>
 
       {/* Scroll hint */}
-      <div className="absolute bottom-10 flex flex-col items-center gap-2 animate-bounce" style={{ opacity: 0.4 }}>
+      <div
+        className="absolute bottom-10 flex flex-col items-center gap-2 animate-bounce"
+        style={{ opacity: 0.4 }}
+      >
         <ArrowDown size={18} style={{ color: '#5c5650' }} />
       </div>
     </section>

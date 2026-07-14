@@ -1,37 +1,32 @@
-import { useState, useEffect } from 'react';
 import { getGHSDate } from 'ghs-time';
 import { GHSAnalogClock } from 'ghs-ui';
+import { useEffect, useState } from 'react';
 import { CalendarGrid } from './CalendarGrid';
 
 export function VisualizerSection() {
   const [beats, setBeats] = useState(() => getGHSDate().beatsLong);
 
   useEffect(() => {
-    let raf: number;
-    function tick() {
-      setBeats(getGHSDate().beatsLong);
-      raf = requestAnimationFrame(tick);
-    }
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // beatsLong only changes every centibeat (864 ms) — a coarse interval suffices.
+    const timer = setInterval(() => setBeats(getGHSDate().beatsLong), 250);
+    return () => clearInterval(timer);
   }, []);
 
   return (
     <section id="visualizer" className="px-6 py-24 md:py-32">
       <div className="max-w-7xl mx-auto">
-
         {/* Section heading */}
         <div className="mb-16 text-center">
-          <p className="text-xs tracking-[0.35em] uppercase mb-3 font-sans" style={{ color: '#9b9288' }}>
+          <p
+            className="text-xs tracking-[0.35em] uppercase mb-3 font-sans"
+            style={{ color: '#9b9288' }}
+          >
             The Calendar
           </p>
-          <h2 className="section-heading">
-            13 Months. 28 Days. One rhythm.
-          </h2>
+          <h2 className="section-heading">13 Months. 28 Days. One rhythm.</h2>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12 xl:gap-20 items-start">
-
           {/* Left: Calendar Grid */}
           <div className="flex-1 min-w-0">
             <CalendarGrid />
@@ -64,12 +59,17 @@ export function VisualizerSection() {
                 >
                   {beats}
                 </p>
-                <p className="text-xs mt-2 font-sans" style={{ color: '#b0a898' }}>current @beats (UTC)</p>
+                <p className="text-xs mt-2 font-sans" style={{ color: '#b0a898' }}>
+                  current @beats (UTC)
+                </p>
               </div>
 
               {/* Beat legend */}
               <div className="w-full border-t pt-5" style={{ borderColor: '#e8e4db' }}>
-                <div className="flex justify-between text-xs font-sans" style={{ color: '#9b9288' }}>
+                <div
+                  className="flex justify-between text-xs font-sans"
+                  style={{ color: '#9b9288' }}
+                >
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-1.5 rounded-full" style={{ background: '#2d2926' }} />
                     <span>Day hand — 1,000 beats/rev</span>
@@ -84,7 +84,10 @@ export function VisualizerSection() {
 
             {/* Beats progress bar */}
             <div className="w-full max-w-xs">
-              <div className="flex justify-between text-xs mb-2 font-sans" style={{ color: '#b0a898' }}>
+              <div
+                className="flex justify-between text-xs mb-2 font-sans"
+                style={{ color: '#b0a898' }}
+              >
                 <span>Day progress</span>
                 <span className="font-mono" style={{ color: '#c8903a' }}>
                   {(parseFloat(beats.substring(1)) / 10).toFixed(1)}%
@@ -101,7 +104,6 @@ export function VisualizerSection() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
