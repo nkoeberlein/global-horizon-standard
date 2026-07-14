@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
-import { getGHSDate, MONTH_NAMES_GHS, WEEKDAYS_GHS, isAuroraYear } from 'ghs-time';
+import { getGHSDate, isAuroraYear, MONTH_NAMES_GHS, WEEKDAYS_GHS } from 'ghs-time';
+import { useEffect, useMemo, useState } from 'react';
 
 // GHS months always start on Monday — every month is a perfect 7×4 grid.
 const WEEKDAY_ABBR = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -20,7 +20,9 @@ function MonthCard({ monthIndex, currentMonth, currentDay, isAuroraWeek }: Month
       className="rounded-2xl p-4 transition-all"
       style={{
         background: isCurrentMonth ? 'rgba(200, 144, 58, 0.06)' : 'rgba(255,254,249,0.6)',
-        border: isCurrentMonth ? '1px solid rgba(200, 144, 58, 0.3)' : '1px solid rgba(224,219,210,0.5)',
+        border: isCurrentMonth
+          ? '1px solid rgba(200, 144, 58, 0.3)'
+          : '1px solid rgba(224,219,210,0.5)',
       }}
     >
       <p
@@ -35,7 +37,7 @@ function MonthCard({ monthIndex, currentMonth, currentDay, isAuroraWeek }: Month
 
       {/* Weekday headers */}
       <div className="grid grid-cols-7 gap-0 mb-1">
-        {WEEKDAY_ABBR.map(d => (
+        {WEEKDAY_ABBR.map((d) => (
           <div
             key={d}
             className="text-center text-xs"
@@ -85,34 +87,36 @@ function AuroraWeekCard({ isCurrentAurora, currentDay }: AuroraWeekCardProps) {
         background: isCurrentAurora
           ? 'linear-gradient(135deg, rgba(196,181,253,0.2) 0%, rgba(252,165,165,0.15) 50%, rgba(186,230,253,0.2) 100%)'
           : 'rgba(255,254,249,0.6)',
-        border: isCurrentAurora ? '1px solid rgba(196,181,253,0.4)' : '1px solid rgba(224,219,210,0.5)',
+        border: isCurrentAurora
+          ? '1px solid rgba(196,181,253,0.4)'
+          : '1px solid rgba(224,219,210,0.5)',
       }}
     >
       <p
         className="font-serif text-sm mb-3 text-center"
-        style={{ color: isCurrentAurora ? '#7c6fb0' : '#7a7265', fontWeight: isCurrentAurora ? 600 : 400 }}
+        style={{
+          color: isCurrentAurora ? '#7c6fb0' : '#7a7265',
+          fontWeight: isCurrentAurora ? 600 : 400,
+        }}
       >
         Aurora Week
-        <span className="ml-2 text-xs font-sans" style={{ opacity: 0.6 }}>(intercalary)</span>
+        <span className="ml-2 text-xs font-sans" style={{ opacity: 0.6 }}>
+          (intercalary)
+        </span>
       </p>
       <div className="flex justify-center gap-2 flex-wrap">
         {Array.from({ length: 7 }, (_, i) => {
           const day = i + 1;
           const isToday = isCurrentAurora && day === currentDay;
           return (
-            <div
-              key={day}
-              className="flex flex-col items-center"
-            >
+            <div key={day} className="flex flex-col items-center">
               <span className="text-xs mb-1" style={{ color: '#b0a898', fontSize: '0.6rem' }}>
                 {WEEKDAYS_GHS[i].slice(0, 2)}
               </span>
               <div
                 className="w-8 h-8 flex items-center justify-center rounded-full text-xs font-medium"
                 style={{
-                  background: isToday
-                    ? 'linear-gradient(135deg, #c4b5fd, #fca5a5)'
-                    : 'transparent',
+                  background: isToday ? 'linear-gradient(135deg, #c4b5fd, #fca5a5)' : 'transparent',
                   color: isToday ? '#fff' : '#9b9288',
                   fontWeight: isToday ? 700 : 400,
                 }}
@@ -162,10 +166,13 @@ export function CalendarGrid() {
       </div>
 
       {/* 13 months grid */}
-      <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
+      <div
+        className="grid gap-3"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}
+      >
         {Array.from({ length: 13 }, (_, i) => (
           <MonthCard
-            key={i}
+            key={MONTH_NAMES_GHS[i]}
             monthIndex={i}
             currentMonth={ghs.month}
             currentDay={ghs.day}
@@ -174,12 +181,7 @@ export function CalendarGrid() {
         ))}
 
         {/* Aurora Week */}
-        {aurora && (
-          <AuroraWeekCard
-            isCurrentAurora={ghs.isAuroraWeek}
-            currentDay={ghs.day}
-          />
-        )}
+        {aurora && <AuroraWeekCard isCurrentAurora={ghs.isAuroraWeek} currentDay={ghs.day} />}
       </div>
     </div>
   );

@@ -2,8 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Popup from './popup';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <Popup />
-    </React.StrictMode>
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error('Root element #root not found');
+}
+
+ReactDOM.createRoot(rootElement).render(
+  <React.StrictMode>
+    <Popup />
+  </React.StrictMode>,
 );

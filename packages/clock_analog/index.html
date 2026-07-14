@@ -339,7 +339,8 @@
         <p class="subtitle">10-Base Decimal Time Interface</p>
 
         <div class="clock-container">
-            <svg class="clock" viewBox="0 0 200 200" id="clockSvg">
+            <svg class="clock" viewBox="0 0 200 200" id="clockSvg" role="img">
+                <title>GHS analog clock showing the current time in @Beats</title>
                 <g id="dial"></g>
 
                 <line x1="100" y1="100" x2="100" y2="35" class="hand hand-day" id="dayHand" />
@@ -353,7 +354,7 @@
         <div class="controls">
             <div class="toggle-row">
                 <span>Mode: <span id="modeLabel" style="color: var(--accent);">Live</span></span>
-                <label class="switch">
+                <label class="switch" for="modeToggle" aria-label="Toggle between live and manual mode">
                     <input type="checkbox" id="modeToggle">
                     <span class="slider"></span>
                 </label>
@@ -426,7 +427,6 @@
         const sliderValue = document.getElementById('sliderValue');
 
         let isManual = false;
-        let manualBeats = 500;
 
         // Calculate current UTC Beats
         function getLiveBeats() {

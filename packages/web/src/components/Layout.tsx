@@ -1,16 +1,18 @@
+import { type ReactNode, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Footer } from './Footer';
-import { ReactNode, useEffect } from 'react';
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
   // Scroll to top on route change
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (pathname) {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
 
-  const isHome = pathname === "/";
+  const isHome = pathname === '/';
 
   return (
     <div className="min-h-screen bg-[#faf9f6] flex flex-col">
@@ -20,13 +22,15 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="max-w-6xl mx-auto flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 group">
               <img src="/logo.png" alt="GHS Logo" className="w-8 h-8 object-contain" />
-              <span className="font-serif text-charcoal font-medium tracking-wide text-sm group-hover:text-yellow-700 transition-colors leading-none">GHS</span>
+              <span className="font-serif text-charcoal font-medium tracking-wide text-sm group-hover:text-yellow-700 transition-colors leading-none">
+                GHS
+              </span>
               <span className="text-xs tracking-widest uppercase font-sans text-[#b0a898] mt-0.5 sm:inline hidden">
                 Global Horizon Standard
               </span>
             </Link>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-xs uppercase tracking-widest font-sans text-[#7a7265] hover:text-charcoal transition-colors px-4 py-2 rounded-full border border-[#d4cfc4]"
             >
               Back to Home
@@ -35,9 +39,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </nav>
       )}
 
-      <main className="flex-grow">
-        {children}
-      </main>
+      <main className="flex-grow">{children}</main>
 
       <Footer />
     </div>
