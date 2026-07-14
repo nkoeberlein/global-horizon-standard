@@ -13,9 +13,14 @@
     "build:api": "npm run build --workspace=packages/api",
     "dev:api": "npm run build:core && npm run dev --workspace=packages/api",
     "dev:web": "npm run build:core && npm run dev --workspace=packages/web",
-    "build": "npm run build:core && npm run build:cli && npm run build:api && npm run build --workspace=packages/web"
+    "build": "npm run build:core && npm run build:cli && npm run build:api && npm run build --workspace=packages/web",
+    "test": "vitest run",
+    "lint": "biome ci .",
+    "lint:fix": "biome check --write ."
   },
   "devDependencies": {
-    "vite-plugin-web-extension": "^4.5.0"
+    "@biomejs/biome": "2.5.3",
+    "vite-plugin-web-extension": "^4.5.0",
+    "vitest": "^4.1.10"
   }
 }

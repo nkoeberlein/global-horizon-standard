@@ -1,12 +1,11 @@
-import { GitHubIcon } from './GitHubIcon';
 import { Link } from 'react-router-dom';
+import { GitHubIcon } from './GitHubIcon';
 
 export function Footer() {
   return (
     <footer className="px-6 py-16" style={{ borderTop: '1px solid #e8e4db' }}>
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-
           {/* Left: brand */}
           <div>
             <p className="font-serif text-xl text-charcoal mb-1" style={{ fontWeight: 400 }}>
@@ -25,8 +24,8 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-sm font-sans transition-colors"
               style={{ color: '#7a7265' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#2d2926')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#7a7265')}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#2d2926')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#7a7265')}
             >
               <GitHubIcon size={14} />
               GitHub
@@ -35,8 +34,12 @@ export function Footer() {
               to="/imprint"
               className="text-sm font-sans transition-colors"
               style={{ color: '#7a7265' }}
-              onMouseEnter={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#2d2926')}
-              onMouseLeave={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#7a7265')}
+              onMouseEnter={(e: React.MouseEvent) =>
+                ((e.currentTarget as HTMLElement).style.color = '#2d2926')
+              }
+              onMouseLeave={(e: React.MouseEvent) =>
+                ((e.currentTarget as HTMLElement).style.color = '#7a7265')
+              }
             >
               Imprint
             </Link>
@@ -44,8 +47,12 @@ export function Footer() {
               to="/privacy"
               className="text-sm font-sans transition-colors"
               style={{ color: '#7a7265' }}
-              onMouseEnter={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#2d2926')}
-              onMouseLeave={(e: React.MouseEvent) => ((e.currentTarget as HTMLElement).style.color = '#7a7265')}
+              onMouseEnter={(e: React.MouseEvent) =>
+                ((e.currentTarget as HTMLElement).style.color = '#2d2926')
+              }
+              onMouseLeave={(e: React.MouseEvent) =>
+                ((e.currentTarget as HTMLElement).style.color = '#7a7265')
+              }
             >
               Privacy
             </Link>

@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
  * A simple component to protect contact information from basic scrapers.
  * It stores the data reversed and flips it only on the client side.
  */
-export function ObfuscatedContact({ 
-  reversedValue, 
+export function ObfuscatedContact({
+  reversedValue,
   isEmail = false,
-  className = "" 
-}: { 
-  reversedValue: string, 
-  isEmail?: boolean,
-  className?: string
+  className = '',
+}: {
+  reversedValue: string;
+  isEmail?: boolean;
+  className?: string;
 }) {
   const [value, setValue] = useState('');
 
@@ -24,10 +24,7 @@ export function ObfuscatedContact({
 
   if (isEmail) {
     return (
-      <a 
-        href={`mailto:${value}`} 
-        className={`hover:underline ${className}`}
-      >
+      <a href={`mailto:${value}`} className={`hover:underline ${className}`}>
         {value}
       </a>
     );

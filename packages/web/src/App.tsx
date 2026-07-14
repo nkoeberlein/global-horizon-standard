@@ -1,8 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
-import { Layout } from './components/Layout';
+import { Route, Routes } from 'react-router-dom';
 import { HeroSection } from './components/HeroSection';
-import { VisualizerSection } from './components/VisualizerSection';
+import { Layout } from './components/Layout';
 import { PhilosophySection } from './components/PhilosophySection';
+import { VisualizerSection } from './components/VisualizerSection';
 import { ImprintPage } from './pages/ImprintPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 
