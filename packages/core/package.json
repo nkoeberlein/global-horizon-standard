@@ -1,6 +1,6 @@
 {
   "name": "ghs-time",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "The official Global Horizon Standard (GHS) time converter — 13-month calendar, @Beats decimal time, Human Era.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
