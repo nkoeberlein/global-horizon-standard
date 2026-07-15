@@ -20,7 +20,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.3",
-    "vite-plugin-web-extension": "^4.5.0",
+    "typescript": "^6.0.2",
+    "vite-plugin-web-extension": "^4.5.1",
     "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "shell-quote": "^1.8.4",
+    "tmp": "^0.2.6",
+    "uuid": "^11.1.1",
+    "vite": "^8.1.4",
+    "esbuild": "^0.28.1"
   }
 }
