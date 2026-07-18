@@ -11,12 +11,12 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "commander": "^13.0.0",
+    "commander": "^15.0.0",
     "ghs-time": "*"
   },
   "devDependencies": {
-    "@types/node": "^25.0.0",
-    "typescript": "^6.0.0"
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,6 @@
   "author": "Nikolaus Köberlein",
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   }
 }

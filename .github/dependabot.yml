@@ -3,9 +3,58 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+      day: "monday"
     open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "npm"
+    groups:
+      biome:
+        patterns:
+          - "@biomejs/biome"
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/node"
+          - "@types/chrome"
+          - "@types/react"
+          - "@types/react-dom"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "react-router-dom"
+          - "@vitejs/plugin-react"
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/vite"
+          - "@tailwindcss/postcss"
+      vite:
+        patterns:
+          - "vite"
+          - "vite-plugin-web-extension"
+      hono:
+        patterns:
+          - "hono"
+          - "@hono/node-server"
+      build-tools:
+        patterns:
+          - "tsdown"
+          - "tsx"
+          - "vitest"
+          - "commander"
+          - "lucide-react"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

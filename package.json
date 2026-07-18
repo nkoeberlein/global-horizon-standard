@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.4",
-    "typescript": "^6.0.2",
+    "typescript": "^7.0.2",
     "vite-plugin-web-extension": "^4.5.1",
     "vitest": "^4.1.10"
   },

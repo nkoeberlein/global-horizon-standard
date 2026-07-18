@@ -47,10 +47,10 @@
   "author": "Nikolaus Köberlein",
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "devDependencies": {
-    "tsdown": "^0.21.7",
-    "typescript": "^6.0.0"
+    "tsdown": "^0.22.9",
+    "typescript": "^7.0.0"
   }
 }
