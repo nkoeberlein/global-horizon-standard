@@ -13,8 +13,8 @@
     "ghs-time": "*",
     "ghs-ui": "*",
     "lucide-react": "^1.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-router-dom": "^7.14.0"
   },
   "devDependencies": {
@@ -22,7 +22,7 @@
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-react": "^6.0.4",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "typescript": "^7.0.0",
