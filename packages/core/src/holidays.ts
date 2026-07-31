@@ -1,5 +1,6 @@
 import { isAuroraYear } from './aurora';
 import { parseGHSDate } from './converter';
+import { formatEra } from './era';
 
 interface HolidayBase {
   name: string;
@@ -32,6 +33,13 @@ export type Holiday = FixedHoliday | DynamicHoliday;
  * calendar they shift by up to ±4 days from year to year. Use
  * `getHolidaysForYear` to resolve a fixed holiday to its Gregorian date in a
  * specific year.
+ *
+ * Astronomical holidays (the equinoxes and solstices) are placed so their
+ * Gregorian dates are centered on the actual event, leaving only that
+ * irreducible ±4-day drift. They are deliberately *not* on a tidy
+ * every-third-month grid: the seasons are unequal, so day 14 of months 4/7/10
+ * would sit 4, 6 and 11 days off respectively. `tests/holidays.test.ts` guards
+ * the calibration.
  */
 export const HOLIDAYS: readonly Holiday[] = [
   {
@@ -64,7 +72,7 @@ export const HOLIDAYS: readonly Holiday[] = [
     category: 'Global',
     type: 'fixed',
     month: 4,
-    day: 14,
+    day: 10,
     description:
       'Marks the longest day of the year (northern hemisphere). A festival of light and energy.',
   },
@@ -73,7 +81,7 @@ export const HOLIDAYS: readonly Holiday[] = [
     category: 'Global',
     type: 'fixed',
     month: 7,
-    day: 14,
+    day: 20,
     description:
       'The balance point of the year. Day and night are equal. A celebration of harvest and equilibrium.',
   },
@@ -99,7 +107,7 @@ export const HOLIDAYS: readonly Holiday[] = [
     category: 'Global',
     type: 'fixed',
     month: 10,
-    day: 14,
+    day: 25,
     description: 'The shortest day (northern hemisphere). Marking the return of the light.',
   },
   {
@@ -265,9 +273,10 @@ export interface HolidayOccurrence {
 }
 
 /**
- * Resolves all fixed holidays to their Gregorian dates in the given GHS year.
- * Aurora-Week holidays are omitted in years that are not Aurora Years.
- * Dynamic (lunar-calendar) holidays cannot be resolved by GHS and are excluded.
+ * Resolves all fixed holidays to their Gregorian dates in the given GHS year,
+ * sorted chronologically. Aurora-Week holidays are omitted in years that are
+ * not Aurora Years. Dynamic (lunar-calendar) holidays cannot be resolved by GHS
+ * and are excluded.
  */
 export function getHolidaysForYear(era: number): HolidayOccurrence[] {
   const occurrences: HolidayOccurrence[] = [];
@@ -280,7 +289,7 @@ export function getHolidaysForYear(era: number): HolidayOccurrence[] {
     const occurrence: HolidayOccurrence = {
       holiday,
       era,
-      ghsDate: `${era}.${monthStr}.${String(holiday.day).padStart(2, '0')}`,
+      ghsDate: `${formatEra(era)}.${monthStr}.${String(holiday.day).padStart(2, '0')}`,
       gregorian: parseGHSDate(era, holiday.month, holiday.day),
     };
     if (holiday.endDay !== undefined) {
@@ -289,5 +298,8 @@ export function getHolidaysForYear(era: number): HolidayOccurrence[] {
     occurrences.push(occurrence);
   }
 
-  return occurrences;
+  // HOLIDAYS is grouped by category, not by date. Within a year the Gregorian
+  // order matches the GHS order, so this also places the Aurora Week after
+  // month 13 without a separate sort key.
+  return occurrences.sort((a, b) => a.gregorian.getTime() - b.gregorian.getTime());
 }

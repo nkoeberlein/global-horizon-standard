@@ -59,14 +59,17 @@ You never need to buy a new calendar again. Schedules, pay cycles, and holidays 
 
 The year's astronomical anchor points fall at predictable calendar positions:
 
-| GHS Date   | Event             | Astronomical Meaning   |
-|------------|-------------------|------------------------|
-| 1 March    | New Year          | Spring Equinox         |
-| 14 June    | Summer Festival   | Summer Solstice        |
-| 14 September | Autumn Festival | Autumn Equinox (sep = 7) |
-| 14 December  | Winter Festival | Winter Solstice (dec = 10) |
+| GHS Date      | Event           | Astronomical Meaning       |
+|---------------|-----------------|----------------------------|
+| 1 March       | New Year        | Spring Equinox             |
+| 10 June       | Summer Festival | Summer Solstice            |
+| 20 September  | Autumn Festival | Autumn Equinox (sep = 7)   |
+| 25 December   | Winter Festival | Winter Solstice (dec = 10) |
 
 Due to the ~1.24-day annual drift between the 364-day calendar and the solar year, these astronomical events shift by a few days over a 5–6 year cycle. The Aurora Week resets this drift periodically.
+
+> [!NOTE]
+> These dates deliberately do **not** sit on a tidy day-14-of-every-third-month grid. The astronomical seasons are unequal — Earth's orbit is elliptical, so spring→summer spans ~92.8 days while autumn→winter spans ~89.6 — and a uniform grid would place the autumn equinox 6 days and the winter solstice 11 days off. The dates above are chosen so each event's ±4-day drift window is *centered* on the true event, which is the best a fixed calendar date can do.
 
 ## 4. Financial Quarters
 
