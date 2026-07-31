@@ -123,6 +123,9 @@ Where:
 
 This distributes the 71 leap weeks as evenly as possible, producing intervals of 5 or 6 years between Aurora Years.
 
+> [!IMPORTANT]
+> `mod` here denotes the **mathematical modulo** — the non-negative residue. Languages whose `%` operator truncates toward zero (JavaScript, C, C++, Java, Go, Rust) return negative results for negative operands and must normalize: `((x % 400) + 400) % 400`. Without this, every era ≤ 0 is misclassified, the 146,097-day cycle invariant of §5.3 collapses, and year starts computed via the 400-year shortcut drift thousands of days off. Languages with a euclidean `%` (Dart, Python) need no adjustment.
+
 ### 5.5 Epoch & Reference Implementation
 
 The calendar is anchored at a **single epoch**:
@@ -136,7 +139,8 @@ Every other year start follows deterministically by chaining year lengths (364 o
 ```typescript
 function isAuroraYear(yearHE: number): boolean {
   const epsilon = 156;
-  return (71 * yearHE + epsilon) % 400 < 71;
+  // Euclidean modulo — JavaScript's `%` is negative for negative operands.
+  return (((71 * yearHE + epsilon) % 400) + 400) % 400 < 71;
 }
 
 function getDaysInYear(yearHE: number): number {

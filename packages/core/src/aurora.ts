@@ -10,10 +10,14 @@ import { DAYS_PER_AURORA_YEAR, DAYS_PER_NORMAL_YEAR } from './constants';
  * - Epsilon 156 calibrates the phase so year starts drift symmetrically
  *   around the spring equinox (see epoch.ts).
  *
+ * The modulo is euclidean: JavaScript's `%` returns negative results for
+ * negative operands, which would misclassify eras <= 0 and break the
+ * 146,097-day cycle invariant that getYearStartMs/resolveYear rely on.
+ *
  * Ref: spec/calendar.md §5.4
  */
 export function isAuroraYear(yearHE: number): boolean {
-  return (71 * yearHE + 156) % 400 < 71;
+  return (((71 * yearHE + 156) % 400) + 400) % 400 < 71;
 }
 
 /**
