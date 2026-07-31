@@ -34,6 +34,17 @@ const int cycleYears = 400;
 /// Days per 400-year cycle: 400 × 364 + 71 × 7 = 146,097 (matches Gregorian).
 const int cycleDays = 146097;
 
+/// Formats a Human Era year for machine-readable output.
+///
+/// spec/timestamp-format.md requires the full 5-digit year in the core format,
+/// so GHS timestamps sort lexicographically and round-trip through the string
+/// parser. The sign is handled separately: padLeft on "-101" would yield
+/// "0-101".
+String formatEra(int yearHE) {
+  final sign = yearHE < 0 ? '-' : '';
+  return '$sign${yearHE.abs().toString().padLeft(5, '0')}';
+}
+
 /// Returns true if [yearHE] is an Aurora Year (53-week leap year).
 ///
 /// Formula: (71 × Y + 156) mod 400 < 71
@@ -191,7 +202,7 @@ GhsDateResult getGhsDate([DateTime? inputDate]) {
     isAuroraYearFlag: aurora,
     beats: beatsFormatted,
     beatsLong: beatsLong,
-    fullDate: '$yearHE.$monthStr.$dayStr',
+    fullDate: '${formatEra(yearHE)}.$monthStr.$dayStr',
   );
 }
 
@@ -250,7 +261,10 @@ enum GhsFormat { core, ui, text, short }
 /// | text   | 15 March 12026       | Formal        |
 /// | short  | 15 Mar '26           | Everyday      |
 String formatGhs(GhsDateResult ghs, [GhsFormat format = GhsFormat.core]) {
-  final shortYear = ghs.era.toString().substring(ghs.era.toString().length - 2);
+  // Pad first: substring(len - 2) throws for single-digit eras, and "'1" would
+  // be wrong anyway.
+  final eraStr = formatEra(ghs.era);
+  final shortYear = eraStr.substring(eraStr.length - 2);
   final shortMonth = ghs.isAuroraWeek ? 'Aur' : ghs.monthName.substring(0, 3);
 
   switch (format) {

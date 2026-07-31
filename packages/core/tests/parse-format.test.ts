@@ -74,6 +74,49 @@ describe('formatGHS', () => {
   });
 });
 
+/**
+ * spec/timestamp-format.md: "The full 5-digit year must be used for long-term
+ * data integrity." Before this was enforced, getGHSDate emitted `500.01.01`,
+ * which parseGHSString rejected — the library produced strings it could not
+ * read back. Era 500 is not exotic: spec/era-he.md cites Göbekli Tepe at
+ * ~500 HE as the showcase for the Human Era.
+ */
+describe('era padding in machine-readable output', () => {
+  it.each([
+    [12026, '12026.01.15'],
+    [9999, '09999.01.15'],
+    [500, '00500.01.15'],
+    [1, '00001.01.15'],
+  ])('pads era %i to five digits', (era, expected) => {
+    expect(getGHSDate(parseGHSDate(era, 1, 15)).fullDate).toBe(expected);
+  });
+
+  it('keeps the sign outside the padding for negative eras', () => {
+    // Naive padStart would produce "0-101".
+    expect(getGHSDate(parseGHSDate(-101, 1, 15)).fullDate).toBe('-00101.01.15');
+  });
+
+  it('round-trips every fullDate back through parseGHSString', () => {
+    for (const era of [1, 500, 9999, 10000, 12026, 99999]) {
+      for (const [month, day] of [
+        [1, 1],
+        [7, 20],
+        [13, 28],
+      ] as [number, number][]) {
+        const original = parseGHSDate(era, month, day);
+        const { fullDate } = getGHSDate(original);
+        const reparsed = parseGHSString(fullDate);
+        expect(reparsed, `${fullDate} must parse back`).not.toBeNull();
+        expect(reparsed?.date.getTime()).toBe(original.getTime());
+      }
+    }
+  });
+
+  it("renders the short year with a leading zero ('01, not '1)", () => {
+    expect(formatGHS(getGHSDate(parseGHSDate(1, 1, 15)), 'short')).toBe("15 Mar '01");
+  });
+});
+
 describe('isGHSFormat', () => {
   it('accepts exactly the known formats', () => {
     for (const format of GHS_FORMATS) {

@@ -28,6 +28,22 @@ void main() {
       expect(isAuroraYear(-1000), isFalse);
     });
 
+    test('era is padded to five digits in fullDate', () {
+      expect(getGhsDate(DateTime.utc(2026, 6, 15)).fullDate, startsWith('12026.'));
+      expect(formatEra(12026), '12026');
+      expect(formatEra(9999), '09999');
+      expect(formatEra(500), '00500');
+      expect(formatEra(1), '00001');
+      // padLeft alone would produce "0-101".
+      expect(formatEra(-101), '-00101');
+    });
+
+    test('short format does not throw for single-digit eras', () {
+      final ghs = getGhsDate(parseGhsDate(1, 1, 15));
+      expect(ghs.fullDate, '00001.01.15');
+      expect(formatGhs(ghs, GhsFormat.short), "15 Mar '01");
+    });
+
     test('400 consecutive years hold 71 Aurora Years, negative windows too', () {
       for (final windowStart in [-1200, -400, -3, 0, 500, 12000]) {
         var days = 0;

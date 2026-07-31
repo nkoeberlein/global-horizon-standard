@@ -1,3 +1,4 @@
+import { formatEra } from './era';
 import type { GHSDateResult } from './types';
 
 /** Available output formats for {@link formatGHS}. */
@@ -22,7 +23,8 @@ export function isGHSFormat(value: string): value is GHSFormat {
  */
 export function formatGHS(ghsObj: GHSDateResult, format: GHSFormat = 'core'): string {
   const { era, monthName, day, beats, isAuroraWeek, fullDate } = ghsObj;
-  const shortYear = String(era).slice(-2);
+  // Pad first, so single- and few-digit eras yield "'01" rather than "'1".
+  const shortYear = formatEra(era).slice(-2);
   const shortMonth = isAuroraWeek ? 'Aur' : monthName.slice(0, 3);
 
   switch (format) {

@@ -11,6 +11,11 @@ export interface ParsedGHSDate {
 }
 
 // "12026.01.15", "12026.A.03", optionally followed by " @685" or " @685.25"
+//
+// The era is exactly five digits, per spec/timestamp-format.md ("The full
+// 5-digit year must be used"). `formatEra` pads accordingly, so everything
+// getGHSDate emits for era 1–99999 parses back. Negative eras are outside the
+// grammar by design — spec/era-he.md exists precisely to abolish them.
 const GHS_STRING_RE = /^(\d{5})\.(A|\d{2})\.(\d{2})(?:\s+@(\d{1,3}(?:\.\d{1,2})?))?$/i;
 
 /**

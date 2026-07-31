@@ -1,6 +1,7 @@
 import { isAuroraYear } from './aurora';
 import { BEAT_MS, DAY_MS, DAYS_PER_NORMAL_YEAR, MONTH_NAMES_GHS, WEEKDAYS_GHS } from './constants';
 import { getYearStartMs, resolveYear } from './epoch';
+import { formatEra } from './era';
 import type { GHSDateResult } from './types';
 
 /**
@@ -65,7 +66,7 @@ export function getGHSDate(inputDate: Date = new Date()): GHSDateResult {
     isAuroraYear: aurora,
     beats: `@${beatsStr}`,
     beatsLong: `@${beatsStr}.${String(centibeats % 100).padStart(2, '0')}`,
-    fullDate: `${yearHE}.${monthStr}.${dayStr}`,
+    fullDate: `${formatEra(yearHE)}.${monthStr}.${dayStr}`,
   };
 }
 
