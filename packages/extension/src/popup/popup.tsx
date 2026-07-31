@@ -6,7 +6,7 @@ const Popup = () => {
   const [now, setNow] = useState(getGHSDate());
 
   useEffect(() => {
-    const timer = setInterval(() => setNow(getGHSDate()), 864); // Update ca. alle 10 Centibeats
+    const timer = setInterval(() => setNow(getGHSDate()), 864); // 864 ms = 1 Centibeat
     return () => clearInterval(timer);
   }, []);
 

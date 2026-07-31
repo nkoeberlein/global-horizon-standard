@@ -131,12 +131,13 @@ program
     console.log('\n🌍 GLOBAL HORIZON STANDARD');
     console.log('(Press Ctrl+C to exit)\n');
 
-    // Update every 86ms (approx. 1 Millibeat) for a smooth UI
+    // The display shows whole beats, which only change every 86.4 s. A coarse
+    // repaint keeps the clock feeling live without busy-looping (see CLAUDE.md).
     setInterval(() => {
       const now = getGHSDate();
       // \r clears the current line and writes over it
       process.stdout.write(`\r  ⏱️  ${formatGHS(now, 'ui')}`);
-    }, 86);
+    }, 250);
   });
 
 /**
@@ -163,7 +164,9 @@ program
       !Number.isInteger(targetYear) ||
       targetYear < 10000 ||
       targetYear > 99999 ||
-      (typeof targetMonth === 'number' && (targetMonth < 1 || targetMonth > 13))
+      // Number.isInteger first: NaN passes both range comparisons.
+      (typeof targetMonth === 'number' &&
+        (!Number.isInteger(targetMonth) || targetMonth < 1 || targetMonth > 13))
     ) {
       fail("Month must be between 1-13 (or 'A'), year must be a 5-digit HE number.");
     }
