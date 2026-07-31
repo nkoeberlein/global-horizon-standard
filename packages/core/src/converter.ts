@@ -10,9 +10,16 @@ import type { GHSDateResult } from './types';
  * are derived from the GHS epoch (see epoch.ts) by chaining the 364/371-day
  * year lengths, so the mapping between real days and GHS dates is bijective:
  * every day has exactly one GHS date and vice versa.
+ *
+ * @throws RangeError when `inputDate` is an Invalid Date (or otherwise
+ *         non-finite) — resolveYear cannot converge on NaN.
  */
 export function getGHSDate(inputDate: Date = new Date()): GHSDateResult {
   const ms = inputDate.getTime();
+  if (!Number.isFinite(ms)) {
+    throw new RangeError('Invalid Date: cannot convert an invalid date to GHS.');
+  }
+
   const { yearHE, yearStartMs } = resolveYear(ms);
 
   // Whole days elapsed since the start of this GHS year (0-indexed).
@@ -30,12 +37,15 @@ export function getGHSDate(inputDate: Date = new Date()): GHSDateResult {
   const weekOfYear = isAuroraWeek ? null : Math.floor(dayIndex / 7) + 1;
   const quarter = weekOfYear === null ? null : Math.floor((weekOfYear - 1) / 13) + 1;
 
-  // @Beats — UTC milliseconds within the day / 86,400 (1 beat = 86.4 SI seconds)
+  // @Beats — 1 beat = 86,400 ms (86.4 SI seconds), 1 centibeat = 864 ms.
+  // `msInDay` is always an integer in [0, 86_399_999], so this is exact integer
+  // math. Truncating (never rounding) keeps the display from showing a beat
+  // that has not happened yet — a clock shows 10:59, not 11:00, at 10:59:59 —
+  // and makes `beats` and `beatsLong` agree by construction.
   const msInDay = ms - yearStartMs - dayIndex * DAY_MS;
-
-  // Clamp to [0, 999.99] to prevent floating-point rounding to "@1000.00"
-  // at 23:59:59.999 UTC.
-  const beatsValue = Math.min(msInDay / BEAT_MS, 999.99);
+  const wholeBeats = Math.floor(msInDay / BEAT_MS); // 0–999
+  const centibeats = Math.floor(msInDay / (BEAT_MS / 100)); // 0–99,999
+  const beatsStr = String(wholeBeats).padStart(3, '0');
 
   const month = isAuroraWeek ? null : monthIndex + 1;
   const monthName = isAuroraWeek ? 'Aurora' : (MONTH_NAMES_GHS[monthIndex] as string);
@@ -53,8 +63,8 @@ export function getGHSDate(inputDate: Date = new Date()): GHSDateResult {
     weekday,
     isAuroraWeek,
     isAuroraYear: aurora,
-    beats: `@${Math.floor(beatsValue).toString().padStart(3, '0')}`,
-    beatsLong: `@${beatsValue.toFixed(2).padStart(6, '0')}`,
+    beats: `@${beatsStr}`,
+    beatsLong: `@${beatsStr}.${String(centibeats % 100).padStart(2, '0')}`,
     fullDate: `${yearHE}.${monthStr}.${dayStr}`,
   };
 }

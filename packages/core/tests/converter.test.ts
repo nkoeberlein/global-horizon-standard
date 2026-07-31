@@ -133,7 +133,7 @@ describe('weeks and quarters (spec §4)', () => {
 });
 
 describe('@Beats', () => {
-  it('starts the day at @000 and clamps 23:59:59.999 to @999.99', () => {
+  it('starts the day at @000 and truncates 23:59:59.999 to @999.99', () => {
     const midnight = getGHSDate(new Date(Date.UTC(2026, 6, 14, 0, 0, 0, 0)));
     expect(midnight.beats).toBe('@000');
     expect(midnight.beatsLong).toBe('@000.00');
@@ -152,6 +152,32 @@ describe('@Beats', () => {
     const date = parseGHSDate(12026, 5, 7, 685.25);
     const ghs = getGHSDate(date);
     expect(ghs.beatsLong).toBe('@685.25');
+  });
+
+  it('truncates rather than rounds — never shows a beat that has not happened', () => {
+    // 172,481 ms into the day = 1.9963 beats. Rounding would display @002.00.
+    const ghs = getGHSDate(new Date(parseGHSDate(12026, 1, 1).getTime() + 172_481));
+    expect(ghs.beats).toBe('@001');
+    expect(ghs.beatsLong).toBe('@001.99');
+  });
+
+  it('keeps beats and beatsLong in agreement across a full day', () => {
+    const dayStart = parseGHSDate(12026, 1, 1).getTime();
+    for (let msInDay = 0; msInDay < DAY_MS; msInDay += 997) {
+      const ghs = getGHSDate(new Date(dayStart + msInDay));
+      expect(ghs.beatsLong.slice(0, 4)).toBe(ghs.beats);
+    }
+  });
+});
+
+describe('invalid input', () => {
+  // Regression: resolveYear's unbounded loop never terminated on NaN
+  // (every `NaN < NaN` is false), hanging the process instead of throwing.
+  it.each([
+    ['Invalid Date', new Date(Number.NaN)],
+    ['unparseable string', new Date('nonsense')],
+  ])('throws RangeError instead of hanging on %s', (_label, input) => {
+    expect(() => getGHSDate(input)).toThrow(RangeError);
   });
 });
 

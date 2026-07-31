@@ -16,6 +16,27 @@ void main() {
       expect(isAuroraYear(12020), isFalse);
       expect(isAuroraYear(12022), isFalse);
     });
+
+    // Dart's `%` is euclidean, so negative eras are already handled. The
+    // TypeScript core needed an explicit fix here (JS `%` truncates); this
+    // test pins the behaviour so the two ports cannot drift apart again.
+    test('negative eras use a non-negative modulo', () {
+      for (var y = -2000; y <= 2000; y++) {
+        final euclidean = (((71 * y + 156) % 400) + 400) % 400 < 71;
+        expect(isAuroraYear(y), euclidean, reason: 'era $y');
+      }
+      expect(isAuroraYear(-1000), isFalse);
+    });
+
+    test('400 consecutive years hold 71 Aurora Years, negative windows too', () {
+      for (final windowStart in [-1200, -400, -3, 0, 500, 12000]) {
+        var days = 0;
+        for (var y = windowStart; y < windowStart + 400; y++) {
+          days += getDaysInYear(y);
+        }
+        expect(days, cycleDays, reason: 'window $windowStart');
+      }
+    });
   });
 
   group('epoch calibration', () {
@@ -107,6 +128,23 @@ void main() {
       final ghs = getGhsDate(DateTime.utc(2026, 4, 16, 23, 59, 59, 999));
       expect(ghs.beats, isNot('@1000'));
       expect(ghs.beats, '@999');
+      expect(ghs.beatsLong, '@999.99');
+    });
+
+    test('truncates rather than rounds', () {
+      // 172,481 ms into the day = 1.9963 beats. Rounding would show @002.00.
+      final ghs = getGhsDate(
+          DateTime.utc(2026, 4, 16).add(const Duration(milliseconds: 172481)));
+      expect(ghs.beats, '@001');
+      expect(ghs.beatsLong, '@001.99');
+    });
+
+    test('beats and beatsLong agree across a full day', () {
+      final dayStart = DateTime.utc(2026, 4, 16);
+      for (var msInDay = 0; msInDay < 86400000; msInDay += 997) {
+        final ghs = getGhsDate(dayStart.add(Duration(milliseconds: msInDay)));
+        expect(ghs.beatsLong.substring(0, 4), ghs.beats, reason: 'ms $msInDay');
+      }
     });
   });
 

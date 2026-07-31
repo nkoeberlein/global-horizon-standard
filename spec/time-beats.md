@@ -21,6 +21,16 @@ When it is **@500**, it is @500 everywhere on Earth simultaneously. There are no
 
 The **Centibeat** (~0.86 seconds) is the natural replacement for the second in everyday life — close to the duration of a human heartbeat.
 
+### 2.1 Rounding
+
+Beat values are **truncated toward zero, never rounded up** — at any precision. A clock must not display a beat that has not happened yet, exactly as a conventional clock shows 10:59 at 10:59:59, not 11:00.
+
+Consequences:
+- The highest value of any day is **@999.99**; **@1000** is never displayed.
+- Truncation at every precision guarantees that coarser and finer renderings of the same instant agree: `@001` and `@001.99` describe the same moment; `@001` and `@002.00` would be a contradiction.
+
+Implementations should derive beats with integer arithmetic from the millisecond offset within the UTC day (1 beat = 86,400 ms, 1 centibeat = 864 ms, 1 millibeat = 86.4 ms) rather than formatting a floating-point value, which reintroduces rounding.
+
 ## 3. Arithmetic Advantage
 
 Calculating time durations becomes trivially simple:

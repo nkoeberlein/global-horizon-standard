@@ -37,6 +37,10 @@ const int cycleDays = 146097;
 /// Returns true if [yearHE] is an Aurora Year (53-week leap year).
 ///
 /// Formula: (71 × Y + 156) mod 400 < 71
+///
+/// Dart's `%` is already euclidean (always non-negative for a positive
+/// divisor), so this stays correct for eras <= 0. The TypeScript core needs an
+/// explicit `((x % 400) + 400) % 400` because JavaScript's `%` truncates.
 bool isAuroraYear(int yearHE) {
   return (71 * yearHE + 156) % 400 < 71;
 }
@@ -156,18 +160,23 @@ GhsDateResult getGhsDate([DateTime? inputDate]) {
   final weekOfYear = auroraWeek ? null : dayIndex ~/ 7 + 1;
   final quarter = weekOfYear == null ? null : (weekOfYear - 1) ~/ 13 + 1;
 
-  // @Beats — ms within the day / 86,400 (1 beat = 86.4 SI seconds).
-  // Clamp to [0, 999.99] to prevent floating-point rounding to "@1000.00".
+  // @Beats — 1 beat = 86,400 ms (86.4 SI seconds), 1 centibeat = 864 ms.
+  // [msInDay] is always an integer in [0, 86_399_999], so this is exact integer
+  // math. Truncating (never rounding) keeps the display from showing a beat
+  // that has not happened yet, and makes beats and beatsLong agree by
+  // construction.
   final msInDay = ms - resolved.yearStartMs - dayIndex * _dayMs;
-  final beatsValue = (msInDay / 86400).clamp(0.0, 999.99);
+  final wholeBeats = msInDay ~/ 86400; // 0–999
+  final centibeats = msInDay ~/ 864; // 0–99,999
+  final beatsStr = wholeBeats.toString().padLeft(3, '0');
 
   final month = auroraWeek ? null : monthIndex + 1;
   final monthName = auroraWeek ? 'Aurora' : monthNamesGhs[monthIndex];
   final monthStr = auroraWeek ? 'A' : month.toString().padLeft(2, '0');
   final dayStr = dayOfMonth.toString().padLeft(2, '0');
 
-  final beatsFormatted = '@${beatsValue.floor().toString().padLeft(3, '0')}';
-  final beatsLong = '@${beatsValue.toStringAsFixed(2).padLeft(6, '0')}';
+  final beatsFormatted = '@$beatsStr';
+  final beatsLong = '@$beatsStr.${(centibeats % 100).toString().padLeft(2, '0')}';
 
   return GhsDateResult(
     era: yearHE,
