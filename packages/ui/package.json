@@ -7,14 +7,14 @@
   "types": "src/index.ts",
   "dependencies": {
     "ghs-time": "*",
-    "lucide-react": "^1.0"
+    "lucide-react": "^1.28.0"
   },
   "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@types/react": "^19.1.0",
-    "typescript": "^7.0.0"
+    "@types/react": "^19.2.18",
+    "typescript": "^7.0.2"
   }
 }
