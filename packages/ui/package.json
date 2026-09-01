@@ -7,7 +7,7 @@
   "types": "src/index.ts",
   "dependencies": {
     "ghs-time": "*",
-    "lucide-react": "^1.28.0"
+    "lucide-react": "^1.35.0"
   },
   "peerDependencies": {
     "react": "^19.2.8",
