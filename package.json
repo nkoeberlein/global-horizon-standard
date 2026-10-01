@@ -22,7 +22,7 @@
     "@biomejs/biome": "2.5.4",
     "typescript": "^7.0.2",
     "vite-plugin-web-extension": "^4.5.1",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.2"
   },
   "overrides": {
     "shell-quote": "^1.8.4",
