@@ -1,24 +1,67 @@
-## CLI Commands
+# 🌍 ghs-cli
 
-The `ghs` CLI tool provides a set of commands to interact with the Global Horizon Standard directly from your terminal.
+Command-line interface (`ghs`) for the **Global Horizon Standard (GHS)** — 13-month calendar, `@Beats` decimal time, and Human Era (HE).
 
-### `ghs` (or `ghs now`)
-The primary command. It outputs the current moment in its full GHS representation, including contextual information.
-* **Output Example:** `12026.01.13 @685`
-* **Context:** "Date: Tuesday, 13 March 12026 HE | Year Info: Normal Year (52 weeks)"
+## Installation
+
+```bash
+npm install -g ghs-cli
+```
+
+Or inside this repository:
+
+```bash
+npm run build
+npm link packages/cli
+```
+
+## Commands
+
+### `ghs` (Default: Current GHS Time)
+Displays the current GHS timestamp and human-readable date.
+
+```bash
+$ ghs
+  🌍 GHS: 12026.01.15 @685
+  📅 Monday, 15 March 12026
+
+$ ghs --format short      # Formats: core, ui, text, short
+$ ghs --json              # Full GHSDateResult as JSON
+$ ghs --compare           # Side-by-side GHS and ISO-8601 UTC output
+```
 
 ### `ghs convert <date>`
-Converts any Gregorian date into the GHS time protocol.
-* **Input Example:** `ghs convert 1995-08-15`
-* **Output Example:** `11995.06.01 @000 (Tuesday, 1 August)`
-* **Features:** Supports standard ISO strings (e.g., `YYYY-MM-DD`) and Unix timestamps.
+Bidirectional converter between Gregorian (`YYYY-MM-DD` / ISO-8601) and GHS (`[GHS ]YYYYY.MM.DD[@BBB]`, or `YYYYY.A.DD` for Aurora Week).
+
+```bash
+$ ghs convert "2026-03-23"
+  🌍 Gregorian:  2026-03-23T00:00:00.000Z
+  🗓️  GHS Output: 12026.01.01 @000 (1 Mar 12026 @000)
+
+$ ghs convert "12025.A.01"
+  🗓️  GHS Input:  12025.A.01
+  🌍 Gregorian:  2026-03-16T00:00:00.000Z
+```
+
+### `ghs clock`
+Runs a live-updating terminal `@Beats` clock.
+
+```bash
+$ ghs clock
+```
 
 ### `ghs cal [month] [year]`
-Displays a perfectly symmetrical terminal calendar, inspired by the classic Linux `cal` command.
-* **Symmetry by Design:** Since every GHS month consists of exactly 28 days (starting on Monday and ending on Sunday), the terminal grid is always perfectly aligned.
-* **Aurora Check:** Automatically detects leap years and visually highlights the 7-day "Aurora Week" (A.01 to A.07) at the end of the year.
+Displays the symmetrical 4×7 GHS calendar grid for any month (`1`–`13`) or the Aurora Week (`A`).
 
-### `ghs beats` (via `ghs --unix`)
-Outputs strictly the current global time in `@Beats`.
-* **Output Example:** `@685`
-* **Use Case:** Designed for seamless integration into server logs, custom shell scripts, or desktop status bars (e.g., i3status, Polybar, Waybar).
+```bash
+$ ghs cal 1 12026
+$ ghs cal A 12025
+```
+
+### `ghs holidays [year]`
+Lists the fixed GHS holidays for a given Human Era year alongside their computed Gregorian UTC dates (including the Aurora Festival in Aurora Years).
+
+```bash
+$ ghs holidays 12026
+$ ghs holidays 12025
+```

@@ -109,4 +109,4 @@ For sub-beat precision (scientific or high-frequency applications), append centi
 
 During the adoption phase, GHS timestamps should be prefixed with **GHS** to avoid confusion with the Gregorian system:
 
-`GHS 12026.01.15 @685  (Gregorian: 15 March 2026)`
+`GHS 12026.01.15 @685  (Gregorian: 6 April 2026)`

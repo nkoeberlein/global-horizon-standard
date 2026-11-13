@@ -45,7 +45,7 @@ The existing month names are retained because they are globally familiar, even i
 No system switches overnight. A parallel display period is needed (like price tags during the Euro introduction):
 
 ```
-GHS 12026.01.09 @875  (29 Mar 2026, 21:00 UTC)
+GHS 12026.01.09 @875  (31 Mar 2026, 21:00 UTC)
 ```
 
 An official **GHS prefix** prevents confusion between old and new date formats during the transition.

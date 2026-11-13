@@ -1,17 +1,19 @@
-# ghs_mobile
+# GHS Mobile (`ghs_mobile`)
 
-A new Flutter project.
+Flutter application (Android & iOS) for the **Global Horizon Standard (GHS)** — displaying live `@Beats` decimal time, the 13-month Human Era calendar, and a bidirectional Gregorian ↔ GHS converter.
 
-## Getting Started
+## Architecture
 
-This project is a starting point for a Flutter application.
+- `lib/core/ghs_converter.dart` — Pure Dart port of `ghs-time` v3 (`getGhsDate`, `parseGhsDate`, `parseGhsString`, `parseGhsComponents`, `getSolarNoonBeat`, `formatGhs`).
+- `lib/screens/home_screen.dart` — Live GHS clock and date view (`Timer.periodic` 1 s).
+- `lib/screens/converter_screen.dart` — Bidirectional Gregorian ↔ GHS converter.
+- `test/core/ghs_converter_test.dart` — Unit test suite and conformance checks against `test/fixtures/vectors.json`.
 
-A few resources to get you started if this is your first Flutter project:
+## Development
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+cd packages/mobile
+flutter pub get
+flutter test
+flutter run
+```

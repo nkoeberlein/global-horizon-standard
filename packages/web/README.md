@@ -24,4 +24,3 @@ npm run build --workspace=packages/web
 
 - React 19, React Router 7, Vite 8, Tailwind CSS 4
 - [`ghs-time`](../core/) for calendar and time logic
-- [`ghs-ui`](../ui/) for shared components (consumed directly from source)

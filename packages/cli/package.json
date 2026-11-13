@@ -11,11 +11,11 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "commander": "^15.0.0",
+    "commander": "^15.1.0",
     "ghs-time": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.6.6",
     "typescript": "^7.0.2"
   },
   "repository": {

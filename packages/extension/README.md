@@ -4,9 +4,10 @@ A browser extension that displays live GHS time — @Beats decimal time and 13-m
 
 ## Features
 
-- Live @Beats display, updated every ~10 centibeats (≈8.64 seconds)
+- Live @Beats popup display, updated every centibeat (864 ms)
 - Current GHS date: month, weekday, and Human Era year
 - Aurora Year indicator
+- Toolbar action badge updated in the background via `chrome.alarms`
 - Link to the GHS web dashboard
 
 ## Build
@@ -15,13 +16,10 @@ A browser extension that displays live GHS time — @Beats decimal time and 13-m
 # From repo root
 npm install
 npm run build:core
-
-# Build the extension
-cd packages/extension
-npm run build
+npm run build --workspace=packages/extension
 ```
 
-The output is in `dist/`. Load it as an unpacked extension in your browser.
+The output is in `packages/extension/dist/`. Load it as an unpacked extension in your browser.
 
 ## Installation (Developer Mode)
 
@@ -31,7 +29,7 @@ The output is in `dist/`. Load it as an unpacked extension in your browser.
 
 ## Tech Stack
 
-- React 18, Vite, Tailwind CSS 4
+- React 19, Vite, Tailwind CSS 4
 - Manifest V3
 - [`ghs-time`](../core/) for all calendar and time logic
 - Background service worker using the `alarms` API for periodic updates
