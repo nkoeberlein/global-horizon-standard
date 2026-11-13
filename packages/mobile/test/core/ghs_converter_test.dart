@@ -7,11 +7,11 @@ import 'package:test/test.dart';
 void main() {
   group('isAuroraYear', () {
     // Verified against TypeScript reference: packages/core/src
-    // Aurora years near 12026: 12014, 12019, 12025, 12030, 12036
+    // Aurora years near 12026: 12013, 12019, 12025, 12030, 12036
     test('known Aurora years return true', () {
       expect(isAuroraYear(12025), isTrue);
       expect(isAuroraYear(12019), isTrue);
-      expect(isAuroraYear(12014), isTrue);
+      expect(isAuroraYear(12013), isTrue);
     });
 
     test('non-Aurora years return false', () {

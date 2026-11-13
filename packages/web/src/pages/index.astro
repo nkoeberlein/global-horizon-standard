@@ -1,16 +1,22 @@
 ---
+import katex from 'katex';
 import { EcosystemSection } from '../components/EcosystemSection';
 import { HeroSection } from '../components/HeroSection';
 import { PhilosophySection } from '../components/PhilosophySection';
 import { VisualizerSection } from '../components/VisualizerSection';
 import { WhySection } from '../components/WhySection';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const solarNoonFormulaHtml = katex.renderToString(
+  'B_{\\text{noon}}(\\lambda) = \\left(500 - \\frac{1{,}000\\,\\lambda}{360^\\circ}\\right) \\bmod 1{,}000',
+  { throwOnError: true, output: 'htmlAndMathml' },
+);
 ---
 
 <BaseLayout isHome={true}>
   <HeroSection client:load />
   <WhySection />
   <PhilosophySection />
-  <VisualizerSection client:visible />
+  <VisualizerSection client:visible solarNoonFormulaHtml={solarNoonFormulaHtml} />
   <EcosystemSection />
 </BaseLayout>

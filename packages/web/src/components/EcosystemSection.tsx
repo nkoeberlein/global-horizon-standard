@@ -1,25 +1,26 @@
 import { GitHubIcon } from './GitHubIcon';
+import { MathFormula } from './MathFormula';
 
 const ECOSYSTEM_PACKAGES = [
   {
     name: 'ghs-time',
     badge: 'TypeScript · ESM / CJS',
-    desc: 'Zero-dependency reference library. Bijective Date ↔ GHS conversion, @Beats, solar noon calculation, and holiday resolution.',
+    desc: 'Zero-dependency reference library for Date ↔ GHS conversion, @Beats, and holidays.',
   },
   {
     name: 'ghs-cli & ghs-api',
     badge: 'CLI · Hono HTTP',
-    desc: 'Terminal clock, calendar generator, and REST endpoints (/now, /convert, /holidays) for server integration.',
+    desc: 'Terminal clock, calendar generator, and REST endpoints (/now, /convert, /holidays).',
   },
   {
     name: 'Browser & mobile',
     badge: 'MV3 · Flutter',
-    desc: 'Live @Beats badge in the browser toolbar and a native Dart/Flutter app verified against the same conformance vectors.',
+    desc: 'Live @Beats browser badge and native Dart/Flutter app tested against the same vectors.',
   },
   {
     name: 'Formal specification',
     badge: '146,097-day cycle',
-    desc: 'Complete mathematical rulebook, epoch derivation (Unix day 11,036), and cross-language test vectors in spec/vectors.json.',
+    desc: 'Normative mathematical rulebook and cross-language test vectors in spec/vectors.json.',
   },
 ];
 
@@ -27,7 +28,7 @@ export function EcosystemSection() {
   return (
     <section id="ecosystem" className="px-6 md:px-8 py-24 border-t border-[#1f1b16]/8">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-8">
           {/* Left: Heading & copy */}
           <div className="lg:col-span-6">
             <p className="font-mono text-xs text-[#7b7266] mb-2">
@@ -37,9 +38,8 @@ export function EcosystemSection() {
               An open time protocol backed by 146,097-day bijectivity tests
             </h2>
             <p className="section-sub mb-8">
-              Unlike historical calendar proposals that remained on paper, the Global Horizon
-              Standard ships as a verified software stack — with property tests proving 1:1
-              bijectivity across every day of the 400-year Aurora cycle.
+              Ships as a verified software stack with property tests proving 1:1 bijectivity across
+              every day of the 400-year Aurora cycle.
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -106,6 +106,34 @@ export function EcosystemSection() {
                   GHS 12026.08.12 @860 (Friday, 12 October 12026 HE · Q3 · W30)
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Closed-form Specification Equations */}
+        <div className="surface-card p-6 mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <span className="font-mono text-xs text-[#7b7266]">
+              Normative closed-form definition · Origin 12000.01.01 = Unix day 11,036
+            </span>
+            <MathFormula tex="\varepsilon = 286" />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="lg:col-span-5 flex flex-col justify-between gap-2">
+              <span className="font-sans text-xs text-[#5e554a]">
+                Aurora Year criterion (71 leap weeks per 400 years)
+              </span>
+              <MathFormula display variant="box" tex="(71Y + 286) \bmod 400 < 71" />
+            </div>
+            <div className="lg:col-span-7 flex flex-col justify-between gap-2">
+              <span className="font-sans text-xs text-[#5e554a]">
+                Unix day of New Year (Y.01.01) in closed form
+              </span>
+              <MathFormula
+                display
+                variant="box"
+                tex="\text{day}(Y.01.01) = 11{,}036 + 364(Y - 12{,}000) + 7\left\lfloor\frac{71(Y - 12{,}000) + 215}{400}\right\rfloor"
+              />
             </div>
           </div>
         </div>

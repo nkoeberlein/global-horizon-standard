@@ -1,60 +1,88 @@
+import type { ReactNode } from 'react';
+import { MathFormula } from './MathFormula';
+
 const ETYMOLOGY_MONTHS = [
   {
     name: 'September',
-    latin: 'septem = 7',
+    latinTex: '\\text{septem} = 7',
     gregorianNum: '09',
     ghsNum: '07',
   },
   {
     name: 'October',
-    latin: 'octo = 8',
+    latinTex: '\\text{octo} = 8',
     gregorianNum: '10',
     ghsNum: '08',
   },
   {
     name: 'November',
-    latin: 'novem = 9',
+    latinTex: '\\text{novem} = 9',
     gregorianNum: '11',
     ghsNum: '09',
   },
   {
     name: 'December',
-    latin: 'decem = 10',
+    latinTex: '\\text{decem} = 10',
     gregorianNum: '12',
     ghsNum: '10',
   },
 ];
 
-const COMPARISON_ROWS = [
+interface ComparisonRow {
+  topic: string;
+  legacy: ReactNode;
+  ghs: ReactNode;
+}
+
+const COMPARISON_ROWS: ComparisonRow[] = [
   {
     topic: 'Month lengths',
-    legacy: '28, 29, 30, or 31 days — altered to flatter Roman emperors (July and August).',
-    ghs: '13 months × 28 days. Every month is an identical 4-week grid.',
+    legacy: '28, 29, 30, or 31 days (irregular Roman lengths)',
+    ghs: (
+      <>
+        <MathFormula variant="plain" tex="13 \times 28\text{ d}" /> — identical 4-week grids
+      </>
+    ),
   },
   {
     topic: 'Weekday alignment',
-    legacy: 'Dates shift by 1–2 weekdays every year. Requires a new calendar annually.',
-    ghs: 'Locked forever. The 1st, 8th, 15th, and 22nd of every month are always Mondays.',
+    legacy: 'Shifts by 1–2 weekdays every year',
+    ghs: 'Locked forever — the 1st is always Monday',
   },
   {
     topic: 'Start of the year',
-    legacy: '1 January — a Roman political appointment date in the middle of winter.',
-    ghs: 'Northern spring equinox (17–25 March) — aligned with Earth’s astronomical renewal.',
+    legacy: '1 January (mid-winter political date)',
+    ghs: 'Northern spring equinox (17–25 March)',
   },
   {
     topic: 'Leap correction',
-    legacy: 'Single leap day (29 Feb) fractures quarterly math and weekday periodicity.',
-    ghs: 'Aurora Week (A.1–A.7): a full 7-day intercalary week that never breaks the 7-day cycle.',
+    legacy: 'Single leap day (29 Feb) fractures the week',
+    ghs: 'Aurora Week (A.1–A.7) keeps 7-day continuity',
   },
   {
     topic: 'Global timekeeping',
-    legacy: '24+ political time zones, Daylight Saving switches, and base-60 (24×60×60) math.',
-    ghs: '@Beats decimal time: 1 day = 1,000 beats worldwide. Zero time zones, zero DST.',
+    legacy: (
+      <>
+        24+ time zones, DST &amp; <MathFormula variant="plain" tex="24 \times 60 \times 60" />{' '}
+        base-60
+      </>
+    ),
+    ghs: (
+      <>
+        @Beats decimal time (<MathFormula variant="plain" tex="1\text{ d} = 1{,}000\text{ beats}" />
+        , UTC)
+      </>
+    ),
   },
   {
     topic: 'Historical timeline',
-    legacy: 'BC/AD split forces backward counting across the first 10,000 years of civilization.',
-    ghs: 'Human Era (+10,000 years): one continuous, positive timeline from Göbekli Tepe to today.',
+    legacy: 'BC / AD split with backward counting',
+    ghs: (
+      <>
+        <MathFormula variant="plain" tex="Y_{\text{HE}} = Y_{\text{Greg}} + 10{,}000" /> — one
+        positive scale
+      </>
+    ),
   },
 ];
 
@@ -69,26 +97,23 @@ export function WhySection() {
             A 2,000-year-old patchwork of imperial decrees and colonial meridians
           </h2>
           <p className="section-sub">
-            We run 21st-century planetary infrastructure on a calendar stitched together from
-            Babylonian base-60 arithmetic, Egyptian star decans, Roman political vanity, and 1884
-            naval trade routes. GHS corrects these structural flaws from first principles.
+            Planetary infrastructure still runs on Roman month lengths, Babylonian base-60 time, and
+            19th-century meridians. GHS replaces them from first principles.
           </p>
         </div>
 
         {/* Block 1: The Etymology Paradox */}
         <div className="surface-card p-6 md:p-8 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-6">
-            <div className="max-w-2xl">
+            <div className="max-w-xl">
               <p className="font-mono text-xs text-[#7b7266] mb-2">Restored Latin etymology</p>
               <h3 className="font-serif text-[22px] leading-[1.2] text-[#1f1b16] font-normal mb-2">
                 Why is September the 9th month when septem means seven?
               </h3>
               <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                The original Roman year began in March. When January and February were moved to the
-                front of the calendar, every numbered month shifted two places out of alignment. By
-                anchoring New Year to the March equinox and placing{' '}
-                <span className="text-[#1f1b16] font-medium">Luna</span> as Month 13 at year’s end,
-                GHS restores the numbered months to their true positions.
+                Starting the year at the March equinox and adding{' '}
+                <span className="text-[#1f1b16] font-medium">Luna</span> as Month 13 restores every
+                Latin-numbered month to its true position.
               </p>
             </div>
 
@@ -109,7 +134,7 @@ export function WhySection() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-serif text-[18px] text-[#1f1b16]">{m.name}</span>
-                  <span className="ghs-token">{m.latin}</span>
+                  <MathFormula tex={m.latinTex} />
                 </div>
                 <div className="pt-3 border-t border-[#1f1b16]/8 flex items-center justify-between text-xs font-mono tabular-nums">
                   <span className="text-[#7b7266] line-through">Gregorian #{m.gregorianNum}</span>
@@ -134,7 +159,7 @@ export function WhySection() {
             {COMPARISON_ROWS.map((row) => (
               <div
                 key={row.topic}
-                className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 px-6 py-4 items-baseline font-sans text-[14px] leading-[20px]"
+                className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 px-6 py-3.5 items-baseline font-sans text-[14px] leading-[20px]"
               >
                 <div className="md:col-span-3 font-medium text-[#1f1b16]">{row.topic}</div>
                 <div className="md:col-span-4 text-[#7b7266]">{row.legacy}</div>
@@ -146,35 +171,39 @@ export function WhySection() {
 
         {/* Block 3: Historical precedent vs GHS solution */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-5 surface-card p-6">
-            <p className="font-mono text-xs text-[#7b7266] mb-2">League of Nations, 1931</p>
-            <h3 className="font-serif text-[20px] leading-[1.25] text-[#1f1b16] mb-3">
-              Why 20th-century calendar reform failed
-            </h3>
-            <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-              The International Fixed Calendar (IFC) was used internally by Eastman Kodak for 60
-              years, yet failed at the League of Nations because it inserted standalone “World Days”
-              outside the week. Breaking the 7-day cycle disrupted Sabbath, Sunday, and Friday
-              observance and broke modulo-7 scheduling.
-            </p>
+          <div className="md:col-span-5 surface-card p-6 flex flex-col justify-between">
+            <div>
+              <p className="font-mono text-xs text-[#7b7266] mb-2">League of Nations, 1931</p>
+              <h3 className="font-serif text-[20px] leading-[1.25] text-[#1f1b16] mb-2">
+                Why 1930s calendar reform failed
+              </h3>
+              <p className="font-sans text-[14px] leading-[22px] text-[#5e554a] mb-4">
+                The International Fixed Calendar inserted dateless “World Days” outside the week —
+                breaking the 7-day cycle and modulo-7 scheduling.
+              </p>
+            </div>
+            <MathFormula variant="box" tex="365 \bmod 7 = 1 \neq 0 \quad (\text{week drifts})" />
           </div>
 
           <div className="md:col-span-7 surface-card p-6 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between gap-4 mb-2">
                 <p className="font-mono text-xs text-[#b57924]">Continuity invariant</p>
-                <span className="ghs-token">364d / 371d = 0 (mod 7)</span>
+                <MathFormula tex="364 \equiv 371 \equiv 0 \pmod{7}" />
               </div>
-              <h3 className="font-serif text-[20px] leading-[1.25] text-[#1f1b16] mb-3">
+              <h3 className="font-serif text-[20px] leading-[1.25] text-[#1f1b16] mb-2">
                 How the Aurora Week preserves the 7-day week forever
               </h3>
-              <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                Instead of dateless leap days, GHS accumulates the annual solar remainder and
-                inserts a complete 7-day <span className="ghs-token">Aurora Week (A.1–A.7)</span> 71
-                times every 400 years. Every GHS year contains an exact integer number of weeks (52
-                or 53). Monday follows Sunday without a single interruption across millennia.
+              <p className="font-sans text-[14px] leading-[22px] text-[#5e554a] mb-4">
+                GHS accumulates the annual solar remainder into a full 7-day{' '}
+                <span className="ghs-token">Aurora Week (A.1–A.7)</span> 71 times every 400 years.
+                Monday follows Sunday without a single interruption across millennia.
               </p>
             </div>
+            <MathFormula
+              variant="box"
+              tex="52 \times 7 = 364\text{ d} \qquad \text{and} \qquad 53 \times 7 = 371\text{ d}"
+            />
           </div>
         </div>
       </div>

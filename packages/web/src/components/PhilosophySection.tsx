@@ -1,3 +1,5 @@
+import { MathFormula } from './MathFormula';
+
 const PERPETUAL_WEEKDAYS = [
   { day: 'Mon', dates: ['01', '08', '15', '22'], isWeekend: false },
   { day: 'Tue', dates: ['02', '09', '16', '23'], isWeekend: false },
@@ -13,42 +15,42 @@ const HUMAN_ERA_TIMELINE = [
     he: '00500 HE',
     gregorian: '9500 BCE',
     title: 'Göbekli Tepe',
-    desc: 'Oldest known monumental sanctuary and dawn of settled agriculture.',
+    desc: 'Dawn of settled agriculture',
     highlight: false,
   },
   {
     he: '07500 HE',
     gregorian: '2500 BCE',
     title: 'Great Pyramid',
-    desc: 'Early urban civilizations across Egypt, Mesopotamia, and the Indus.',
+    desc: 'Early urban civilizations',
     highlight: false,
   },
   {
     he: '09247 HE',
     gregorian: '0753 BCE',
     title: 'Founding of Rome',
-    desc: 'Classical antiquity placed on a forward-moving timeline.',
+    desc: 'Classical antiquity',
     highlight: false,
   },
   {
     he: '11760 HE',
     gregorian: '1760 CE',
     title: 'Industrial Age',
-    desc: 'Steam power, railways, and global telegraph synchronization.',
+    desc: 'Steam & global telegraph',
     highlight: false,
   },
   {
     he: '11969 HE',
     gregorian: '1969 CE',
     title: 'Apollo 11',
-    desc: 'Humanity steps onto another world in the late 12th millennium HE.',
+    desc: 'First lunar landing',
     highlight: false,
   },
   {
     he: '12026 HE',
     gregorian: '2026 CE',
     title: 'Planetary era',
-    desc: 'Twelve millennia of shared human history in one positive count.',
+    desc: '12 millennia in one count',
     highlight: true,
   },
 ];
@@ -65,8 +67,8 @@ export function PhilosophySection() {
               Built for human memory, economic comparability, and clean software
             </h2>
             <p className="section-sub">
-              Every structural rule in GHS removes a recurring source of cognitive friction,
-              statistical distortion, or timezone edge cases.
+              Four mathematical rules eliminate calendar drift, statistical distortion, and
+              time-zone arithmetic.
             </p>
           </div>
           <div className="shrink-0 hidden md:block">
@@ -83,17 +85,16 @@ export function PhilosophySection() {
           {/* 7 cols: Perpetual Calendar Matrix */}
           <div className="lg:col-span-7 surface-card p-6 md:p-8 flex flex-col justify-between">
             <div className="mb-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <span className="font-mono text-xs text-[#7b7266]">13-month symmetry</span>
-                <span className="ghs-token">(day − 1) mod 7 = weekday</span>
+                <MathFormula tex="\text{weekday}(d) = (d - 1) \bmod 7" />
               </div>
               <h3 className="font-serif text-[22px] leading-[1.2] text-[#1f1b16] mb-2">
                 Know the date, know the weekday forever
               </h3>
               <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                Every month has 28 days (4 complete weeks). The 1st of every month is a Monday; the
-                28th is a Sunday. Birthdays, public holidays, and billing dates fall on the exact
-                same weekday every year.
+                Every month is 4 complete weeks (1st = Monday, 28th = Sunday), so birthdays,
+                holidays, and billing cycles fall on the same weekday every year.
               </p>
             </div>
 
@@ -128,17 +129,16 @@ export function PhilosophySection() {
           {/* 5 cols: Economic & Quarterly Precision */}
           <div className="lg:col-span-5 surface-card p-6 md:p-8 flex flex-col justify-between">
             <div className="mb-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <span className="font-mono text-xs text-[#7b7266]">13-period accounting</span>
-                <span className="ghs-token">4 × 91d quarters</span>
+                <MathFormula tex="13 \times 28\text{ d} = 4 \times 91\text{ d}" />
               </div>
               <h3 className="font-serif text-[22px] leading-[1.2] text-[#1f1b16] mb-2">
                 Zero statistical noise in analytics
               </h3>
               <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                Comparing Gregorian February (28 days, 4 weekends) to October (31 days, 5 weekends)
-                distorts Month-over-Month revenue and payroll by up to 10.7%. In GHS, every month
-                and every 13-week quarter (91 days) is identical in length.
+                Gregorian months vary by up to 10.7% in length; GHS gives analytics 13 identical
+                28-day months and four 91-day quarters.
               </p>
             </div>
 
@@ -180,17 +180,16 @@ export function PhilosophySection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
           <div className="lg:col-span-6 surface-card p-6 md:p-8 flex flex-col justify-between">
             <div className="mb-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <span className="font-mono text-xs text-[#7b7266]">Decimal time</span>
-                <span className="ghs-token">1 beat = 86.4 SI s</span>
+                <MathFormula tex="1\text{ beat} = \frac{86{,}400\text{ s}}{1{,}000} = 86.4\text{ s}" />
               </div>
               <h3 className="font-serif text-[22px] leading-[1.2] text-[#1f1b16] mb-2">
                 @Beats — decimal arithmetic, zero time zones
               </h3>
               <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                A day is divided into 1,000 @Beats, with 1 centibeat lasting 0.864 seconds. Because
-                @Beats are anchored globally to UTC, @500 occurs at the exact same instant in
-                Berlin, Tokyo, and New York.
+                One day is divided into 1,000 UTC-anchored @Beats — @500 occurs at the exact same
+                instant in Berlin, Tokyo, and New York.
               </p>
             </div>
 
@@ -201,36 +200,41 @@ export function PhilosophySection() {
               </div>
               <div className="pt-2 border-t border-[#1f1b16]/8 flex items-center justify-between text-[#1f1b16] font-medium">
                 <span className="font-sans">GHS duration</span>
-                <span className="text-[#b57924]">@625 − @350 = 275 beats (27.5% of day)</span>
+                <span className="text-[#b57924]">
+                  <MathFormula variant="plain" tex="@625 - @350 = 275\text{ beats } (27.5\%)" />
+                </span>
               </div>
             </div>
           </div>
 
           <div className="lg:col-span-6 surface-card p-6 md:p-8 flex flex-col justify-between">
             <div className="mb-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <span className="font-mono text-xs text-[#7b7266]">Intercalary week</span>
-                <span className="ghs-token">71 weeks / 400 yrs</span>
+                <MathFormula tex="(71Y + 286) \bmod 400 < 71" />
               </div>
               <h3 className="font-serif text-[22px] leading-[1.2] text-[#1f1b16] mb-2">
                 The Aurora Week — a global maintenance and festival pause
               </h3>
               <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                Every 5–6 years, an Aurora Year adds one 7-day week (
-                <span className="ghs-token">A.1–A.7</span>) after Month 13 (Luna). Sitting outside
-                months and financial quarters, it provides a scheduled planetary pause for
-                celebration and system migrations without billing drift.
+                Every 5–6 years, a 7-day <span className="ghs-token">Aurora Week (A.1–A.7)</span>{' '}
+                follows Luna — sitting outside months and quarters for a planetary pause.
               </p>
             </div>
 
-            <div className="rounded-[8px] p-4 bg-[#f7f4ee] border border-[#1f1b16]/8 flex items-center justify-between gap-4 text-xs">
+            <div className="rounded-[8px] p-4 bg-[#f7f4ee] border border-[#1f1b16]/8 flex flex-wrap items-center justify-between gap-3 text-xs">
               <div>
-                <div className="font-sans font-medium text-[#1f1b16]">
+                <div className="font-sans font-medium text-[#1f1b16] mb-0.5">
                   146,097-day solar cycle lock
                 </div>
-                <div className="font-sans text-[#7b7266]">400 × 364d + 71 × 7d = 146,097 days</div>
+                <div className="text-[#5e554a]">
+                  <MathFormula
+                    variant="plain"
+                    tex="400 \times 364\text{ d} + 71 \times 7\text{ d} = 146{,}097\text{ d}"
+                  />
+                </div>
               </div>
-              <span className="ghs-token shrink-0">(71Y + 286) mod 400 &lt; 71</span>
+              <span className="ghs-token shrink-0">365.2425 d / yr</span>
             </div>
           </div>
         </div>
@@ -238,21 +242,23 @@ export function PhilosophySection() {
         {/* Row 3: Full-width Human Era Timeline */}
         <div className="surface-card p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-            <div className="max-w-2xl">
+            <div className="max-w-xl">
               <p className="font-mono text-xs text-[#7b7266] mb-2">Continuous chronology</p>
               <h3 className="font-serif text-[22px] leading-[1.2] text-[#1f1b16] mb-2">
                 12,026 years of civilization on a single positive timeline
               </h3>
               <p className="font-sans text-[14px] leading-[22px] text-[#5e554a]">
-                Splitting history into BC and AD forces backward counting across the first ten
-                millennia of human settlement. Adding 10,000 years places all recorded history on a
-                single monotonic scale.
+                Adding 10,000 years replaces the BC/AD split with one monotonic scale across all
+                recorded human history.
               </p>
             </div>
-            <span className="ghs-token self-start md:self-auto">Year HE = Gregorian + 10,000</span>
+            <MathFormula
+              tex="Y_{\text{HE}} = Y_{\text{Greg}} + 10{,}000"
+              className="self-start md:self-auto"
+            />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {HUMAN_ERA_TIMELINE.map((item) => (
               <div
                 key={item.he}
@@ -278,7 +284,7 @@ export function PhilosophySection() {
                     {item.title}
                   </div>
                 </div>
-                <p className="font-sans text-xs text-[#5e554a] leading-[18px]">{item.desc}</p>
+                <p className="font-sans text-xs text-[#7b7266]">{item.desc}</p>
               </div>
             ))}
           </div>

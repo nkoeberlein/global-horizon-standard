@@ -34,7 +34,11 @@ function getLocalPhase(currentBeat: number, noonBeat: number): string {
   return 'Night';
 }
 
-export function VisualizerSection() {
+interface VisualizerSectionProps {
+  solarNoonFormulaHtml?: string;
+}
+
+export function VisualizerSection({ solarNoonFormulaHtml }: VisualizerSectionProps) {
   const [ghs, setGhs] = useState(() => getGHSDate());
   const [selectedIso, setSelectedIso] = useState(() => new Date().toISOString().slice(0, 10));
   const [activeTab, setActiveTab] = useState<'converter' | 'holidays'>('converter');
@@ -62,8 +66,8 @@ export function VisualizerSection() {
           <p className="font-mono text-xs text-[#7b7266] mb-2">03 · Horological reference</p>
           <h2 className="section-heading mb-4">13 months, 28 days, one global pulse</h2>
           <p className="section-sub">
-            Every month starts on Monday and ends on Sunday. Inspect the live 13-month calendar,
-            follow the 10-segment @Beats dial, or convert any historical or future date below.
+            Inspect the live 13-month grid, follow the 10-segment @Beats dial, or convert any date
+            below.
           </p>
         </div>
 
@@ -127,14 +131,17 @@ export function VisualizerSection() {
 
             {/* Global Solar Noon Card */}
             <div className="surface-card p-6 w-full font-sans">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-[14px] font-medium text-[#1f1b16]">Local solar noon</span>
                 <span className="ghs-token">{ghs.beats}</span>
               </div>
-              <p className="text-xs text-[#5e554a] leading-[18px] mb-4">
-                The clock reads {ghs.beats} everywhere; only the beat of local solar noon shifts
-                with longitude:
-              </p>
+              {solarNoonFormulaHtml && (
+                <div
+                  className="ghs-math-box text-xs mb-3 py-2 px-3"
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: static build-time KaTeX math
+                  dangerouslySetInnerHTML={{ __html: solarNoonFormulaHtml }}
+                />
+              )}
               <div className="space-y-1.5 text-xs">
                 {WORLD_CITIES.map((item) => {
                   const noonBeat = getSolarNoonBeat(item.lon);
@@ -275,34 +282,33 @@ export function VisualizerSection() {
             </div>
           ) : (
             <div>
-              <p className="font-sans text-[14px] leading-[22px] text-[#5e554a] mb-6">
-                Fixed GHS holidays fall on the same weekday every year — New Year is always Monday,
-                Earth Day is always Friday, and Christmas is always Sunday. Resolved occurrences for{' '}
+              <p className="font-sans text-[14px] leading-[22px] text-[#5e554a] mb-5">
+                Fixed GHS holidays fall on the exact same weekday every year — resolved for{' '}
                 <span className="font-mono tabular-nums text-[#1f1b16] font-medium">
                   {convertedDate.era} HE
                 </span>
                 :
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-sans">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans">
                 {holidays.map((occ) => {
                   const weekday = WEEKDAYS_GHS[(occ.holiday.day - 1) % 7];
                   return (
                     <div
                       key={occ.holiday.name}
-                      className="rounded-[8px] p-4 bg-[#f7f4ee] border border-[#1f1b16]/8 flex flex-col justify-between"
+                      className="rounded-[8px] p-4 bg-[#f7f4ee] border border-[#1f1b16]/8 flex flex-col justify-between gap-3"
                     >
-                      <div>
-                        <div className="flex items-center justify-between gap-2 mb-2">
-                          <span className="font-sans text-[14px] font-medium text-[#1f1b16]">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="font-sans text-[14px] font-medium text-[#1f1b16]">
                             {occ.holiday.name}
-                          </span>
-                          <span className="ghs-token">{occ.ghsDate}</span>
+                          </div>
+                          <div className="text-xs text-[#7b7266] mt-0.5">
+                            {occ.holiday.category}
+                          </div>
                         </div>
-                        <p className="text-xs text-[#5e554a] leading-[18px] mb-3">
-                          {occ.holiday.description}
-                        </p>
+                        <span className="ghs-token shrink-0">{occ.ghsDate}</span>
                       </div>
-                      <div className="pt-3 border-t border-[#1f1b16]/8 flex items-center justify-between text-xs font-mono tabular-nums text-[#7b7266]">
+                      <div className="pt-2.5 border-t border-[#1f1b16]/8 flex items-center justify-between text-xs font-mono tabular-nums text-[#7b7266]">
                         <span className="font-sans text-[#1f1b16] font-medium">
                           Every {weekday}
                         </span>
