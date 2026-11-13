@@ -1,0 +1,63 @@
+---
+import { Footer } from '../components/Footer';
+import '../index.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  isHome?: boolean;
+}
+
+const {
+  title = 'Global Horizon Standard — 13 equal months, @Beats & Human Era',
+  description = 'Global Horizon Standard (GHS) replaces irregular months and time zones with a symmetric 13×28 calendar, @Beats decimal time, and a 12,000-year Human Era.',
+  isHome = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="min-h-screen bg-[#f7f4ee] text-[#1f1b16] flex flex-col">
+      {
+        !isHome && (
+          <header class="h-16 px-6 md:px-8 border-b border-[#1f1b16]/8 bg-[#f7f4ee]/95 sticky top-0 z-50 flex items-center">
+            <div class="max-w-6xl w-full mx-auto flex items-center justify-between">
+              <a href="/" class="flex items-center gap-2.5 group">
+                <img src="/logo.png" alt="GHS" class="w-6 h-6 object-contain" />
+                <span class="font-sans text-sm font-medium text-[#1f1b16]">
+                  Global Horizon Standard
+                </span>
+              </a>
+              <a
+                href="/"
+                class="h-8 px-3 rounded-[8px] inline-flex items-center text-xs font-sans text-[#5e554a] hover:text-[#1f1b16] bg-[#efe9df] hover:bg-[#e5decfe6] border border-[#1f1b16]/8 transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              >
+                Back to overview
+              </a>
+            </div>
+          </header>
+        )
+      }
+
+      <main class="flex-grow">
+        <slot />
+      </main>
+
+      <Footer />
+    </div>
+  </body>
+</html>

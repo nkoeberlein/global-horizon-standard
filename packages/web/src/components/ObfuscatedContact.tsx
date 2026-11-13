@@ -16,11 +16,10 @@ export function ObfuscatedContact({
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    // Reverse the string back on mount
     setValue(reversedValue.split('').reverse().join(''));
   }, [reversedValue]);
 
-  if (!value) return <span className="animate-pulse bg-gray-200 rounded w-24 h-4 inline-block" />;
+  if (!value) return <span className="bg-[#efe9df] rounded-[4px] w-24 h-4 inline-block" />;
 
   if (isEmail) {
     return (

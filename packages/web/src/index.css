@@ -7,40 +7,54 @@
   }
 
   body {
-    background-color: #faf9f6;
-    color: #2d2926;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #f7f4ee;
+    color: #1f1b16;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background: rgba(200, 144, 58, 0.2);
-    color: #2d2926;
+    background: rgba(181, 121, 36, 0.16);
+    color: #1f1b16;
   }
 }
 
 @layer components {
   .section-heading {
-    @apply font-serif text-3xl md:text-4xl leading-tight tracking-tight;
-    color: #2d2926;
+    font-family: "Newsreader", Georgia, Cambria, serif;
+    font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    color: #1f1b16;
   }
 
   .section-sub {
-    font-size: 1.125rem;
-    line-height: 1.75;
-    max-width: 36rem;
-    color: #5c5650;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: 38rem;
+    color: #5e554a;
   }
 
-  .glass-card {
-    background: rgba(255, 254, 249, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(232, 228, 219, 0.7);
-    box-shadow:
-      0 4px 24px rgba(60, 50, 35, 0.08),
-      0 1px 4px rgba(60, 50, 35, 0.04);
+  .surface-card {
+    background: #fdfbf7;
+    border: 1px solid rgba(31, 27, 22, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .ghs-token {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: #efe9df;
+    color: #1f1b16;
+    border: 1px solid rgba(31, 27, 22, 0.08);
   }
 }
 
@@ -50,17 +64,16 @@
   }
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f0ede6;
+  background: #efe9df;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d4cfc4;
-  border-radius: 3px;
+  background: #c8c0b4;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b0a898;
+  background: #7b7266;
 }

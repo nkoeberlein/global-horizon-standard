@@ -1,0 +1,16 @@
+---
+import { EcosystemSection } from '../components/EcosystemSection';
+import { HeroSection } from '../components/HeroSection';
+import { PhilosophySection } from '../components/PhilosophySection';
+import { VisualizerSection } from '../components/VisualizerSection';
+import { WhySection } from '../components/WhySection';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout isHome={true}>
+  <HeroSection client:load />
+  <WhySection />
+  <PhilosophySection />
+  <VisualizerSection client:visible />
+  <EcosystemSection />
+</BaseLayout>

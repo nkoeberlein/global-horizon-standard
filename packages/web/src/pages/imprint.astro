@@ -1,0 +1,48 @@
+---
+import { ObfuscatedContact } from '../components/ObfuscatedContact';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Imprint — Global Horizon Standard">
+  <div class="max-w-3xl mx-auto px-6 md:px-8 py-20 font-sans text-[#5e554a] leading-[24px]">
+    <h1 class="font-serif text-[32px] leading-[1.15] text-[#1f1b16] mb-10">Imprint</h1>
+
+    <section class="mb-10">
+      <h2 class="font-mono text-xs text-[#7b7266] mb-3">Information according to § 5 DDG</h2>
+      <div class="space-y-1 text-[16px] text-[#1f1b16]">
+        <p>
+          <ObfuscatedContact client:load reversedValue="nielreböK sualokiN" />
+        </p>
+        <p>
+          <ObfuscatedContact client:load reversedValue="RETNECOC o/c" />
+        </p>
+        <p>
+          <ObfuscatedContact client:load reversedValue="1 .rtsdloppoK" />
+        </p>
+        <p>
+          <ObfuscatedContact client:load reversedValue="hcahciA 15568" />
+        </p>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="font-mono text-xs text-[#7b7266] mb-3">Contact</h2>
+      <div class="space-y-1 text-[16px] text-[#1f1b16] font-medium">
+        <p>
+          Email: <ObfuscatedContact client:load reversedValue="ed.nielrebeokn@musserpmi" isEmail={true} />
+        </p>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="font-mono text-xs text-[#7b7266] mb-3">Editorial responsibility</h2>
+      <p class="text-[#1f1b16]">
+        Nikolaus Köberlein stays responsible for the contents of this website.
+      </p>
+    </section>
+
+    <div class="pt-8 border-t border-[#1f1b16]/8 text-xs text-[#7b7266]">
+      This website is an open-source project and part of the Global Horizon Standard proposal.
+    </div>
+  </div>
+</BaseLayout>

@@ -1,5 +1,4 @@
 import { formatGHS, getGHSDate } from 'ghs-time';
-import { ArrowDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { GitHubIcon } from './GitHubIcon';
 
@@ -19,245 +18,191 @@ export function HeroSection() {
   const shorthand = formatGHS(ghs, 'short');
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
-      {/* Subtle radial background accent */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(232,168,32,0.07) 0%, transparent 70%)',
-        }}
-      />
-
-      {/* Top nav */}
-      <nav className="absolute top-0 left-0 right-0 flex items-center justify-between px-8 py-6">
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="GHS Logo" className="w-8 h-8 object-contain" />
-          <span className="font-serif text-charcoal font-medium tracking-wide text-sm">GHS</span>
-          <span
-            className="text-cream-dark text-xs tracking-widest uppercase font-sans sm:inline hidden"
-            style={{ color: '#b0a898' }}
-          >
+    <section className="min-h-screen flex flex-col justify-between px-6 md:px-8 py-6">
+      {/* Top navigation: quiet chrome, 4px grid */}
+      <header className="w-full max-w-6xl mx-auto h-12 flex items-center justify-between">
+        <a href="/" className="flex items-center gap-2.5">
+          <img src="/logo.png" alt="GHS" className="w-7 h-7 object-contain" />
+          <span className="font-sans text-[15px] font-medium text-[#1f1b16]">
             Global Horizon Standard
           </span>
-        </div>
-        <a
-          href="https://github.com/nkoeberlein/global-horizon-standard"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-charcoal-light hover:text-charcoal transition-colors text-sm"
-        >
-          <GitHubIcon size={16} />
-          <span className="hidden sm:inline">GitHub</span>
         </a>
-      </nav>
 
-      {/* Hero content */}
-      <div className="text-center max-w-3xl mx-auto pt-16">
-        {/* Tagline */}
-        <p
-          className="text-xs font-sans tracking-[0.35em] uppercase mb-6"
-          style={{ color: '#9b9288' }}
-        >
-          An open proposal for a better calendar
-        </p>
-
-        {/* Headline */}
-        <h1
-          className="font-serif leading-tight mb-5"
-          style={{
-            fontSize: 'clamp(2rem, 5.5vw, 3.25rem)',
-            fontWeight: 400,
-            color: '#2d2926',
-            letterSpacing: '-0.02em',
-          }}
-        >
-          13 equal months,
-          <br />
-          decimal time,
-          <br />
-          one shared human era.
-        </h1>
-
-        {/* One-liner */}
-        <p
-          className="font-sans mb-10 mx-auto"
-          style={{
-            fontSize: '1.05rem',
-            color: '#7a7265',
-            maxWidth: '32rem',
-            lineHeight: 1.7,
-          }}
-        >
-          GHS replaces irregular months and AM/PM with a symmetric 13×28 calendar and @Beats — the
-          same time, everywhere on Earth.
-        </p>
-
-        {/* Gregorian ↔ GHS comparison */}
-        <div
-          className="rounded-2xl mb-10 overflow-hidden font-sans"
-          style={{ border: '1px solid #e8e4db' }}
-        >
-          {/* Header row */}
-          <div
-            className="grid grid-cols-[1fr_auto_1fr] items-center px-7 py-3"
-            style={{ background: '#f4f1ea', borderBottom: '1px solid #e8e4db' }}
+        <nav className="flex items-center gap-6 text-[14px] font-sans text-[#5e554a]">
+          <a
+            href="#why"
+            className="hover:text-[#1f1b16] transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hidden md:inline"
           >
-            <span
-              className="text-xs tracking-widest uppercase text-left"
-              style={{ color: '#b0a898' }}
-            >
-              Gregorian
-            </span>
-            <span className="px-6" style={{ color: '#d4cfc4' }}>
-              →
-            </span>
-            <span
-              className="text-xs tracking-widest uppercase text-right"
-              style={{ color: '#c8903a' }}
-            >
-              GHS
-            </span>
-          </div>
-
-          {/* Date row */}
-          <div
-            className="grid grid-cols-[1fr_auto_1fr] items-center px-7 py-6"
-            style={{ borderBottom: '1px solid #f0ede6' }}
+            Why GHS
+          </a>
+          <a
+            href="#advantages"
+            className="hover:text-[#1f1b16] transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hidden md:inline"
           >
-            <div className="text-left">
-              <div className="text-xl" style={{ color: '#5c5650' }}>
-                {now.toLocaleDateString('en-GB', {
-                  weekday: 'short',
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  timeZone: 'UTC',
-                })}
-              </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                Calendar date (UTC)
-              </div>
-            </div>
-            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
-              →
-            </span>
-            <div className="text-right">
-              <div className="text-xl" style={{ color: '#2d2926', fontWeight: 600 }}>
-                {ghs.weekday?.slice(0, 3)}, {shorthand}
-              </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                13 × 28-day calendar
-              </div>
-            </div>
-          </div>
-
-          {/* Time row */}
-          <div
-            className="grid grid-cols-[1fr_auto_1fr] items-center px-7 py-6"
-            style={{ borderBottom: '1px solid #f0ede6' }}
+            Advantages
+          </a>
+          <a
+            href="#visualizer"
+            className="hover:text-[#1f1b16] transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hidden sm:inline"
           >
-            <div className="text-left">
-              <div className="font-mono tabular-nums text-xl" style={{ color: '#5c5650' }}>
-                {now.toLocaleTimeString('en-GB', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                  timeZone: 'UTC',
-                })}{' '}
-                UTC
-              </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                24 h · 60 min · 60 sec
-              </div>
-            </div>
-            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
-              →
-            </span>
-            <div className="text-right">
-              <div
-                className="font-mono tabular-nums text-xl"
-                style={{ color: '#c8903a', fontWeight: 600 }}
-              >
-                {beatsDisplay}
-              </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                1 day = 1,000 @beats
-              </div>
-            </div>
-          </div>
-
-          {/* Era row */}
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center px-7 py-6">
-            <div className="text-left">
-              <div className="text-xl" style={{ color: '#5c5650' }}>
-                {now.getUTCFullYear()} CE
-              </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                Common Era
-              </div>
-            </div>
-            <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
-              →
-            </span>
-            <div className="text-right">
-              <div className="text-xl" style={{ color: '#2d2926', fontWeight: 600 }}>
-                {ghs.era} HE
-              </div>
-              <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                Human Era (+10,000)
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            Calendar
+          </a>
+          <a
+            href="#ecosystem"
+            className="hover:text-[#1f1b16] transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hidden lg:inline"
+          >
+            Specification
+          </a>
           <a
             href="https://github.com/nkoeberlein/global-horizon-standard"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-7 py-3 rounded-full text-sm font-sans font-medium transition-all"
-            style={{
-              background: '#2d2926',
-              color: '#faf9f6',
-              letterSpacing: '0.03em',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = '#4a4035')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = '#2d2926')}
+            className="h-8 px-3 rounded-[8px] inline-flex items-center gap-2 bg-[#efe9df] hover:bg-[#e5ded2] text-[#1f1b16] text-[13px] font-medium border border-[#1f1b16]/8 transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
           >
             <GitHubIcon size={15} />
-            View on GitHub
+            <span>GitHub</span>
           </a>
-          <a
-            href="#visualizer"
-            className="flex items-center gap-2 px-7 py-3 rounded-full text-sm font-sans font-medium transition-all border"
+        </nav>
+      </header>
+
+      {/* Main asymmetric split hero */}
+      <div className="w-full max-w-6xl mx-auto my-auto py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        {/* Left: Calm typographic statement */}
+        <div className="lg:col-span-6 text-left">
+          <p className="font-mono text-xs text-[#7b7266] mb-4">
+            Open proposal for planetary timekeeping
+          </p>
+
+          <h1
+            className="font-serif text-[#1f1b16] mb-6"
             style={{
-              borderColor: '#d4cfc4',
-              color: '#5c5650',
-              letterSpacing: '0.03em',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#b0a898';
-              e.currentTarget.style.color = '#2d2926';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#d4cfc4';
-              e.currentTarget.style.color = '#5c5650';
+              fontSize: 'clamp(2.25rem, 4.5vw, 3.5rem)',
+              lineHeight: 1.06,
+              letterSpacing: '-0.025em',
+              fontWeight: 400,
             }}
           >
-            Explore the Calendar
-          </a>
+            13 equal months,
+            <br />
+            decimal time,
+            <br />
+            one shared human era
+          </h1>
+
+          <p className="font-sans text-[18px] leading-[28px] text-[#5e554a] max-w-[34rem] mb-8">
+            GHS replaces irregular months, shifting weekdays, and time zones with a perpetual 13×28
+            calendar and @Beats — the same time, everywhere on Earth.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href="#why"
+              className="h-11 px-5 rounded-[8px] inline-flex items-center justify-center text-[14px] font-sans font-medium bg-[#1f1b16] hover:bg-[#332d25] text-[#fdfbf7] transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            >
+              Why change time
+            </a>
+            <a
+              href="#visualizer"
+              className="h-11 px-5 rounded-[8px] inline-flex items-center justify-center text-[14px] font-sans font-medium bg-[#efe9df] hover:bg-[#e5ded2] text-[#1f1b16] border border-[#1f1b16]/8 transition-colors duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            >
+              Explore the calendar
+            </a>
+          </div>
+        </div>
+
+        {/* Right: Live Gregorian ↔ GHS Chronometer Instrument */}
+        <div className="lg:col-span-6">
+          <div className="surface-card p-6 font-sans">
+            {/* Instrument header */}
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#1f1b16]/8">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#b57924]" />
+                <span className="text-xs font-mono text-[#7b7266]">Live UTC reference</span>
+              </div>
+              <span className="ghs-token">
+                GHS {ghs.fullDate} {ghs.beats}
+              </span>
+            </div>
+
+            {/* Column labels */}
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center px-3 pb-2 text-xs text-[#7b7266]">
+              <span>Gregorian legacy</span>
+              <span className="px-4" />
+              <span className="text-right text-[#1f1b16] font-medium">Global Horizon Standard</span>
+            </div>
+
+            <div className="space-y-2">
+              {/* Date row */}
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center p-4 rounded-[8px] bg-[#f7f4ee] border border-[#1f1b16]/6">
+                <div>
+                  <div className="text-[17px] text-[#5e554a] tabular-nums">
+                    {now.toLocaleDateString('en-GB', {
+                      weekday: 'short',
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      timeZone: 'UTC',
+                    })}
+                  </div>
+                  <div className="text-xs text-[#7b7266] mt-1">28–31 day months</div>
+                </div>
+                <span className="px-4 font-mono text-xs text-[#7b7266]">→</span>
+                <div className="text-right">
+                  <div className="text-[17px] font-medium text-[#1f1b16] tabular-nums">
+                    {ghs.weekday.slice(0, 3)}, {shorthand}
+                  </div>
+                  <div className="text-xs text-[#7b7266] mt-1 font-mono tabular-nums">
+                    {ghs.fullDate} · 13×28d
+                  </div>
+                </div>
+              </div>
+
+              {/* Time row */}
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center p-4 rounded-[8px] bg-[#f7f4ee] border border-[#1f1b16]/6">
+                <div>
+                  <div className="font-mono tabular-nums text-[17px] text-[#5e554a]">
+                    {now.toLocaleTimeString('en-GB', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      timeZone: 'UTC',
+                    })}{' '}
+                    UTC
+                  </div>
+                  <div className="text-xs text-[#7b7266] mt-1">24h · 60m · 60s</div>
+                </div>
+                <span className="px-4 font-mono text-xs text-[#7b7266]">→</span>
+                <div className="text-right">
+                  <div className="font-mono tabular-nums text-[20px] font-medium text-[#b57924]">
+                    {beatsDisplay}
+                  </div>
+                  <div className="text-xs text-[#7b7266] mt-1">1,000 @beats / day</div>
+                </div>
+              </div>
+
+              {/* Era row */}
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center p-4 rounded-[8px] bg-[#f7f4ee] border border-[#1f1b16]/6">
+                <div>
+                  <div className="text-[17px] text-[#5e554a] tabular-nums">
+                    {now.getUTCFullYear()} CE
+                  </div>
+                  <div className="text-xs text-[#7b7266] mt-1">Common Era</div>
+                </div>
+                <span className="px-4 font-mono text-xs text-[#7b7266]">→</span>
+                <div className="text-right">
+                  <div className="text-[17px] font-medium text-[#1f1b16] tabular-nums">
+                    {ghs.era} HE
+                  </div>
+                  <div className="text-xs text-[#7b7266] mt-1">Human Era (+10,000)</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Scroll hint */}
-      <div
-        className="absolute bottom-10 flex flex-col items-center gap-2 animate-bounce"
-        style={{ opacity: 0.4 }}
-      >
-        <ArrowDown size={18} style={{ color: '#5c5650' }} />
-      </div>
+      {/* Bottom hairline spacer */}
+      <div className="w-full max-w-6xl mx-auto h-4" />
     </section>
   );
 }

@@ -16,7 +16,7 @@ npm run build --workspace=packages/extension
 
 # Dev servers (each first rebuilds core)
 npm run dev:api         # tsx watch on localhost:3000
-npm run dev:web         # Vite dev server
+npm run dev:web         # Astro dev server
 
 # Quality gates (run before committing; CI enforces all)
 npm run lint            # Biome (lint + format check), config in biome.json
@@ -61,12 +61,12 @@ Hono HTTP server. Type-checked with `tsc --noEmit`, run with `tsx`.
 ### `packages/cli` — `ghs-cli`
 Commander terminal CLI (`ghs` binary). CommonJS output via `tsc` (`moduleResolution: nodenext`).
 - `src/index.ts` — commands: default (current time), `convert`, `clock`, `cal`, `holidays`. Reads version from `../package.json` at runtime (`__dirname` available in CJS).
-- `src/badge.ts` — minimal `YYYYY.MM.DD @BBB` output consumed by `.github/workflows/update-badge.yml`.
+- `src/badge.ts` — minimal `YYYYY.MM.DD @BBB` output for terminal use; the live README badge is served by `ghs-api` (`/badge.json` on Cloudflare Workers).
 
 ### `packages/web` — `ghs-web`
-Official GHS landing page and dashboard. React 19 + Vite + Tailwind CSS 4 + React Router 7.
-- `src/App.tsx` — routes (home, imprint, privacy).
-- `src/components/` — `HeroSection.tsx` (headline + live UTC Gregorian↔GHS comparison), `VisualizerSection.tsx` (calendar grid + clock card + day progress via `beatsExact`), `GHSAnalogClock.tsx` (10-segment canvas analog `@Beats` clock, 100 ms repaint), `CalendarGrid.tsx` (13 month cards + Aurora Week card, refreshes at UTC midnight), `PhilosophySection.tsx`, `Layout.tsx`, `Footer.tsx`.
+Official GHS landing page and dashboard. Astro + React 19 Islands (`@astrojs/react`) + Tailwind CSS 4 (`@tailwindcss/vite`).
+- `src/pages/` — file-based routes (`index.astro`, `imprint.astro`, `privacy.astro`); `src/layouts/BaseLayout.astro`.
+- `src/components/` — `HeroSection.tsx` (`client:load`, headline + live UTC Gregorian↔GHS comparison), `WhySection.tsx` (static, etymology & legacy vs. GHS comparison), `PhilosophySection.tsx` (static, advantages bento grid & Human Era timeline), `VisualizerSection.tsx` (`client:visible`, calendar grid + clock card + solar noon phases + interactive date/holiday converter), `GHSAnalogClock.tsx` (10-segment canvas analog `@Beats` clock, 100 ms repaint), `CalendarGrid.tsx` (13 month cards + Aurora Week card, refreshes at UTC midnight), `EcosystemSection.tsx` (static), `Footer.tsx` (static).
 - Warm organic palette (`#c8903a` amber, `#2d2926` charcoal, `#faf9f6` cream). Live displays use coarse `setInterval`s (100–250 ms) — never 60 fps `requestAnimationFrame` loops.
 
 ### `packages/extension` — `ghs-extension`

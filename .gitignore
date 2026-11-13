@@ -14,8 +14,9 @@ out/
 bin/
 # TypeScript build info
 *.tsbuildinfo
-# Vite specific
+# Vite / Astro specific
 .vite/
+.astro/
 # Vercel / Netlify deployments
 .vercel
 .netlify
