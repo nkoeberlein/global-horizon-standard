@@ -15,7 +15,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "ghs-time": ["./node_modules/ghs-time/dist/index.d.mts", "../core/src/index.ts"]
+    }
   },
   "include": ["src", "vite.config.ts"]
 }
