@@ -91,6 +91,34 @@ describe('GET /convert', () => {
   });
 });
 
+describe('GET /badge.json', () => {
+  interface BadgeBody {
+    schemaVersion: number;
+    label: string;
+    message: string;
+    color: string;
+    labelColor: string;
+  }
+
+  it('returns valid Shields.io badge JSON with the live GHS time', async () => {
+    const res = await app.request('/badge.json');
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as BadgeBody;
+    expect(body.schemaVersion).toBe(1);
+    expect(body.label).toBe('GHS NOW');
+    expect(body.message).toMatch(/^\d{5}\.\d{2}\.\d{2} @\d{3}$/);
+    expect(body.color).toBe('blueviolet');
+    expect(body.labelColor).toBe('555555');
+    expect(res.headers.get('Cache-Control')).toBe('public, max-age=60');
+  });
+
+  it('stays within the Shields.io message length limit', async () => {
+    const res = await app.request('/badge.json');
+    const body = (await res.json()) as BadgeBody;
+    expect(body.message.length).toBeLessThanOrEqual(40);
+  });
+});
+
 describe('GET /holidays', () => {
   it('returns holidays for a given year with computed Gregorian dates', async () => {
     const { status, body } = await getJson('/holidays?year=12026');

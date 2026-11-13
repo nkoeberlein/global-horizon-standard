@@ -3,7 +3,7 @@
   <h1>🌍 Global Horizon Standard (GHS)</h1>
   <p>One World. One Pulse. One Human Era.</p>
 
-  <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/nkoeberlein/ea238f96af6f644ffe06415ee941e7a6/raw/ghs-time.json&style=for-the-badge" alt="Live GHS Time" />
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fghs-api.koeberlein-nikolaus.workers.dev%2Fbadge.json&style=for-the-badge" alt="Live GHS Time" />
 
   <br />
 

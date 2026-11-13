@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
+    "dev:worker": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:dry": "wrangler deploy --dry-run",
     "build": "tsc --noEmit"
   },
   "dependencies": {
@@ -14,6 +17,7 @@
   },
   "devDependencies": {
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.47.0"
   }
 }

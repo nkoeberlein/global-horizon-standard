@@ -24,7 +24,10 @@ app.onError((err, c) => {
 });
 
 app.notFound((c) =>
-  c.json({ error: 'Not found. Available endpoints: /, /now, /convert, /holidays' }, 404),
+  c.json(
+    { error: 'Not found. Available endpoints: /, /now, /convert, /holidays, /badge.json' },
+    404,
+  ),
 );
 
 // 1. Root / Healthcheck
@@ -36,6 +39,7 @@ app.get('/', (c) => {
       now: `/now?format={${GHS_FORMATS.join('|')}}`,
       convert: '/convert?date=YYYY-MM-DD | YYYYY.MM.DD',
       holidays: '/holidays?year=YYYYY',
+      badge: '/badge.json (Shields.io live badge)',
     },
   });
 });
@@ -132,4 +136,23 @@ app.get('/holidays', (c) => {
   }));
 
   return c.json({ year: era, count: holidays.length, holidays });
+});
+
+// 5. Endpoint: Live-Badge für Shields.io (/badge.json)
+// Liefert das Shields.io-JSON-Schema mit der zum Request-Zeitpunkt
+// berechneten GHS-Zeit. `fullDate` rendert Aurora-Wochen bereits als
+// `YYYYY.A.DD`, `beats` ist schon `@BBB` gepaddet.
+app.get('/badge.json', (c) => {
+  const ghs = getGHSDate(new Date());
+  return c.json(
+    {
+      schemaVersion: 1,
+      label: 'GHS NOW',
+      message: `${ghs.fullDate} ${ghs.beats}`,
+      color: 'blueviolet',
+      labelColor: '555555',
+    },
+    200,
+    { 'Cache-Control': 'public, max-age=60' },
+  );
 });
