@@ -51,7 +51,7 @@ describe('GET /now', () => {
 
 describe('GET /convert', () => {
   it('converts Gregorian → GHS', async () => {
-    const { status, body } = await getJson('/convert?date=2026-03-18');
+    const { status, body } = await getJson('/convert?date=2026-03-23');
     expect(status).toBe(200);
     expect(body.ghs?.fullDate).toBe('12026.01.01');
   });
@@ -59,13 +59,13 @@ describe('GET /convert', () => {
   it('converts GHS → Gregorian', async () => {
     const { status, body } = await getJson('/convert?date=12026.01.01');
     expect(status).toBe(200);
-    expect(body.gregorian_utc).toBe('2026-03-18T00:00:00.000Z');
+    expect(body.gregorian_utc).toBe('2026-03-23T00:00:00.000Z');
   });
 
   it('converts Aurora dates', async () => {
-    const { status, body } = await getJson('/convert?date=12026.A.01');
+    const { status, body } = await getJson('/convert?date=12025.A.01');
     expect(status).toBe(200);
-    expect(body.gregorian_utc).toBe('2027-03-17T00:00:00.000Z');
+    expect(body.gregorian_utc).toBe('2026-03-16T00:00:00.000Z');
   });
 
   it('rejects a missing date parameter with 400', async () => {
@@ -80,7 +80,7 @@ describe('GET /convert', () => {
   });
 
   it('rejects the Aurora Week in a non-Aurora year with 400', async () => {
-    const { status, body } = await getJson('/convert?date=12027.A.01');
+    const { status, body } = await getJson('/convert?date=12026.A.01');
     expect(status).toBe(400);
     expect(body.error).toContain('Aurora');
   });
@@ -97,12 +97,12 @@ describe('GET /holidays', () => {
     expect(status).toBe(200);
     expect(body.year).toBe(12026);
     const newYear = body.holidays?.find((h) => h.name === 'New Year (Equinox)');
-    expect(newYear?.gregorian).toBe('2026-03-18');
+    expect(newYear?.gregorian).toBe('2026-03-23');
   });
 
   it('includes the Aurora Festival only in Aurora years', async () => {
-    const aurora = await getJson('/holidays?year=12026');
-    const normal = await getJson('/holidays?year=12027');
+    const aurora = await getJson('/holidays?year=12025');
+    const normal = await getJson('/holidays?year=12026');
     const hasAurora = (b: ApiBody) =>
       b.holidays?.some((h) => h.name === 'Aurora Festival') ?? false;
     expect(hasAurora(aurora.body)).toBe(true);
@@ -115,10 +115,13 @@ describe('GET /holidays', () => {
     expect(body.year).toBeGreaterThan(12000);
   });
 
-  it('rejects an invalid year with 400', async () => {
-    const { status } = await getJson('/holidays?year=abc');
-    expect(status).toBe(400);
-  });
+  it.each(['abc', '12026abc', '9999', '100000'])(
+    'rejects invalid year %s with 400',
+    async (bad) => {
+      const { status } = await getJson(`/holidays?year=${bad}`);
+      expect(status).toBe(400);
+    },
+  );
 });
 
 describe('unknown routes', () => {

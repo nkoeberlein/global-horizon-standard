@@ -7,13 +7,14 @@ import { GitHubIcon } from './GitHubIcon';
 const REFRESH_MS = 250;
 
 export function HeroSection() {
-  const [ghs, setGhs] = useState(() => getGHSDate());
+  const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
-    const timer = setInterval(() => setGhs(getGHSDate()), REFRESH_MS);
+    const timer = setInterval(() => setNow(new Date()), REFRESH_MS);
     return () => clearInterval(timer);
   }, []);
 
+  const ghs = getGHSDate(now);
   const beatsDisplay = ghs.beatsLong; // "@045.23"
   const shorthand = formatGHS(ghs, 'short');
 
@@ -126,15 +127,16 @@ export function HeroSection() {
           >
             <div className="text-left">
               <div className="text-xl" style={{ color: '#5c5650' }}>
-                {new Date().toLocaleDateString('en-GB', {
+                {now.toLocaleDateString('en-GB', {
                   weekday: 'short',
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
+                  timeZone: 'UTC',
                 })}
               </div>
               <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
-                Calendar date
+                Calendar date (UTC)
               </div>
             </div>
             <span className="px-6 text-xl" style={{ color: '#d4cfc4' }}>
@@ -157,10 +159,11 @@ export function HeroSection() {
           >
             <div className="text-left">
               <div className="font-mono tabular-nums text-xl" style={{ color: '#5c5650' }}>
-                {new Date().toLocaleTimeString('en-GB', {
+                {now.toLocaleTimeString('en-GB', {
                   hour: '2-digit',
                   minute: '2-digit',
                   second: '2-digit',
+                  timeZone: 'UTC',
                 })}{' '}
                 UTC
               </div>
@@ -188,7 +191,7 @@ export function HeroSection() {
           <div className="grid grid-cols-[1fr_auto_1fr] items-center px-7 py-6">
             <div className="text-left">
               <div className="text-xl" style={{ color: '#5c5650' }}>
-                {new Date().getFullYear()} CE
+                {now.getUTCFullYear()} CE
               </div>
               <div className="text-xs mt-1.5" style={{ color: '#b0a898' }}>
                 Common Era

@@ -118,10 +118,9 @@ export function GHSAnalogClock({ size = 280 }: GHSAnalogClockProps) {
     }
 
     // --- Compute beat values ---
-    const ghsDate = getGHSDate();
-    const beatsFloat = parseFloat(ghsDate.beatsLong.substring(1)); // 0–999.99
-    const dayAngleDeg = (beatsFloat / 1000) * 360;
-    const beatAngleDeg = ((beatsFloat % 100) / 100) * 360;
+    const { beatsExact } = getGHSDate();
+    const dayAngleDeg = (beatsExact / 1000) * 360;
+    const beatAngleDeg = ((beatsExact % 100) / 100) * 360;
 
     // --- Day hand (thick, warm charcoal) ---
     const dayHandLen = R * 0.52;

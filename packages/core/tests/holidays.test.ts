@@ -5,15 +5,15 @@ describe('getHolidaysForYear', () => {
   const fixedCount = HOLIDAYS.filter((h) => h.type === 'fixed').length;
 
   it('resolves all fixed holidays in an Aurora year', () => {
-    expect(isAuroraYear(12026)).toBe(true);
-    const occurrences = getHolidaysForYear(12026);
+    expect(isAuroraYear(12025)).toBe(true);
+    const occurrences = getHolidaysForYear(12025);
     expect(occurrences).toHaveLength(fixedCount);
     expect(occurrences.some((o) => o.holiday.name === 'Aurora Festival')).toBe(true);
   });
 
   it('omits Aurora-Week holidays in non-Aurora years', () => {
-    expect(isAuroraYear(12027)).toBe(false);
-    const occurrences = getHolidaysForYear(12027);
+    expect(isAuroraYear(12026)).toBe(false);
+    const occurrences = getHolidaysForYear(12026);
     expect(occurrences).toHaveLength(fixedCount - 1);
     expect(occurrences.some((o) => o.holiday.name === 'Aurora Festival')).toBe(false);
   });
@@ -21,14 +21,14 @@ describe('getHolidaysForYear', () => {
   it('computes Gregorian dates from the calendar instead of stale static values', () => {
     const newYear = getHolidaysForYear(12026).find((o) => o.holiday.name === 'New Year (Equinox)');
     expect(newYear?.ghsDate).toBe('12026.01.01');
-    expect(newYear?.gregorian.toISOString().slice(0, 10)).toBe('2026-03-18');
+    expect(newYear?.gregorian.toISOString().slice(0, 10)).toBe('2026-03-23');
 
     // Same holiday lands on a different Gregorian day in another year — the
     // reason static equivalents were removed.
     const newYear27 = getHolidaysForYear(12027).find(
       (o) => o.holiday.name === 'New Year (Equinox)',
     );
-    expect(newYear27?.gregorian.toISOString().slice(0, 10)).toBe('2027-03-24');
+    expect(newYear27?.gregorian.toISOString().slice(0, 10)).toBe('2027-03-22');
   });
 
   it('resolves multi-day observances with an end date', () => {
@@ -43,11 +43,20 @@ describe('getHolidaysForYear', () => {
   // HOLIDAYS is grouped by category, so the raw array order put 13.16 before
   // 13.01 and the Aurora Week before 10.28.
   it.each([
-    ['an Aurora year', 12026],
-    ['a non-Aurora year', 12027],
+    ['an Aurora year', 12025],
+    ['a non-Aurora year', 12026],
   ])('returns occurrences in chronological order in %s', (_label, era) => {
     const times = getHolidaysForYear(era).map((o) => o.gregorian.getTime());
     expect(times).toEqual([...times].sort((a, b) => a - b));
+  });
+
+  it('defines Easter Sunday by the Gregorian computus (21 March), not GHS 01.01 (C4)', () => {
+    const easter = HOLIDAYS.find((h) => h.name === 'Easter Sunday');
+    expect(easter?.type).toBe('dynamic');
+    if (easter?.type === 'dynamic') {
+      expect(easter.rule).toContain('21 March (Gregorian computus)');
+      expect(easter.description).toContain('Always a GHS Sunday');
+    }
   });
 });
 

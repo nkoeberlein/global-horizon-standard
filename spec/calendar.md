@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The Global Horizon Standard divides the year into **13 months of exactly 28 days** (364 days). Every month begins on a Monday and ends on a Sunday. The year starts near the **spring equinox**: year starts drift within a fixed window of **16–24 March** (Gregorian), centered on the equinox (~20 March), and the Aurora Week periodically resets the drift (see §5.5).
+The Global Horizon Standard divides the year into **13 months of exactly 28 days** (364 days). Every month begins on a Monday and ends on a Sunday. The year starts at the **northern spring equinox**: the origin is coupled to the March equinox of 2000 (**`12000.01.01` = Unix day `11,036`**), and year starts stay within ±3.5 days of the astronomical equinox (**17–25 March** Gregorian), periodically reset by the Aurora Week (see §5.5).
 
 To maintain alignment with the solar year (~365.2422 days), GHS uses the **Aurora Week** — a full 7-day leap week inserted every 5 to 6 years — instead of individual leap days.
 
@@ -12,19 +12,19 @@ To maintain alignment with the solar year (~365.2422 days), GHS uses the **Auror
 
 | #  | Name      | Season | Gregorian Equivalent (approx.) | Note                        |
 |----|-----------|--------|--------------------------------|-----------------------------|
-| 01 | March     | Spring | Mar 21 – Apr 17               | New Year (equinox)          |
-| 02 | April     | Spring | Apr 18 – May 15               |                             |
-| 03 | May       | Spring | May 16 – Jun 12               |                             |
-| 04 | June      | Summer | Jun 13 – Jul 10               | Summer solstice (~mid-month)|
-| 05 | July      | Summer | Jul 11 – Aug 7                |                             |
-| 06 | August    | Summer | Aug 8 – Sep 4                 |                             |
-| 07 | September | Autumn | Sep 5 – Oct 2                 | Septem = 7 ✓                |
-| 08 | October   | Autumn | Oct 3 – Oct 30                | Octo = 8 ✓                  |
-| 09 | November  | Autumn | Oct 31 – Nov 27               | Novem = 9 ✓                 |
-| 10 | December  | Winter | Nov 28 – Dec 25               | Decem = 10 ✓                |
-| 11 | January   | Winter | Dec 26 – Jan 22               |                             |
-| 12 | February  | Winter | Jan 23 – Feb 19               |                             |
-| 13 | Luna      | Winter | Feb 20 – Mar 19               | The Moon Month (year's end) |
+| 01 | March     | Spring | Mar 20 – Apr 16               | New Year (equinox)          |
+| 02 | April     | Spring | Apr 17 – May 14               |                             |
+| 03 | May       | Spring | May 15 – Jun 11               |                             |
+| 04 | June      | Summer | Jun 12 – Jul 9                | Summer solstice (~mid-month)|
+| 05 | July      | Summer | Jul 10 – Aug 6                |                             |
+| 06 | August    | Summer | Aug 7 – Sep 3                 |                             |
+| 07 | September | Autumn | Sep 4 – Oct 1                 | Septem = 7 ✓                |
+| 08 | October   | Autumn | Oct 2 – Oct 29                | Octo = 8 ✓                  |
+| 09 | November  | Autumn | Oct 30 – Nov 26               | Novem = 9 ✓                 |
+| 10 | December  | Winter | Nov 27 – Dec 24               | Decem = 10 ✓                |
+| 11 | January   | Winter | Dec 25 – Jan 21               |                             |
+| 12 | February  | Winter | Jan 22 – Feb 18               |                             |
+| 13 | Luna      | Winter | Feb 19 – Mar 18               | The Moon Month (year's end) |
 | —  | Aurora    | —      | (7 days after Luna)            | A.1–A.7 (Aurora Years only) |
 
 > [!NOTE]
@@ -117,44 +117,52 @@ Difference: 146,097 − 145,600 = **497 days** = **71 weeks**.
 A year *Y* (in HE) is an Aurora Year if:
 
 ```
-(71 × Y + 156) mod 400 < 71
+(71 × Y + 286) mod 400 < 71
 ```
 
 Where:
 - **Y** = the year in the Human Era
-- **156** = the epsilon constant, calibrating the algorithm to the spring equinox
+- **286** = the phase constant $\varepsilon$, centering year starts on the astronomical March equinox (±3.5 days) from the anchor `12000.01.01`
 
 This distributes the 71 leap weeks as evenly as possible, producing intervals of 5 or 6 years between Aurora Years.
 
 > [!IMPORTANT]
-> `mod` here denotes the **mathematical modulo** — the non-negative residue. Languages whose `%` operator truncates toward zero (JavaScript, C, C++, Java, Go, Rust) return negative results for negative operands and must normalize: `((x % 400) + 400) % 400`. Without this, every era ≤ 0 is misclassified, the 146,097-day cycle invariant of §5.3 collapses, and year starts computed via the 400-year shortcut drift thousands of days off. Languages with a euclidean `%` (Dart, Python) need no adjustment.
+> `mod` here denotes the **mathematical modulo** — the non-negative residue. Languages whose `%` operator truncates toward zero (JavaScript, C, C++, Java, Go, Rust) return negative results for negative operands and must normalize: `((x % 400) + 400) % 400`. Without this, every era ≤ 0 is misclassified and the 146,097-day cycle invariant of §5.3 collapses. Languages with a euclidean `%` (Dart, Python) need no adjustment.
 
 ### 5.5 Epoch & Reference Implementation
 
-The calendar is anchored at a **single epoch**:
+The calendar origin is coupled to two things only — a natural event and an integer day on the digital time base:
 
-> **GHS 10001.01.01 = 21 March of year 1 CE (proleptic Gregorian), 00:00 UTC**
->
-> — the year traditionally associated with the birth of Christ, and the first full year of the Human Era.
+- **Meaning**: the astronomical March equinox of 2000 (`2000-03-20 07:35 UTC`, `@316` on day 1).
+- **Normative Definition**:
 
-Every other year start follows deterministically by chaining year lengths (364 or 371 days). Because any 400 consecutive GHS years sum to exactly 146,097 days — identical to the Gregorian 400-year cycle — year starts remain forever within the **16–24 March drift window**, centered on the spring equinox. In the modern era this calibration yields, e.g., **12026.01.01 = 18 March 2026**.
+> **GHS `12000.01.01` = Unix day `11,036`** (`⌊unixMs / 86,400,000⌋ = 11,036`)
+
+No Gregorian date appears in the normative definition. Every year start follows in closed form from the anchor and the Aurora step function:
+
+```
+Unix day of Y.01.01 = 11,036 + 364 × (Y − 12,000) + 7 × (⌊(71 × (Y − 1) + 286) / 400⌋ − ⌊(71 × 11,999 + 286) / 400⌋)
+                    = 11,036 + 364 × (Y − 12,000) + 7 × ⌊(71 × (Y − 12,000) + 215) / 400⌋
+```
+
+Because any 400 consecutive GHS years sum to exactly 146,097 days, year starts stay within **±3.5 days** of the March equinox (informatively **17–25 March** Gregorian; e.g. **`12026.01.01` = 23 March 2026**). And because Unix day `11,036` is a Monday (`11,036 mod 7 = 4`) and every GHS year is a whole number of weeks (364 or 371 days), **every GHS weekday coincides 1:1 with the existing seven-day week forever**.
 
 ```typescript
+const EPSILON = 286;
+const EPOCH_YEAR_HE = 12000;
+const EPOCH_UNIX_DAY = 11_036;
+const EPOCH_MS = EPOCH_UNIX_DAY * 86_400_000;
+
 function isAuroraYear(yearHE: number): boolean {
-  const epsilon = 156;
   // Euclidean modulo — JavaScript's `%` is negative for negative operands.
-  return (((71 * yearHE + epsilon) % 400) + 400) % 400 < 71;
+  return (((71 * yearHE + EPSILON) % 400) + 400) % 400 < 71;
 }
 
-function getDaysInYear(yearHE: number): number {
-  return isAuroraYear(yearHE) ? 371 : 364;
-}
+const leapsThrough = (y: number): number => Math.floor((71 * y + EPSILON) / 400);
 
-const EPOCH_YEAR = 10001; // starts 0001-03-21T00:00Z (proleptic Gregorian)
-
-function yearStart(yearHE: number): Date {
-  // epoch + sum of getDaysInYear(y) for all years between epoch and yearHE
-  // (jump whole 400-year cycles of 146,097 days for efficiency)
+function getYearStartMs(yearHE: number): number {
+  const auroraYears = leapsThrough(yearHE - 1) - leapsThrough(EPOCH_YEAR_HE - 1);
+  return EPOCH_MS + ((yearHE - EPOCH_YEAR_HE) * 364 + auroraYears * 7) * 86_400_000;
 }
 ```
 

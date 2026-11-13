@@ -24,6 +24,14 @@ export interface GHSDateResult {
   beats: string;
   /** Centibeat-precision value, e.g. "@045.23" */
   beatsLong: string;
-  /** ISO-style compact notation, e.g. "12026.01.15" or "12026.A.03" */
+  /** Centibeat-precision numeric beat value in [0, 999.99], e.g. 45.23 */
+  beatsExact: number;
+  /**
+   * ISO-style compact notation, e.g. "12026.01.15" or "12026.A.03".
+   *
+   * Padded to five era digits so values in era 1–99999 sort lexicographically
+   * and round-trip through `parseGHSString`. Values outside era 1–99999
+   * (e.g. "-00500.03.17", "110000.03.16") are display-only.
+   */
   fullDate: string;
 }

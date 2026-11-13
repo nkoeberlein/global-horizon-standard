@@ -29,7 +29,7 @@ The Global Horizon Standard is an open-source time protocol that corrects the lo
 | **Era** | Human Era (HE): +10,000 years to the Gregorian calendar. |
 | **Time** | @Beats: 1,000 decimal beats per day. Zero time zones. |
 | **Leap Mechanism** | Aurora Week: A 7-day intercalary week every 5–6 years. |
-| **Year Start** | The spring equinox (21 March Gregorian). |
+| **Year Start** | The northern spring equinox (`12000.01.01` = Unix day `11,036`; drifts 17–25 March). |
 | **Timestamp** | `12026.01.15 @685` (GHS Core standard). |
 
 ---
@@ -52,19 +52,19 @@ Our current calendar is a patchwork of Roman emperors, papal decrees, and coloni
 
 | #  | Name      | Season | Gregorian (Approx.)   | Note |
 |----|-----------|--------|-----------------------|------|
-| 01 | March     | Spring | 21 Mar – 17 Apr       | Year begins |
-| 02 | April     | Spring | 18 Apr – 15 May       | |
-| 03 | May       | Spring | 16 May – 12 Jun       | |
-| 04 | June      | Summer | 13 Jun – 10 Jul       | |
-| 05 | July      | Summer | 11 Jul – 7 Aug        | |
-| 06 | August    | Summer | 8 Aug – 4 Sep         | |
-| 07 | September | Autumn | 5 Sep – 2 Oct         | *septem = 7* |
-| 08 | October   | Autumn | 3 Oct – 30 Oct        | *octo = 8* |
-| 09 | November  | Autumn | 31 Oct – 27 Nov       | *novem = 9* |
-| 10 | December  | Winter | 28 Nov – 25 Dec       | *decem = 10* |
-| 11 | January   | Winter | 26 Dec – 22 Jan       | |
-| 12 | February  | Winter | 23 Jan – 19 Feb       | |
-| 13 | **Luna** | Winter | 20 Feb – 19 Mar       | The 13th month |
+| 01 | March     | Spring | 20 Mar – 16 Apr       | Year begins |
+| 02 | April     | Spring | 17 Apr – 14 May       | |
+| 03 | May       | Spring | 15 May – 11 Jun       | |
+| 04 | June      | Summer | 12 Jun – 9 Jul        | |
+| 05 | July      | Summer | 10 Jul – 6 Aug        | |
+| 06 | August    | Summer | 7 Aug – 3 Sep         | |
+| 07 | September | Autumn | 4 Sep – 1 Oct         | *septem = 7* |
+| 08 | October   | Autumn | 2 Oct – 29 Oct        | *octo = 8* |
+| 09 | November  | Autumn | 30 Oct – 26 Nov       | *novem = 9* |
+| 10 | December  | Winter | 27 Nov – 24 Dec       | *decem = 10* |
+| 11 | January   | Winter | 25 Dec – 21 Jan       | |
+| 12 | February  | Winter | 22 Jan – 18 Feb       | |
+| 13 | **Luna** | Winter | 19 Feb – 18 Mar       | The 13th month |
 | —  | **Aurora**| —      | *(A1–A7)* | *Leap years only* |
 
 ### Decimal Time (@Beats)
@@ -95,10 +95,9 @@ Explore the project to understand the math, philosophy, and code behind the stan
   * [`ghs-time`](packages/core/) — Core TypeScript library: calendar conversion, @Beats, Human Era. Published as ESM + CJS.
   * [`ghs-cli`](packages/cli/) — Terminal CLI (`ghs` command): convert dates, display current GHS time.
   * [`ghs-api`](packages/api/) — Hono-based HTTP API serving GHS time and conversions.
-  * [`ghs-web`](packages/web/) — Official GHS web dashboard and landing page.
-  * [`ghs-ui`](packages/ui/) — Reusable UI component library shared across web and extension.
+  * [`ghs-web`](packages/web/) — Official GHS web dashboard, landing page, and analog @Beats clock.
   * [`ghs-extension`](packages/extension/) — Browser extension displaying live GHS time.
-  * [`clock_analog`](packages/clock_analog/) — Web-based analog @Beats clock visualization.
+  * [`ghs_mobile`](packages/mobile/) — Flutter app (Dart port of `ghs-time`).
 * **[`/ideas`](ideas/) — Open Debates & Explorations:** Read our active discussions on [physics implications](ideas/physics-implications.md), [legacy system migrations](ideas/legacy-systems.md), and [global adoption strategies](ideas/adoption-strategy.md).
 * **[`/data`](data/) — Machine-Readable Data:** Contains `timezone-map.json` (local solar phases vs. @Beats). Holidays live in the `ghs-time` package (`HOLIDAYS`, `getHolidaysForYear`) with per-year computed Gregorian dates.
 * **[`/docs`](docs/) — Historical Context:** [Why our legacy calendar is broken](docs/historical-context.md).

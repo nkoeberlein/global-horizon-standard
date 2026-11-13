@@ -108,7 +108,12 @@ app.get('/convert', (c) => {
 // 4. Endpoint: Feiertage (/holidays?year=12026)
 app.get('/holidays', (c) => {
   const yearQuery = c.req.query('year');
-  const era = yearQuery ? Number.parseInt(yearQuery, 10) : getGHSDate().era;
+  const era =
+    yearQuery === undefined
+      ? getGHSDate().era
+      : /^\d{5}$/.test(yearQuery)
+        ? Number(yearQuery)
+        : Number.NaN;
 
   if (!Number.isInteger(era) || era < 10000 || era > 99999) {
     return c.json(

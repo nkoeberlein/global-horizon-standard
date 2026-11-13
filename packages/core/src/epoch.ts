@@ -1,29 +1,26 @@
-import { getDaysInYear } from './aurora';
-import { DAY_MS } from './constants';
+import { EPSILON } from './aurora';
+import { DAY_MS, DAYS_PER_NORMAL_YEAR } from './constants';
+import { assertEra } from './era';
 
 /**
- * GHS epoch — the calibration point from which every year start is derived.
+ * GHS epoch — the origin from which every year start is derived.
  *
- * GHS year 10001 HE (= 1 CE, the year traditionally associated with the birth
- * of Christ) begins on 21 March of year 1 in the proleptic Gregorian calendar,
- * at 00:00 UTC.
+ * - Meaning: the astronomical March equinox of 2000 (2000-03-20 07:35 UTC,
+ *   i.e. `@316` on day 1).
+ * - Definition: `12000.01.01 = Unix day 11,036` (00:00 UTC).
  *
- * This single fixed point, chained with the 364/371-day year lengths from
- * `getDaysInYear`, determines all other year starts. Because any 400
- * consecutive GHS years sum to exactly 146,097 days (identical to the
- * Gregorian 400-year cycle), year starts drift within a stable window of
- * 16–24 March, centered on the spring equinox (~20 March). In the modern era
- * this calibration yields 12026.01.01 = 2026-03-18 UTC.
+ * Unix day 11,036 is a Monday (`11036 mod 7 = 4`). Because every GHS year is
+ * an exact multiple of 7 days (364 or 371), GHS weekdays coincide with the
+ * existing seven-day week on every day, forever. With `EPSILON = 286`, year
+ * starts stay within ±3.5 days of the March equinox (17–25 March Gregorian;
+ * e.g. `12026.01.01 = 2026-03-23 UTC`).
  */
-export const EPOCH_YEAR_HE = 10001;
+export const EPOCH_YEAR_HE = 12000;
 
-export const EPOCH_MS = (() => {
-  // Date.UTC(1, ...) would map year 1 to 1901 — construct via setUTCFullYear.
-  const d = new Date(0);
-  d.setUTCFullYear(1, 2, 21);
-  d.setUTCHours(0, 0, 0, 0);
-  return d.getTime();
-})();
+/** Unix day of 12000.01.01: the UTC day of the March equinox of 2000. A Monday. */
+export const EPOCH_UNIX_DAY = 11_036;
+
+export const EPOCH_MS = EPOCH_UNIX_DAY * DAY_MS;
 
 /** Years per leap cycle. */
 export const CYCLE_YEARS = 400;
@@ -31,18 +28,23 @@ export const CYCLE_YEARS = 400;
 /** Days per 400-year cycle: 400 × 364 + 71 × 7 = 146,097 (matches Gregorian). */
 export const CYCLE_DAYS = 146_097;
 
+const leapsThrough = (y: number): number => Math.floor((71 * y + EPSILON) / CYCLE_YEARS);
+
+function computeYearStartMs(yearHE: number): number {
+  const auroraYears = leapsThrough(yearHE - 1) - leapsThrough(EPOCH_YEAR_HE - 1);
+  return EPOCH_MS + ((yearHE - EPOCH_YEAR_HE) * DAYS_PER_NORMAL_YEAR + auroraYears * 7) * DAY_MS;
+}
+
 /**
  * Returns the UTC timestamp (ms) of 00:00 on day 1 of GHS year `yearHE`.
  *
- * Jumps whole 400-year cycles, then walks the remaining ≤400 years.
+ * Closed-form O(1) calculation: `isAuroraYear(Y)` is true exactly when
+ * `⌊(71Y + ε) / 400⌋` increments at `Y`, so the number of Aurora Years
+ * before `yearHE` is a difference of two floors.
  */
 export function getYearStartMs(yearHE: number): number {
-  const cycles = Math.floor((yearHE - EPOCH_YEAR_HE) / CYCLE_YEARS);
-  let ms = EPOCH_MS + cycles * CYCLE_DAYS * DAY_MS;
-  for (let y = EPOCH_YEAR_HE + cycles * CYCLE_YEARS; y < yearHE; y++) {
-    ms += getDaysInYear(y) * DAY_MS;
-  }
-  return ms;
+  assertEra(yearHE);
+  return computeYearStartMs(yearHE);
 }
 
 /**
@@ -50,17 +52,9 @@ export function getYearStartMs(yearHE: number): number {
  * timestamp of that year's first day.
  */
 export function resolveYear(ms: number): { yearHE: number; yearStartMs: number } {
-  const daysSinceEpoch = Math.floor((ms - EPOCH_MS) / DAY_MS);
-  const cycles = Math.floor(daysSinceEpoch / CYCLE_DAYS);
-  let yearHE = EPOCH_YEAR_HE + cycles * CYCLE_YEARS;
-  let yearStartMs = EPOCH_MS + cycles * CYCLE_DAYS * DAY_MS;
-
-  for (;;) {
-    const yearLengthMs = getDaysInYear(yearHE) * DAY_MS;
-    if (ms < yearStartMs + yearLengthMs) {
-      return { yearHE, yearStartMs };
-    }
-    yearStartMs += yearLengthMs;
-    yearHE++;
-  }
+  const days = Math.floor((ms - EPOCH_MS) / DAY_MS);
+  let yearHE = EPOCH_YEAR_HE + Math.floor((days * CYCLE_YEARS) / CYCLE_DAYS);
+  while (computeYearStartMs(yearHE) > ms) yearHE--;
+  while (computeYearStartMs(yearHE + 1) <= ms) yearHE++;
+  return { yearHE, yearStartMs: computeYearStartMs(yearHE) };
 }

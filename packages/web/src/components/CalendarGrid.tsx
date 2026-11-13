@@ -1,8 +1,8 @@
-import { getGHSDate, isAuroraYear, MONTH_NAMES_GHS, WEEKDAYS_GHS } from 'ghs-time';
+import { DAY_MS, getGHSDate, MONTH_NAMES_GHS, WEEKDAYS_GHS } from 'ghs-time';
 import { useEffect, useMemo, useState } from 'react';
 
 // GHS months always start on Monday — every month is a perfect 7×4 grid.
-const WEEKDAY_ABBR = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+const WEEKDAY_ABBR = WEEKDAYS_GHS.map((w) => w.slice(0, 2));
 
 interface MonthCardProps {
   monthIndex: number; // 0-based (0 = first GHS month = "March")
@@ -135,9 +135,9 @@ export function CalendarGrid() {
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
-    // Refresh at the next GHS midnight (next multiple of 86400s in UTC)
+    // Refresh at the next GHS midnight (next multiple of DAY_MS in UTC)
     function scheduleRefresh() {
-      const msUntilMidnight = 86400000 - (Date.now() % 86400000);
+      const msUntilMidnight = DAY_MS - (Date.now() % DAY_MS);
       return setTimeout(() => {
         setNow(new Date());
         scheduleRefresh();
@@ -148,7 +148,7 @@ export function CalendarGrid() {
   }, []);
 
   const ghs = useMemo(() => getGHSDate(now), [now]);
-  const aurora = isAuroraYear(ghs.era);
+  const aurora = ghs.isAuroraYear;
 
   return (
     <div>

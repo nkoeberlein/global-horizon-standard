@@ -1,7 +1,7 @@
 import { isAuroraYear } from './aurora';
 import { BEAT_MS, DAY_MS, DAYS_PER_NORMAL_YEAR, MONTH_NAMES_GHS, WEEKDAYS_GHS } from './constants';
 import { getYearStartMs, resolveYear } from './epoch';
-import { formatEra } from './era';
+import { assertEra, formatEra } from './era';
 import type { GHSDateResult } from './types';
 
 /**
@@ -66,8 +66,26 @@ export function getGHSDate(inputDate: Date = new Date()): GHSDateResult {
     isAuroraYear: aurora,
     beats: `@${beatsStr}`,
     beatsLong: `@${beatsStr}.${String(centibeats % 100).padStart(2, '0')}`,
+    beatsExact: centibeats / 100,
     fullDate: `${formatEra(yearHE)}.${monthStr}.${dayStr}`,
   };
+}
+
+/**
+ * Computes the approximate @Beat (0–999) of local solar noon for a given
+ * longitude in degrees east of Greenwich (accepts `[-180, 360]`, e.g. `0` for
+ * London, `13.4` for Berlin, `-74` or `286` for New York).
+ *
+ * Formula: `((500 - (longitude / 360) * 1000) mod 1000)`
+ *
+ * @throws RangeError when `longitude` is not finite or outside `[-180, 360]`.
+ */
+export function getSolarNoonBeat(longitude: number): number {
+  if (!Number.isFinite(longitude) || longitude < -180 || longitude > 360) {
+    throw new RangeError(`Invalid longitude: ${longitude}. Must be in the range [-180, 360].`);
+  }
+  const raw = (((500 - (longitude / 360) * 1000) % 1000) + 1000) % 1000;
+  return Math.round(raw) % 1000;
 }
 
 /**
@@ -89,9 +107,7 @@ export function parseGHSDate(
   day: number,
   beats: number = 0,
 ): Date {
-  if (!Number.isInteger(era)) {
-    throw new RangeError(`Invalid era: ${era}. Must be an integer Human Era year.`);
-  }
+  assertEra(era);
   if (!Number.isFinite(beats) || beats < 0 || beats >= 1000) {
     throw new RangeError(`Invalid beats: ${beats}. Must be in the range [0, 1000).`);
   }
@@ -115,5 +131,8 @@ export function parseGHSDate(
     dayIndex = (month - 1) * 28 + (day - 1);
   }
 
-  return new Date(getYearStartMs(era) + dayIndex * DAY_MS + Math.round(beats * BEAT_MS));
+  // Clamp at DAY_MS - 1 so beats like 999.999995 (where Math.round(beats * BEAT_MS)
+  // reaches 86,400,000) never roll over into the next day.
+  const msInDay = Math.min(Math.round(beats * BEAT_MS), DAY_MS - 1);
+  return new Date(getYearStartMs(era) + dayIndex * DAY_MS + msInDay);
 }

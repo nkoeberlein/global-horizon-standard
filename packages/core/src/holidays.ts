@@ -1,6 +1,6 @@
 import { isAuroraYear } from './aurora';
 import { parseGHSDate } from './converter';
-import { formatEra } from './era';
+import { assertEra, formatEra } from './era';
 
 interface HolidayBase {
   name: string;
@@ -175,9 +175,9 @@ export const HOLIDAYS: readonly Holiday[] = [
     name: 'Easter Sunday',
     category: 'Christianity',
     type: 'dynamic',
-    rule: 'First Sunday after the first full moon on or after GHS 01.01',
+    rule: 'First Sunday after the ecclesiastical full moon on or after 21 March (Gregorian computus)',
     description:
-      'Celebrates the resurrection of Jesus Christ. Wanders between early March and late April.',
+      'Celebrates the resurrection of Jesus Christ. Always a GHS Sunday: 7, 14, 21 or 28 March, or 7 April.',
   },
   {
     name: 'Ramadan (Start)',
@@ -279,6 +279,7 @@ export interface HolidayOccurrence {
  * and are excluded.
  */
 export function getHolidaysForYear(era: number): HolidayOccurrence[] {
+  assertEra(era);
   const occurrences: HolidayOccurrence[] = [];
 
   for (const holiday of HOLIDAYS) {

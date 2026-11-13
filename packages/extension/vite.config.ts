@@ -1,4 +1,3 @@
-import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -12,9 +11,4 @@ export default defineConfig({
       manifest: 'manifest.json',
     }),
   ],
-  resolve: {
-    alias: {
-      'ghs-time': path.resolve(__dirname, '../core/src/index.ts'),
-    },
-  },
 });

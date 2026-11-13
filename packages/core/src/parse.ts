@@ -10,17 +10,19 @@ export interface ParsedGHSDate {
   date: Date;
 }
 
-// "12026.01.15", "12026.A.03", optionally followed by " @685" or " @685.25"
+// "12026.01.15", "12026.A.03", optionally prefixed with "GHS " and optionally
+// followed by " @685", "@685", or " @685.25" (per spec/timestamp-format.md).
 //
 // The era is exactly five digits, per spec/timestamp-format.md ("The full
 // 5-digit year must be used"). `formatEra` pads accordingly, so everything
-// getGHSDate emits for era 1–99999 parses back. Negative eras are outside the
-// grammar by design — spec/era-he.md exists precisely to abolish them.
-const GHS_STRING_RE = /^(\d{5})\.(A|\d{2})\.(\d{2})(?:\s+@(\d{1,3}(?:\.\d{1,2})?))?$/i;
+// getGHSDate emits for era 1–99999 parses back. Negative eras and eras >= 100000
+// are outside the grammar by design — spec/era-he.md exists precisely to abolish
+// negative years, and five-digit padding preserves lexicographic sorting.
+const GHS_STRING_RE = /^(?:GHS\s+)?(\d{5})\.(A|\d{2})\.(\d{2})(?:\s*@(\d{1,3}(?:\.\d{1,2})?))?$/i;
 
 /**
  * Parses a GHS timestamp string (`YYYYY.MM.DD` or `YYYYY.A.DD`, optionally
- * with ` @BBB` beats).
+ * prefixed with `GHS ` and optionally followed by `[@BBB]` beats).
  *
  * @returns The parsed components, or `null` when the input is not shaped like
  *          a GHS timestamp at all (callers typically fall back to Gregorian

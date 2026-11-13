@@ -15,11 +15,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "ghs-time": ["../core/src/index.ts"],
-      "ghs-ui": ["../ui/src/index.ts"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "vite.config.ts"]
 }

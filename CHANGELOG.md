@@ -2,6 +2,37 @@
 
 All notable changes to the Global Horizon Standard monorepo.
 
+## ghs-time 3.0.0 — 2026-11-13 (12026.09.12)
+
+### Breaking: natural & digital origin (`12000.01.01 = Unix day 11,036`, $\varepsilon = 286$)
+
+The calendar origin is no longer defined via a proleptic Gregorian date in 1 CE (`0001-03-21`). Instead, it is coupled to two things only:
+
+- **Meaning:** the astronomical March equinox of 2000 (`2000-03-20 07:35 UTC`, `@316` on day 1).
+- **Normative definition:** **`12000.01.01 = Unix day 11,036`** (`⌊unixMs / 86,400,000⌋ = 11,036`), with phase constant **`EPSILON = 286`** in `(71 × Y + 286) mod 400 < 71`.
+
+Consequences:
+
+- **Optimal equinox centering:** Year starts stay within **±3.5 days** (mean offset `0.0 d`, down from `−0.3 d`) of the astronomical March equinox — the theoretical floor for any leap-week calendar. The informative Gregorian window is now **17–25 March** (`12026.01.01 = 2026-03-23`).
+- **1:1 weekday continuity:** Because Unix day `11,036` (`2000-03-20`) is a Monday (`11,036 mod 7 = 4`) and every GHS year is a whole number of weeks (364 or 371 days), **every GHS weekday now coincides with the existing seven-day week on every day, forever** — making `spec/calendar.md` §6 true as written.
+- **Migration:** Every date shifts by a whole-year constant (`+2 days` in 270 of 400 years, `−5 days` in the other 130). Aurora Years near the present become `… 12014, 12019, 12025, 12030, 12036 …` (`12025` is an Aurora Year; `12026` is not).
+- **Exports:** `EPOCH_YEAR_HE` (`12000`) and `EPOCH_MS` (`953_510_400_000`) change value. `EPOCH_UNIX_DAY` (`11_036`), `EPSILON` (`286`), `MIN_ERA` (`-261_820`), `MAX_ERA` (`285_759`), `assertEra`, and `formatEra` are now exported from `ghs-time`.
+
+### Fixed
+
+- **Era validation and closed-form $O(1)$ year arithmetic (C2):** `assertEra` validates all five era entry points (`isAuroraYear`, `getDaysInYear`, `getYearStartMs`, `parseGHSDate`, `getHolidaysForYear`), throwing `RangeError` for non-integers, `NaN`, or eras outside `MIN_ERA…MAX_ERA` (`-261820…285759`). `getYearStartMs` now uses a closed-form floor difference instead of a loop, removing the `> 2^53` infinite loop and silent `Invalid Date` returns.
+- **`parseGHSDate` beat rollover (C3):** Clamps the millisecond offset within the day to `DAY_MS - 1` so fractional beats near `1000` (e.g. `999.999995`) never round up to `86,400,000 ms` and roll over into the next day.
+- **Easter Sunday rule in `HOLIDAYS` (C4):** States the Gregorian computus definition (first Sunday after the ecclesiastical full moon on or after 21 March) instead of `GHS 01.01`. Under the Monday-aligned origin, Easter is always a GHS Sunday (`01.07`, `01.14`, `01.21`, `01.28`, or `02.07` in 397 of 400 years).
+- **`parseGHSString` grammar alignment (C5):** Accepts the optional `GHS ` legacy-transition prefix and makes the space before `@BBB` optional (`12026.01.15@685`), matching `spec/timestamp-format.md`.
+- **`ghs-api` `/holidays` and `ghs-cli` year parsing:** Reject trailing non-numeric characters (e.g. `/holidays?year=12026abc` → 400) that `Number.parseInt` previously accepted.
+
+### Added & Changed
+
+- **Cross-language conformance vectors (`spec/vectors.json`):** Generated from `ghs-time` and asserted in both Vitest and `flutter test` (`ghs_mobile`).
+- **`ghs_mobile` (Dart):** Mirrored the v3.0.0 origin, `epsilon = 286`, `assertEra`, closed-form year arithmetic, and beat clamping.
+- **Specifications & docs:** Updated `spec/calendar.md`, `spec/era-he.md`, `spec/timestamp-format.md`, `spec/time-beats.md`, `docs/design-compromises.md`, and `README.md`.
+- **Tooling:** Renamed `vitest.config.ts` → `vitest.config.mts` to silence the Vite ESM loader warning; aligned root `package.json` `engines.node` (`>=24.0.0`) with CI.
+
 ## ghs-time 2.0.1 — 2026-07-31 (12026.05.24)
 
 ### Fixed

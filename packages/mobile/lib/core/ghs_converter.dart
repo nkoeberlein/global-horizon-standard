@@ -5,7 +5,7 @@
 /// - Calendar: 13 months × 28 days = 364 days/year
 /// - Time:     @Beats (decimal time, 1 day = 1,000 beats, anchored to UTC)
 /// - Leap:     Aurora Week — 71 full weeks inserted per 400-year cycle
-/// - Epoch:    10001.01.01 = 21 March 1 CE (proleptic Gregorian, UTC)
+/// - Epoch:    12000.01.01 = Unix day 11,036 (March equinox of 2000, UTC)
 ///
 /// Ported from: packages/core/src (epoch-based implementation)
 
@@ -21,18 +21,37 @@ const List<String> weekdaysGhs = [
 const int _dayMs = 86400000;
 const int _daysPerNormalYear = 364;
 
-/// GHS year 10001 HE (= 1 CE) begins on 21 March of year 1, 00:00 UTC.
-/// All other year starts derive from this single calibration point by
-/// chaining year lengths (364/371). Year starts drift within 16–24 March,
-/// centered on the spring equinox; e.g. 12026.01.01 = 2026-03-18.
-const int epochYearHe = 10001;
-final int epochMs = DateTime.utc(1, 3, 21).millisecondsSinceEpoch;
+/// Minimum and maximum Human Era years whose every instant is a valid
+/// JavaScript Date (within ±8.64e15 ms of the Unix epoch).
+const int minEra = -261820;
+const int maxEra = 285759;
+
+/// Phase constant calibrating the 400-year Aurora cycle so year starts stay
+/// centered on the March equinox (±3.5 days) from the anchor
+/// `12000.01.01 = Unix day 11,036`.
+const int epsilon = 286;
+
+/// GHS year 12000 HE begins on Unix day 11,036 (2000-03-20T00:00:00Z, the UTC
+/// day of the March equinox of 2000 — a Monday). Because every GHS year is a
+/// multiple of 7 days (364 or 371), GHS weekdays coincide with the existing
+/// seven-day week on every day, forever. Year starts stay within 17–25 March;
+/// e.g. 12026.01.01 = 2026-03-23.
+const int epochYearHe = 12000;
+const int epochUnixDay = 11036;
+const int epochMs = epochUnixDay * _dayMs;
 
 /// Years per leap cycle.
 const int cycleYears = 400;
 
 /// Days per 400-year cycle: 400 × 364 + 71 × 7 = 146,097 (matches Gregorian).
 const int cycleDays = 146097;
+
+/// Validates that [era] is within the supported Human Era range [minEra]…[maxEra].
+void assertEra(int era) {
+  if (era < minEra || era > maxEra) {
+    throw RangeError('Invalid era: $era. Must be an integer in $minEra…$maxEra.');
+  }
+}
 
 /// Formats a Human Era year for machine-readable output.
 ///
@@ -47,13 +66,14 @@ String formatEra(int yearHE) {
 
 /// Returns true if [yearHE] is an Aurora Year (53-week leap year).
 ///
-/// Formula: (71 × Y + 156) mod 400 < 71
+/// Formula: (71 × Y + 286) mod 400 < 71
 ///
 /// Dart's `%` is already euclidean (always non-negative for a positive
 /// divisor), so this stays correct for eras <= 0. The TypeScript core needs an
 /// explicit `((x % 400) + 400) % 400` because JavaScript's `%` truncates.
 bool isAuroraYear(int yearHE) {
-  return (71 * yearHE + 156) % 400 < 71;
+  assertEra(yearHE);
+  return (71 * yearHE + epsilon) % 400 < 71;
 }
 
 /// Returns the number of days in a GHS year: 364 (normal) or 371 (Aurora).
@@ -61,31 +81,31 @@ int getDaysInYear(int yearHE) {
   return isAuroraYear(yearHE) ? 371 : _daysPerNormalYear;
 }
 
+int _leapsThrough(int y) => ((71 * y + epsilon) / cycleYears).floor();
+
+int _computeYearStartMs(int yearHE) {
+  final auroraYears = _leapsThrough(yearHE - 1) - _leapsThrough(epochYearHe - 1);
+  return epochMs +
+      ((yearHE - epochYearHe) * _daysPerNormalYear + auroraYears * 7) * _dayMs;
+}
+
 /// Returns the UTC timestamp (ms) of 00:00 on day 1 of GHS year [yearHE].
 int getYearStartMs(int yearHE) {
-  final cycles = ((yearHE - epochYearHe) / cycleYears).floor();
-  var ms = epochMs + cycles * cycleDays * _dayMs;
-  for (var y = epochYearHe + cycles * cycleYears; y < yearHE; y++) {
-    ms += getDaysInYear(y) * _dayMs;
-  }
-  return ms;
+  assertEra(yearHE);
+  return _computeYearStartMs(yearHE);
 }
 
 /// Resolves the GHS year containing [ms] and that year's start timestamp.
 ({int yearHE, int yearStartMs}) _resolveYear(int ms) {
-  final daysSinceEpoch = ((ms - epochMs) / _dayMs).floor();
-  final cycles = (daysSinceEpoch / cycleDays).floor();
-  var yearHE = epochYearHe + cycles * cycleYears;
-  var yearStartMs = epochMs + cycles * cycleDays * _dayMs;
-
-  while (true) {
-    final yearLengthMs = getDaysInYear(yearHE) * _dayMs;
-    if (ms < yearStartMs + yearLengthMs) {
-      return (yearHE: yearHE, yearStartMs: yearStartMs);
-    }
-    yearStartMs += yearLengthMs;
+  final days = ((ms - epochMs) / _dayMs).floor();
+  var yearHE = epochYearHe + ((days * cycleYears) / cycleDays).floor();
+  while (_computeYearStartMs(yearHE) > ms) {
+    yearHE--;
+  }
+  while (_computeYearStartMs(yearHE + 1) <= ms) {
     yearHE++;
   }
+  return (yearHE: yearHE, yearStartMs: _computeYearStartMs(yearHE));
 }
 
 /// Immutable result object for a converted GHS date.
@@ -126,6 +146,9 @@ class GhsDateResult {
   /// Centibeat-precision value, e.g. "@045.23"
   final String beatsLong;
 
+  /// Centibeat-precision numeric beat value in [0, 999.99], e.g. 45.23
+  final double beatsExact;
+
   /// ISO-style compact notation, e.g. "12026.01.15" or "12026.A.03"
   final String fullDate;
 
@@ -142,6 +165,7 @@ class GhsDateResult {
     required this.isAuroraYearFlag,
     required this.beats,
     required this.beatsLong,
+    required this.beatsExact,
     required this.fullDate,
   });
 }
@@ -202,8 +226,20 @@ GhsDateResult getGhsDate([DateTime? inputDate]) {
     isAuroraYearFlag: aurora,
     beats: beatsFormatted,
     beatsLong: beatsLong,
+    beatsExact: centibeats / 100.0,
     fullDate: '${formatEra(yearHE)}.$monthStr.$dayStr',
   );
+}
+
+/// Computes the approximate @Beat (0–999) of local solar noon for a given
+/// [longitude] in degrees east of Greenwich (`[-180, 360]`).
+int getSolarNoonBeat(num longitude) {
+  if (!longitude.isFinite || longitude < -180 || longitude > 360) {
+    throw RangeError(
+        'Invalid longitude: $longitude. Must be in the range [-180, 360].');
+  }
+  final raw = (((500 - (longitude / 360) * 1000) % 1000) + 1000) % 1000;
+  return raw.round() % 1000;
 }
 
 /// Converts a GHS date back to a UTC [DateTime].
@@ -216,6 +252,7 @@ GhsDateResult getGhsDate([DateTime? inputDate]) {
 /// Throws [RangeError] when a component is out of range or the Aurora Week
 /// is requested in a year that is not an Aurora Year.
 DateTime parseGhsDate(int era, int? month, int day, [double beats = 0]) {
+  assertEra(era);
   if (beats < 0 || beats >= 1000 || !beats.isFinite) {
     throw RangeError('Invalid beats: $beats. Must be in the range [0, 1000).');
   }
@@ -240,13 +277,79 @@ DateTime parseGhsDate(int era, int? month, int day, [double beats = 0]) {
     dayOffset = (month - 1) * 28 + (day - 1);
   }
 
-  // 1 beat = 86.4 seconds = 86,400 ms
-  final msOffset = (beats * 86400).round();
+  // 1 beat = 86.4 seconds = 86,400 ms; clamp at _dayMs - 1 so beats near 1000
+  // never roll over into the next day.
+  final rawMs = (beats * 86400).round();
+  final msOffset = rawMs < _dayMs ? rawMs : _dayMs - 1;
 
   return DateTime.fromMillisecondsSinceEpoch(
     getYearStartMs(era) + dayOffset * _dayMs + msOffset,
     isUtc: true,
   );
+}
+
+/// Components extracted from a GHS timestamp string, plus the resolved UTC [DateTime].
+class ParsedGhsDate {
+  final int era;
+  final int? month;
+  final int day;
+  final double beats;
+  final DateTime date;
+
+  const ParsedGhsDate({
+    required this.era,
+    required this.month,
+    required this.day,
+    required this.beats,
+    required this.date,
+  });
+}
+
+final RegExp _ghsStringRe = RegExp(
+  r'^(?:GHS\s+)?(\d{5})\.(A|\d{2})\.(\d{2})(?:\s*@(\d{1,3}(?:\.\d{1,2})?))?$',
+  caseSensitive: false,
+);
+
+/// Parses a GHS timestamp string (`YYYYY.MM.DD` or `YYYYY.A.DD`, optionally
+/// prefixed with `GHS ` and optionally followed by `[@BBB]` beats).
+///
+/// Returns `null` when [input] is not shaped like a GHS timestamp.
+/// Throws [RangeError] when [input] is GHS-shaped but a component is out of range.
+ParsedGhsDate? parseGhsString(String input) {
+  final match = _ghsStringRe.firstMatch(input.trim());
+  if (match == null) return null;
+
+  final era = int.parse(match.group(1)!);
+  final monthStr = match.group(2)!.toUpperCase();
+  final int? month = monthStr == 'A' ? null : int.parse(monthStr);
+  final day = int.parse(match.group(3)!);
+  final beatsStr = match.group(4);
+  final beats = beatsStr == null ? 0.0 : double.parse(beatsStr);
+
+  return ParsedGhsDate(
+    era: era,
+    month: month,
+    day: day,
+    beats: beats,
+    date: parseGhsDate(era, month, day, beats),
+  );
+}
+
+/// Parses raw text-field components (`era`, `month` as `1`–`13` or `A`, `day`,
+/// and optional `beats`) into a UTC [DateTime].
+DateTime parseGhsComponents({
+  required String era,
+  required String month,
+  required String day,
+  String beats = '0',
+}) {
+  final parsedEra = int.parse(era.trim());
+  final monthRaw = month.trim().toUpperCase();
+  final int? parsedMonth = monthRaw == 'A' ? null : int.parse(monthRaw);
+  final parsedDay = int.parse(day.trim());
+  final beatsRaw = beats.trim();
+  final parsedBeats = beatsRaw.isEmpty ? 0.0 : double.parse(beatsRaw);
+  return parseGhsDate(parsedEra, parsedMonth, parsedDay, parsedBeats);
 }
 
 /// Available output formats for [formatGhs].

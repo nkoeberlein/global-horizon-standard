@@ -16,17 +16,28 @@ describe('parseGHSString', () => {
     expect(parsed?.month).toBe(1);
     expect(parsed?.day).toBe(15);
     expect(parsed?.beats).toBe(0);
-    expect(parsed?.date.toISOString()).toBe('2026-04-01T00:00:00.000Z');
+    expect(parsed?.date.toISOString()).toBe('2026-04-06T00:00:00.000Z');
   });
 
-  it('parses beats and fractional beats', () => {
+  it('parses beats and fractional beats, with or without a space before @ (C5)', () => {
     expect(parseGHSString('12026.01.15 @685')?.beats).toBe(685);
     expect(parseGHSString('12026.01.15 @685.25')?.beats).toBe(685.25);
+    expect(parseGHSString('12026.01.15@685')?.beats).toBe(685);
+    expect(parseGHSString('12026.01.15@685.25')?.beats).toBe(685.25);
+  });
+
+  it('accepts the optional GHS legacy-transition prefix (C5)', () => {
+    const prefixed = parseGHSString('GHS 12026.01.15 @685');
+    expect(prefixed?.era).toBe(12026);
+    expect(prefixed?.month).toBe(1);
+    expect(prefixed?.day).toBe(15);
+    expect(prefixed?.beats).toBe(685);
+    expect(parseGHSString('ghs 12025.A.03@500')?.month).toBe('A');
   });
 
   it('parses Aurora dates case-insensitively', () => {
-    expect(parseGHSString('12026.A.03')?.month).toBe('A');
-    expect(parseGHSString('12026.a.03')?.month).toBe('A');
+    expect(parseGHSString('12025.A.03')?.month).toBe('A');
+    expect(parseGHSString('12025.a.03')?.month).toBe('A');
   });
 
   it('returns null for inputs that are not GHS-shaped', () => {
@@ -37,11 +48,18 @@ describe('parseGHSString', () => {
     expect(parseGHSString('')).toBeNull();
   });
 
+  it('treats fullDate strings outside 5-digit eras (1–99999) as display-only (C5)', () => {
+    expect(getGHSDate(parseGHSDate(110000, 3, 16)).fullDate).toBe('110000.03.16');
+    expect(parseGHSString('110000.03.16')).toBeNull();
+    expect(getGHSDate(parseGHSDate(-500, 3, 17)).fullDate).toBe('-00500.03.17');
+    expect(parseGHSString('-00500.03.17')).toBeNull();
+  });
+
   it('throws RangeError for GHS-shaped but invalid components', () => {
     expect(() => parseGHSString('12026.14.01')).toThrow(RangeError);
     expect(() => parseGHSString('12026.01.29')).toThrow(RangeError);
     expect(() => parseGHSString('12026.00.10')).toThrow(RangeError);
-    expect(() => parseGHSString('12027.A.01')).toThrow(RangeError); // not an Aurora year
+    expect(() => parseGHSString('12026.A.01')).toThrow(RangeError); // not an Aurora year
   });
 
   it('round-trips the fullDate produced by getGHSDate', () => {
@@ -53,7 +71,7 @@ describe('parseGHSString', () => {
 
 describe('formatGHS', () => {
   const regular = getGHSDate(parseGHSDate(12026, 1, 15, 685));
-  const aurora = getGHSDate(parseGHSDate(12026, 'A', 3, 685));
+  const aurora = getGHSDate(parseGHSDate(12025, 'A', 3, 685));
 
   it('formats a regular date in all formats', () => {
     expect(formatGHS(regular, 'core')).toBe('12026.01.15 @685');
@@ -63,10 +81,10 @@ describe('formatGHS', () => {
   });
 
   it('formats an Aurora date in all formats', () => {
-    expect(formatGHS(aurora, 'core')).toBe('12026.A.03 @685');
-    expect(formatGHS(aurora, 'ui')).toBe('A3 Aur 12026 @685');
-    expect(formatGHS(aurora, 'text')).toBe('Aurora 3, 12026');
-    expect(formatGHS(aurora, 'short')).toBe("A3 '26");
+    expect(formatGHS(aurora, 'core')).toBe('12025.A.03 @685');
+    expect(formatGHS(aurora, 'ui')).toBe('A3 Aur 12025 @685');
+    expect(formatGHS(aurora, 'text')).toBe('Aurora 3, 12025');
+    expect(formatGHS(aurora, 'short')).toBe("A3 '25");
   });
 
   it('defaults to the core format', () => {

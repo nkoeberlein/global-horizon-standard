@@ -19,7 +19,7 @@ When it is **@500**, it is @500 everywhere on Earth simultaneously. There are no
 | 1 Centibeat   | cB     | 0.01 @Beat  | 0.864 seconds           |
 | 1 Millibeat   | mB     | 0.001 @Beat | 0.0864 seconds          |
 
-The **Centibeat** (~0.86 seconds) is the natural replacement for the second in everyday life — close to the duration of a human heartbeat.
+The **Centibeat** (~0.86 seconds) is the natural replacement for the second in everyday life — close to the duration of a human heartbeat. In standard GHS timestamp notation (`@BBB.CC`), **centibeats (two decimal places)** are the finest supported fractional resolution; the millibeat is a physical/conceptual sub-unit.
 
 ### 2.1 Rounding
 

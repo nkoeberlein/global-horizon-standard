@@ -149,14 +149,14 @@ program
   .action((monthArg?: string, yearArg?: string) => {
     const nowGHS = getGHSDate();
 
-    const targetYear = yearArg ? Number.parseInt(yearArg, 10) : nowGHS.era;
+    const targetYear = yearArg ? Number(yearArg) : nowGHS.era;
     let targetMonth: number | 'A' = nowGHS.month === null ? 'A' : nowGHS.month;
 
     if (monthArg) {
       if (monthArg.toUpperCase() === 'A' || monthArg.toUpperCase() === 'AURORA') {
         targetMonth = 'A';
       } else {
-        targetMonth = Number.parseInt(monthArg, 10);
+        targetMonth = Number(monthArg);
       }
     }
 
@@ -205,7 +205,7 @@ program
   .command('holidays [year]')
   .description('Lists the fixed GHS holidays of a year (default: current year)')
   .action((yearArg?: string) => {
-    const era = yearArg ? Number.parseInt(yearArg, 10) : getGHSDate().era;
+    const era = yearArg ? Number(yearArg) : getGHSDate().era;
     if (!Number.isInteger(era) || era < 10000 || era > 99999) {
       fail('Year must be a 5-digit HE number, e.g. 12026.');
     }

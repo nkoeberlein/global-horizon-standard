@@ -3,17 +3,24 @@ import {
   CYCLE_DAYS,
   DAY_MS,
   EPOCH_MS,
+  EPOCH_UNIX_DAY,
   EPOCH_YEAR_HE,
+  EPSILON,
   getDaysInYear,
   getGHSDate,
+  getHolidaysForYear,
   getYearStartMs,
   isAuroraYear,
+  MAX_ERA,
+  MIN_ERA,
+  parseGHSDate,
+  WEEKDAYS_GHS,
 } from '../src';
 
 /**
  * Year start derived by walking the 364/371-day chain from the epoch in single
- * steps — deliberately without the 400-year shortcut that getYearStartMs uses,
- * so the two can be cross-checked against each other.
+ * steps — deliberately without the closed-form formula that getYearStartMs
+ * uses, so the two can be cross-checked against each other.
  */
 function chainedYearStartMs(target: number): number {
   let ms = EPOCH_MS;
@@ -25,25 +32,64 @@ function chainedYearStartMs(target: number): number {
   return ms;
 }
 
+/**
+ * Astronomical March equinox in fractional Unix days (Meeus, Astronomical
+ * Algorithms, ch. 27, Table 27.A for years 1000–3000 CE).
+ */
+function marchEquinoxUnixDays(gregorianYear: number): number {
+  const u = (gregorianYear - 2000) / 1000;
+  const jde0 =
+    2451623.80984 + 365242.37404 * u + 0.05169 * u ** 2 - 0.00411 * u ** 3 - 0.00057 * u ** 4;
+  return jde0 - 2440587.5;
+}
+
 describe('epoch calibration', () => {
-  it('anchors 10001.01.01 (1 CE) at 21 March of year 1, proleptic Gregorian UTC', () => {
-    expect(EPOCH_YEAR_HE).toBe(10001);
-    expect(new Date(EPOCH_MS).toISOString()).toBe('0001-03-21T00:00:00.000Z');
+  it('anchors 12000.01.01 at Unix day 11,036 (the March equinox of 2000, a Monday)', () => {
+    expect(EPOCH_YEAR_HE).toBe(12000);
+    expect(EPOCH_UNIX_DAY).toBe(11_036);
+    expect(EPOCH_MS).toBe(11_036 * DAY_MS);
+    expect(new Date(EPOCH_MS).toISOString()).toBe('2000-03-20T00:00:00.000Z');
     expect(getYearStartMs(EPOCH_YEAR_HE)).toBe(EPOCH_MS);
   });
 
-  it('derives 12026.01.01 = 2026-03-18 UTC (modern-era calibration)', () => {
-    expect(new Date(getYearStartMs(12026)).toISOString()).toBe('2026-03-18T00:00:00.000Z');
+  it('derives 12026.01.01 = 2026-03-23 UTC (modern-era calibration)', () => {
+    expect(new Date(getYearStartMs(12026)).toISOString()).toBe('2026-03-23T00:00:00.000Z');
   });
 
-  it('keeps year starts within the 16–24 March drift window (11900–12200 HE)', () => {
+  it('keeps year starts within the 17–25 March drift window (11900–12200 HE)', () => {
     for (let year = 11900; year <= 12200; year++) {
       const start = new Date(getYearStartMs(year));
       expect(start.getUTCMonth()).toBe(2); // March
-      expect(start.getUTCDate()).toBeGreaterThanOrEqual(16);
-      expect(start.getUTCDate()).toBeLessThanOrEqual(24);
+      expect(start.getUTCDate()).toBeGreaterThanOrEqual(17);
+      expect(start.getUTCDate()).toBeLessThanOrEqual(25);
       // The GHS year N HE always starts in Gregorian year N - 10000
       expect(start.getUTCFullYear()).toBe(year - 10000);
+    }
+  });
+
+  it('keeps year starts within ±3.6 days of the astronomical March equinox (11600–13000 HE)', () => {
+    for (let era = 11600; era <= 13000; era++) {
+      const startUnixDay = getYearStartMs(era) / DAY_MS;
+      const equinoxUnixDay = marchEquinoxUnixDays(era - 10000);
+      expect(Math.abs(startUnixDay - equinoxUnixDay)).toBeLessThanOrEqual(3.6);
+    }
+  });
+
+  it('aligns GHS weekdays 1:1 with the existing seven-day week across a full 400-year cycle', () => {
+    // Every GHS year is 52 or 53 full weeks and 12000.01.01 is a Monday, so
+    // every year start is a Monday and every day of a year matches its UTC weekday.
+    for (let era = 12000; era < 12400; era++) {
+      const start = new Date(getYearStartMs(era));
+      expect(start.getUTCDay()).toBe(1); // Monday in JS Date (0=Sun, 1=Mon)
+    }
+    // Check every day of an Aurora year (12025) and a normal year (12026)
+    const startMs = getYearStartMs(12025);
+    const endMs = getYearStartMs(12027);
+    for (let ms = startMs; ms < endMs; ms += DAY_MS) {
+      const d = new Date(ms);
+      expect(WEEKDAYS_GHS.indexOf(getGHSDate(d).weekday as (typeof WEEKDAYS_GHS)[number])).toBe(
+        (d.getUTCDay() + 6) % 7,
+      );
     }
   });
 });
@@ -92,17 +138,15 @@ describe('400-year cycle', () => {
  * the Neolithic Revolution — see spec/era-he.md).
  *
  * Regression guard: isAuroraYear used JavaScript's truncating `%`, which
- * returns negative results for negative operands. That misclassified every era
- * <= -3 and broke the 146,097-day cycle invariant, putting getYearStartMs(0)
- * 2,289 days and getYearStartMs(-1000) 6,895 days off — silently.
+ * returns negative results for negative operands. That misclassified negative
+ * eras and broke the 146,097-day cycle invariant.
  */
 describe('eras at and below the Human Era zero point', () => {
   it('uses a euclidean modulo, so negative eras classify correctly', () => {
     for (let y = -2000; y <= 2000; y++) {
-      const euclidean = (((71 * y + 156) % 400) + 400) % 400 < 71;
+      const euclidean = (((71 * y + EPSILON) % 400) + 400) % 400 < 71;
       expect(isAuroraYear(y)).toBe(euclidean);
     }
-    // The pre-fix implementation reported true here.
     expect(isAuroraYear(-1000)).toBe(false);
   });
 
@@ -116,18 +160,18 @@ describe('eras at and below the Human Era zero point', () => {
     }
   });
 
-  it('matches a pure epoch chain, so the 400-year shortcut stays honest', () => {
-    for (const year of [12026, 10001, 9000, 5000, 500, 1, 0, -1, -1000]) {
+  it('matches a pure epoch chain, so the closed-form formula stays honest', () => {
+    for (const year of [15000, 12026, 12000, 10001, 9000, 5000, 500, 1, 0, -1, -1000, -2000]) {
       expect(getYearStartMs(year)).toBe(chainedYearStartMs(year));
     }
   });
 
-  it('keeps year starts in the 16–24 March drift window down to era -1200', () => {
+  it('keeps year starts in the 17–25 March drift window down to era -1200', () => {
     for (let year = -1200; year <= -900; year++) {
       const start = new Date(getYearStartMs(year));
       expect(start.getUTCMonth()).toBe(2); // March
-      expect(start.getUTCDate()).toBeGreaterThanOrEqual(16);
-      expect(start.getUTCDate()).toBeLessThanOrEqual(24);
+      expect(start.getUTCDate()).toBeGreaterThanOrEqual(17);
+      expect(start.getUTCDate()).toBeLessThanOrEqual(25);
     }
   });
 
@@ -138,5 +182,40 @@ describe('eras at and below the Human Era zero point', () => {
       expect(ghs.era).toBe(year);
       expect(ghs.dayOfYear).toBe(1);
     }
+  });
+});
+
+describe('era bounds and validation (C2)', () => {
+  const invalidEras = [
+    ['above 2^53 (would hang a loop)', 9007199254741202],
+    ['below -2^53', -9007199254740994],
+    ['above MAX_ERA', MAX_ERA + 1],
+    ['286000', 286_000],
+    ['below MIN_ERA', MIN_ERA - 1],
+    ['fractional era', 12026.5],
+    ['NaN', Number.NaN],
+    ['Infinity', Number.POSITIVE_INFINITY],
+    ['-Infinity', Number.NEGATIVE_INFINITY],
+  ] as const;
+
+  it.each(invalidEras)('rejects %s across all five era entry points', (_label, badEra) => {
+    expect(() => isAuroraYear(badEra)).toThrow(RangeError);
+    expect(() => getDaysInYear(badEra)).toThrow(RangeError);
+    expect(() => getYearStartMs(badEra)).toThrow(RangeError);
+    expect(() => parseGHSDate(badEra, 1, 1)).toThrow(RangeError);
+    expect(() => getHolidaysForYear(badEra)).toThrow(RangeError);
+  });
+
+  it('round-trips at MIN_ERA and MAX_ERA without throwing or producing Invalid Date', () => {
+    const minStart = parseGHSDate(MIN_ERA, 1, 1);
+    expect(Number.isFinite(minStart.getTime())).toBe(true);
+    expect(getGHSDate(minStart).era).toBe(MIN_ERA);
+    expect(getGHSDate(minStart).dayOfYear).toBe(1);
+
+    const maxLastDay = parseGHSDate(MAX_ERA, 13, 28, 999.99);
+    expect(Number.isFinite(maxLastDay.getTime())).toBe(true);
+    expect(getGHSDate(maxLastDay).era).toBe(MAX_ERA);
+    expect(getGHSDate(maxLastDay).month).toBe(13);
+    expect(getGHSDate(maxLastDay).day).toBe(28);
   });
 });

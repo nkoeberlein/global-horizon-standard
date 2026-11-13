@@ -61,14 +61,13 @@ class _ConverterScreenState extends State<ConverterScreen>
 
   void _convertGhs() {
     try {
-      final era = int.parse(_eraController.text.trim());
-      final monthRaw = _monthController.text.trim().toUpperCase();
-      final int? month = monthRaw == 'A' ? null : int.parse(monthRaw);
-      final day = int.parse(_dayController.text.trim());
-      final beats = double.tryParse(_beatsController.text.trim()) ?? 0;
-
       setState(() {
-        _ghsResult = parseGhsDate(era, month, day, beats);
+        _ghsResult = parseGhsComponents(
+          era: _eraController.text,
+          month: _monthController.text,
+          day: _dayController.text,
+          beats: _beatsController.text,
+        );
         _ghsError = null;
       });
     } catch (_) {

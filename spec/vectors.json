@@ -1,0 +1,612 @@
+{
+  "constants": {
+    "epochYearHE": 12000,
+    "epochUnixDay": 11036,
+    "epochMs": 953510400000,
+    "epsilon": 286,
+    "cycleYears": 400,
+    "cycleDays": 146097,
+    "minEra": -261820,
+    "maxEra": 285759
+  },
+  "yearStarts": [
+    {
+      "era": -261820,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -8639971056000000,
+      "startIso": "-271820-03-20T00:00:00.000Z"
+    },
+    {
+      "era": -2000,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -440843817600000,
+      "startIso": "-012000-03-20T00:00:00.000Z"
+    },
+    {
+      "era": -1000,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -409286563200000,
+      "startIso": "-011000-03-24T00:00:00.000Z"
+    },
+    {
+      "era": -101,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -380917209600000,
+      "startIso": "-010101-03-20T00:00:00.000Z"
+    },
+    {
+      "era": -1,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -377761363200000,
+      "startIso": "-010001-03-22T00:00:00.000Z"
+    },
+    {
+      "era": 0,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -377729913600000,
+      "startIso": "-010000-03-20T00:00:00.000Z"
+    },
+    {
+      "era": 1,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -377698464000000,
+      "startIso": "-009999-03-19T00:00:00.000Z"
+    },
+    {
+      "era": 500,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -361951286400000,
+      "startIso": "-009500-03-22T00:00:00.000Z"
+    },
+    {
+      "era": 9999,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -62191843200000,
+      "startIso": "-000001-03-22T00:00:00.000Z"
+    },
+    {
+      "era": 10001,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": -62128944000000,
+      "startIso": "0001-03-19T00:00:00.000Z"
+    },
+    {
+      "era": 11970,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": 6998400000,
+      "startIso": "1970-03-23T00:00:00.000Z"
+    },
+    {
+      "era": 12000,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": 953510400000,
+      "startIso": "2000-03-20T00:00:00.000Z"
+    },
+    {
+      "era": 12019,
+      "isAuroraYear": true,
+      "daysInYear": 371,
+      "startMs": 1552867200000,
+      "startIso": "2019-03-18T00:00:00.000Z"
+    },
+    {
+      "era": 12025,
+      "isAuroraYear": true,
+      "daysInYear": 371,
+      "startMs": 1742169600000,
+      "startIso": "2025-03-17T00:00:00.000Z"
+    },
+    {
+      "era": 12026,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": 1774224000000,
+      "startIso": "2026-03-23T00:00:00.000Z"
+    },
+    {
+      "era": 12027,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": 1805673600000,
+      "startIso": "2027-03-22T00:00:00.000Z"
+    },
+    {
+      "era": 12030,
+      "isAuroraYear": true,
+      "daysInYear": 371,
+      "startMs": 1900022400000,
+      "startIso": "2030-03-18T00:00:00.000Z"
+    },
+    {
+      "era": 99999,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": 2777933836800000,
+      "startIso": "+089999-03-22T00:00:00.000Z"
+    },
+    {
+      "era": 285759,
+      "isAuroraYear": false,
+      "daysInYear": 364,
+      "startMs": 8639952998400000,
+      "startIso": "+275759-03-19T00:00:00.000Z"
+    }
+  ],
+  "conversions": [
+    {
+      "ms": 953510400000,
+      "iso": "2000-03-20T00:00:00.000Z",
+      "era": 12000,
+      "month": 1,
+      "monthName": "March",
+      "day": 1,
+      "dayOfYear": 1,
+      "weekOfYear": 1,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "12000.01.01",
+      "formatted": {
+        "core": "12000.01.01 @000",
+        "ui": "1 Mar 12000 @000",
+        "text": "1 March 12000",
+        "short": "1 Mar '00"
+      }
+    },
+    {
+      "ms": 953537702400,
+      "iso": "2000-03-20T07:35:02.400Z",
+      "era": 12000,
+      "month": 1,
+      "monthName": "March",
+      "day": 1,
+      "dayOfYear": 1,
+      "weekOfYear": 1,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@316",
+      "beatsLong": "@316.00",
+      "beatsExact": 316,
+      "fullDate": "12000.01.01",
+      "formatted": {
+        "core": "12000.01.01 @316",
+        "ui": "1 Mar 12000 @316",
+        "text": "1 March 12000",
+        "short": "1 Mar '00"
+      }
+    },
+    {
+      "ms": 1742169600000,
+      "iso": "2025-03-17T00:00:00.000Z",
+      "era": 12025,
+      "month": 1,
+      "monthName": "March",
+      "day": 1,
+      "dayOfYear": 1,
+      "weekOfYear": 1,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": true,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "12025.01.01",
+      "formatted": {
+        "core": "12025.01.01 @000",
+        "ui": "1 Mar 12025 @000",
+        "text": "1 March 12025",
+        "short": "1 Mar '25"
+      }
+    },
+    {
+      "ms": 1773619199136,
+      "iso": "2026-03-15T23:59:59.136Z",
+      "era": 12025,
+      "month": 13,
+      "monthName": "Luna",
+      "day": 28,
+      "dayOfYear": 364,
+      "weekOfYear": 52,
+      "quarter": 4,
+      "weekday": "Sunday",
+      "isAuroraWeek": false,
+      "isAuroraYear": true,
+      "beats": "@999",
+      "beatsLong": "@999.99",
+      "beatsExact": 999.99,
+      "fullDate": "12025.13.28",
+      "formatted": {
+        "core": "12025.13.28 @999",
+        "ui": "28 Lun 12025 @999",
+        "text": "28 Luna 12025",
+        "short": "28 Lun '25"
+      }
+    },
+    {
+      "ms": 1773619200000,
+      "iso": "2026-03-16T00:00:00.000Z",
+      "era": 12025,
+      "month": null,
+      "monthName": "Aurora",
+      "day": 1,
+      "dayOfYear": 365,
+      "weekOfYear": null,
+      "quarter": null,
+      "weekday": "Monday",
+      "isAuroraWeek": true,
+      "isAuroraYear": true,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "12025.A.01",
+      "formatted": {
+        "core": "12025.A.01 @000",
+        "ui": "A1 Aur 12025 @000",
+        "text": "Aurora 1, 12025",
+        "short": "A1 '25"
+      }
+    },
+    {
+      "ms": 1773851205600,
+      "iso": "2026-03-18T16:26:45.600Z",
+      "era": 12025,
+      "month": null,
+      "monthName": "Aurora",
+      "day": 3,
+      "dayOfYear": 367,
+      "weekOfYear": null,
+      "quarter": null,
+      "weekday": "Wednesday",
+      "isAuroraWeek": true,
+      "isAuroraYear": true,
+      "beats": "@685",
+      "beatsLong": "@685.25",
+      "beatsExact": 685.25,
+      "fullDate": "12025.A.03",
+      "formatted": {
+        "core": "12025.A.03 @685",
+        "ui": "A3 Aur 12025 @685",
+        "text": "Aurora 3, 12025",
+        "short": "A3 '25"
+      }
+    },
+    {
+      "ms": 1774223999999,
+      "iso": "2026-03-22T23:59:59.999Z",
+      "era": 12025,
+      "month": null,
+      "monthName": "Aurora",
+      "day": 7,
+      "dayOfYear": 371,
+      "weekOfYear": null,
+      "quarter": null,
+      "weekday": "Sunday",
+      "isAuroraWeek": true,
+      "isAuroraYear": true,
+      "beats": "@999",
+      "beatsLong": "@999.99",
+      "beatsExact": 999.99,
+      "fullDate": "12025.A.07",
+      "formatted": {
+        "core": "12025.A.07 @999",
+        "ui": "A7 Aur 12025 @999",
+        "text": "Aurora 7, 12025",
+        "short": "A7 '25"
+      }
+    },
+    {
+      "ms": 1774224000000,
+      "iso": "2026-03-23T00:00:00.000Z",
+      "era": 12026,
+      "month": 1,
+      "monthName": "March",
+      "day": 1,
+      "dayOfYear": 1,
+      "weekOfYear": 1,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "12026.01.01",
+      "formatted": {
+        "core": "12026.01.01 @000",
+        "ui": "1 Mar 12026 @000",
+        "text": "1 March 12026",
+        "short": "1 Mar '26"
+      }
+    },
+    {
+      "ms": 1774224172481,
+      "iso": "2026-03-23T00:02:52.481Z",
+      "era": 12026,
+      "month": 1,
+      "monthName": "March",
+      "day": 1,
+      "dayOfYear": 1,
+      "weekOfYear": 1,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@001",
+      "beatsLong": "@001.99",
+      "beatsExact": 1.99,
+      "fullDate": "12026.01.01",
+      "formatted": {
+        "core": "12026.01.01 @001",
+        "ui": "1 Mar 12026 @001",
+        "text": "1 March 12026",
+        "short": "1 Mar '26"
+      }
+    },
+    {
+      "ms": 1782000000000,
+      "iso": "2026-06-21T00:00:00.000Z",
+      "era": 12026,
+      "month": 4,
+      "monthName": "June",
+      "day": 7,
+      "dayOfYear": 91,
+      "weekOfYear": 13,
+      "quarter": 1,
+      "weekday": "Sunday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "12026.04.07",
+      "formatted": {
+        "core": "12026.04.07 @000",
+        "ui": "7 Jun 12026 @000",
+        "text": "7 June 12026",
+        "short": "7 Jun '26"
+      }
+    },
+    {
+      "ms": 1782086400000,
+      "iso": "2026-06-22T00:00:00.000Z",
+      "era": 12026,
+      "month": 4,
+      "monthName": "June",
+      "day": 8,
+      "dayOfYear": 92,
+      "weekOfYear": 14,
+      "quarter": 2,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "12026.04.08",
+      "formatted": {
+        "core": "12026.04.08 @000",
+        "ui": "8 Jun 12026 @000",
+        "text": "8 June 12026",
+        "short": "8 Jun '26"
+      }
+    },
+    {
+      "ms": 1794571200000,
+      "iso": "2026-11-13T12:00:00.000Z",
+      "era": 12026,
+      "month": 9,
+      "monthName": "November",
+      "day": 12,
+      "dayOfYear": 236,
+      "weekOfYear": 34,
+      "quarter": 3,
+      "weekday": "Friday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@500",
+      "beatsLong": "@500.00",
+      "beatsExact": 500,
+      "fullDate": "12026.09.12",
+      "formatted": {
+        "core": "12026.09.12 @500",
+        "ui": "12 Nov 12026 @500",
+        "text": "12 November 12026",
+        "short": "12 Nov '26"
+      }
+    },
+    {
+      "ms": 1805673599999,
+      "iso": "2027-03-21T23:59:59.999Z",
+      "era": 12026,
+      "month": 13,
+      "monthName": "Luna",
+      "day": 28,
+      "dayOfYear": 364,
+      "weekOfYear": 52,
+      "quarter": 4,
+      "weekday": "Sunday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@999",
+      "beatsLong": "@999.99",
+      "beatsExact": 999.99,
+      "fullDate": "12026.13.28",
+      "formatted": {
+        "core": "12026.13.28 @999",
+        "ui": "28 Lun 12026 @999",
+        "text": "28 Luna 12026",
+        "short": "28 Lun '26"
+      }
+    },
+    {
+      "ms": -361950076800000,
+      "iso": "-009500-04-05T00:00:00.000Z",
+      "era": 500,
+      "month": 1,
+      "monthName": "March",
+      "day": 15,
+      "dayOfYear": 15,
+      "weekOfYear": 3,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "00500.01.15",
+      "formatted": {
+        "core": "00500.01.15 @000",
+        "ui": "15 Mar 500 @000",
+        "text": "15 March 500",
+        "short": "15 Mar '00"
+      }
+    },
+    {
+      "ms": -377697254400000,
+      "iso": "-009999-04-02T00:00:00.000Z",
+      "era": 1,
+      "month": 1,
+      "monthName": "March",
+      "day": 15,
+      "dayOfYear": 15,
+      "weekOfYear": 3,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "00001.01.15",
+      "formatted": {
+        "core": "00001.01.15 @000",
+        "ui": "15 Mar 1 @000",
+        "text": "15 March 1",
+        "short": "15 Mar '01"
+      }
+    },
+    {
+      "ms": -380916000000000,
+      "iso": "-010101-04-03T00:00:00.000Z",
+      "era": -101,
+      "month": 1,
+      "monthName": "March",
+      "day": 15,
+      "dayOfYear": 15,
+      "weekOfYear": 3,
+      "quarter": 1,
+      "weekday": "Monday",
+      "isAuroraWeek": false,
+      "isAuroraYear": false,
+      "beats": "@000",
+      "beatsLong": "@000.00",
+      "beatsExact": 0,
+      "fullDate": "-00101.01.15",
+      "formatted": {
+        "core": "-00101.01.15 @000",
+        "ui": "15 Mar -101 @000",
+        "text": "15 March -101",
+        "short": "15 Mar '01"
+      }
+    }
+  ],
+  "invalidParseInputs": [
+    {
+      "label": "era below MIN_ERA",
+      "era": -261821,
+      "month": 1,
+      "day": 1,
+      "beats": 0
+    },
+    {
+      "label": "era above MAX_ERA",
+      "era": 285760,
+      "month": 1,
+      "day": 1,
+      "beats": 0
+    },
+    {
+      "label": "month 0",
+      "era": 12026,
+      "month": 0,
+      "day": 1,
+      "beats": 0
+    },
+    {
+      "label": "month 14",
+      "era": 12026,
+      "month": 14,
+      "day": 1,
+      "beats": 0
+    },
+    {
+      "label": "day 0",
+      "era": 12026,
+      "month": 1,
+      "day": 0,
+      "beats": 0
+    },
+    {
+      "label": "day 29",
+      "era": 12026,
+      "month": 1,
+      "day": 29,
+      "beats": 0
+    },
+    {
+      "label": "Aurora day 0",
+      "era": 12025,
+      "month": "A",
+      "day": 0,
+      "beats": 0
+    },
+    {
+      "label": "Aurora day 8",
+      "era": 12025,
+      "month": "A",
+      "day": 8,
+      "beats": 0
+    },
+    {
+      "label": "Aurora in non-Aurora year",
+      "era": 12026,
+      "month": "A",
+      "day": 1,
+      "beats": 0
+    },
+    {
+      "label": "negative beats",
+      "era": 12026,
+      "month": 1,
+      "day": 1,
+      "beats": -1
+    },
+    {
+      "label": "beats 1000",
+      "era": 12026,
+      "month": 1,
+      "day": 1,
+      "beats": 1000
+    }
+  ]
+}

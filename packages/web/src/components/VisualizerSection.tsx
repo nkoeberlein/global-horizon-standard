@@ -1,14 +1,14 @@
 import { getGHSDate } from 'ghs-time';
-import { GHSAnalogClock } from 'ghs-ui';
 import { useEffect, useState } from 'react';
 import { CalendarGrid } from './CalendarGrid';
+import { GHSAnalogClock } from './GHSAnalogClock';
 
 export function VisualizerSection() {
-  const [beats, setBeats] = useState(() => getGHSDate().beatsLong);
+  const [ghs, setGhs] = useState(() => getGHSDate());
 
   useEffect(() => {
     // beatsLong only changes every centibeat (864 ms) — a coarse interval suffices.
-    const timer = setInterval(() => setBeats(getGHSDate().beatsLong), 250);
+    const timer = setInterval(() => setGhs(getGHSDate()), 250);
     return () => clearInterval(timer);
   }, []);
 
@@ -57,7 +57,7 @@ export function VisualizerSection() {
                   className="font-mono text-4xl tabular-nums"
                   style={{ color: '#c8903a', fontWeight: 300, letterSpacing: '-0.01em' }}
                 >
-                  {beats}
+                  {ghs.beatsLong}
                 </p>
                 <p className="text-xs mt-2 font-sans" style={{ color: '#b0a898' }}>
                   current @beats (UTC)
@@ -90,14 +90,14 @@ export function VisualizerSection() {
               >
                 <span>Day progress</span>
                 <span className="font-mono" style={{ color: '#c8903a' }}>
-                  {(parseFloat(beats.substring(1)) / 10).toFixed(1)}%
+                  {(ghs.beatsExact / 10).toFixed(1)}%
                 </span>
               </div>
               <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#e8e4db' }}>
                 <div
                   className="h-full rounded-full transition-none"
                   style={{
-                    width: `${(parseFloat(beats.substring(1)) / 1000) * 100}%`,
+                    width: `${ghs.beatsExact / 10}%`,
                     background: 'linear-gradient(90deg, #e8a820, #c8903a)',
                   }}
                 />

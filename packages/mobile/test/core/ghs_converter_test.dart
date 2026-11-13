@@ -1,18 +1,21 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:ghs_mobile/core/ghs_converter.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('isAuroraYear', () {
     // Verified against TypeScript reference: packages/core/src
-    // Aurora years near 12026: 12015, 12021, 12026, 12032
+    // Aurora years near 12026: 12014, 12019, 12025, 12030, 12036
     test('known Aurora years return true', () {
-      expect(isAuroraYear(12026), isTrue);
-      expect(isAuroraYear(12021), isTrue);
-      expect(isAuroraYear(12015), isTrue);
+      expect(isAuroraYear(12025), isTrue);
+      expect(isAuroraYear(12019), isTrue);
+      expect(isAuroraYear(12014), isTrue);
     });
 
     test('non-Aurora years return false', () {
-      expect(isAuroraYear(12025), isFalse);
+      expect(isAuroraYear(12026), isFalse);
       expect(isAuroraYear(12020), isFalse);
       expect(isAuroraYear(12022), isFalse);
     });
@@ -22,7 +25,7 @@ void main() {
     // test pins the behaviour so the two ports cannot drift apart again.
     test('negative eras use a non-negative modulo', () {
       for (var y = -2000; y <= 2000; y++) {
-        final euclidean = (((71 * y + 156) % 400) + 400) % 400 < 71;
+        final euclidean = (((71 * y + epsilon) % 400) + 400) % 400 < 71;
         expect(isAuroraYear(y), euclidean, reason: 'era $y');
       }
       expect(isAuroraYear(-1000), isFalse);
@@ -56,20 +59,22 @@ void main() {
   });
 
   group('epoch calibration', () {
-    test('10001.01.01 = 21 March 1 CE UTC', () {
+    test('12000.01.01 = Unix day 11,036 (2000-03-20 UTC)', () {
+      expect(epochYearHe, 12000);
+      expect(epochUnixDay, 11036);
       expect(DateTime.fromMillisecondsSinceEpoch(epochMs, isUtc: true),
-          DateTime.utc(1, 3, 21));
+          DateTime.utc(2000, 3, 20));
       expect(getYearStartMs(epochYearHe), epochMs);
     });
 
     // Reference values from the TypeScript implementation (packages/core)
     test('modern-era year starts match the TypeScript reference', () {
       expect(getYearStartMs(12025),
-          DateTime.utc(2025, 3, 19).millisecondsSinceEpoch);
+          DateTime.utc(2025, 3, 17).millisecondsSinceEpoch);
       expect(getYearStartMs(12026),
-          DateTime.utc(2026, 3, 18).millisecondsSinceEpoch);
+          DateTime.utc(2026, 3, 23).millisecondsSinceEpoch);
       expect(getYearStartMs(12027),
-          DateTime.utc(2027, 3, 24).millisecondsSinceEpoch);
+          DateTime.utc(2027, 3, 22).millisecondsSinceEpoch);
     });
 
     test('any 400 consecutive years sum to 146,097 days', () {
@@ -79,13 +84,22 @@ void main() {
       }
       expect(days, cycleDays);
     });
+
+    test('aligns GHS weekdays 1:1 with the existing seven-day week', () {
+      final start = DateTime.utc(2025, 3, 17); // 12025.01.01 (Monday)
+      for (var i = 0; i < 371 + 364; i++) {
+        final d = start.add(Duration(days: i));
+        final ghs = getGhsDate(d);
+        // DateTime.weekday: 1=Mon … 7=Sun
+        expect(weekdaysGhs.indexOf(ghs.weekday), d.weekday - 1);
+      }
+    });
   });
 
   group('getGhsDate — standard date', () {
-    // Reference: node -e "getGHSDate(new Date('2026-04-16T00:00:00Z'))"
-    // → 12026.02.02 (April, day 2)
-    test('2026-04-16 UTC midnight converts correctly', () {
-      final ghs = getGhsDate(DateTime.utc(2026, 4, 16));
+    // Reference: 2026-04-21T00:00:00Z → 12026.02.02 (April, day 2)
+    test('2026-04-21 UTC midnight converts correctly', () {
+      final ghs = getGhsDate(DateTime.utc(2026, 4, 21));
 
       expect(ghs.era, 12026);
       expect(ghs.month, 2);
@@ -93,11 +107,11 @@ void main() {
       expect(ghs.day, 2);
       expect(ghs.beats, '@000');
       expect(ghs.isAuroraWeek, isFalse);
-      expect(ghs.isAuroraYearFlag, isTrue); // 12026 is an Aurora year
+      expect(ghs.isAuroraYearFlag, isFalse); // 12026 is a normal year
     });
 
-    test('GHS year start: 2026-03-18 = month 1, day 1', () {
-      final ghs = getGhsDate(DateTime.utc(2026, 3, 18));
+    test('GHS year start: 2026-03-23 = month 1, day 1', () {
+      final ghs = getGhsDate(DateTime.utc(2026, 3, 23));
 
       expect(ghs.era, 12026);
       expect(ghs.month, 1);
@@ -108,22 +122,22 @@ void main() {
       expect(ghs.quarter, 1);
     });
 
-    test('the moment before belongs to the previous GHS year (Luna 28)', () {
-      final ghs = getGhsDate(DateTime.utc(2026, 3, 17, 23, 59, 59));
+    test('the moment before a normal year transition belongs to Luna 28', () {
+      final ghs = getGhsDate(DateTime.utc(2027, 3, 21, 23, 59, 59));
 
-      expect(ghs.era, 12025);
+      expect(ghs.era, 12026);
       expect(ghs.month, 13);
       expect(ghs.monthName, 'Luna');
       expect(ghs.day, 28);
     });
 
     test('consecutive days map to distinct GHS dates (bijectivity)', () {
-      // 12025 is a normal year: the day after Luna 28 is New Year — no
+      // 12026 is a normal year: the day after Luna 28 is New Year — no
       // duplicated dates (the old fixed-anchor clamping bug).
-      final luna28 = getGhsDate(DateTime.utc(2026, 3, 17));
-      final newYear = getGhsDate(DateTime.utc(2026, 3, 18));
-      expect(luna28.fullDate, '12025.13.28');
-      expect(newYear.fullDate, '12026.01.01');
+      final luna28 = getGhsDate(DateTime.utc(2027, 3, 21));
+      final newYear = getGhsDate(DateTime.utc(2027, 3, 22));
+      expect(luna28.fullDate, '12026.13.28');
+      expect(newYear.fullDate, '12027.01.01');
     });
   });
 
@@ -165,12 +179,12 @@ void main() {
   });
 
   group('getGhsDate — Aurora Week', () {
-    // 12026 is an Aurora Year with 371 days; its Aurora Week spans
-    // 2027-03-17 (A.1) through 2027-03-23 (A.7). 12027 begins 2027-03-24.
-    test('Aurora Week day 1 (2027-03-17) is detected in GHS 12026', () {
-      final ghs = getGhsDate(DateTime.utc(2027, 3, 17));
+    // 12025 is an Aurora Year with 371 days; its Aurora Week spans
+    // 2026-03-16 (A.1) through 2026-03-22 (A.7). 12026 begins 2026-03-23.
+    test('Aurora Week day 1 (2026-03-16) is detected in GHS 12025', () {
+      final ghs = getGhsDate(DateTime.utc(2026, 3, 16));
 
-      expect(ghs.era, 12026);
+      expect(ghs.era, 12025);
       expect(ghs.isAuroraWeek, isTrue);
       expect(ghs.month, isNull);
       expect(ghs.monthName, 'Aurora');
@@ -181,19 +195,19 @@ void main() {
 
     test('all seven Aurora days are reachable', () {
       for (var i = 0; i < 7; i++) {
-        final ghs = getGhsDate(DateTime.utc(2027, 3, 17 + i));
+        final ghs = getGhsDate(DateTime.utc(2026, 3, 16 + i));
         expect(ghs.isAuroraWeek, isTrue);
         expect(ghs.day, i + 1);
       }
-      expect(getGhsDate(DateTime.utc(2027, 3, 24)).fullDate, '12027.01.01');
+      expect(getGhsDate(DateTime.utc(2026, 3, 23)).fullDate, '12026.01.01');
     });
 
     test('non-Aurora years contain no Aurora dates', () {
-      final start = DateTime.utc(2025, 3, 19); // 12025.01.01
-      for (var i = 0; i < getDaysInYear(12025); i++) {
+      final start = DateTime.utc(2026, 3, 23); // 12026.01.01
+      for (var i = 0; i < getDaysInYear(12026); i++) {
         final ghs = getGhsDate(start.add(Duration(days: i)));
         expect(ghs.isAuroraWeek, isFalse);
-        expect(ghs.era, 12025);
+        expect(ghs.era, 12026);
       }
     });
   });
@@ -202,8 +216,7 @@ void main() {
     test('round-trip: Gregorian → GHS → Gregorian', () {
       final original = DateTime.utc(2026, 6, 15, 12);
       final ghs = getGhsDate(original);
-      final beatsNum = double.parse(ghs.beatsLong.substring(1));
-      final restored = parseGhsDate(ghs.era, ghs.month, ghs.day, beatsNum);
+      final restored = parseGhsDate(ghs.era, ghs.month, ghs.day, ghs.beatsExact);
 
       expect(restored.millisecondsSinceEpoch,
           closeTo(original.millisecondsSinceEpoch, 1000));
@@ -211,20 +224,41 @@ void main() {
 
     test('parseGhsDate: every Aurora day round-trips exactly', () {
       for (var day = 1; day <= 7; day++) {
-        final date = parseGhsDate(12026, null, day);
+        final date = parseGhsDate(12025, null, day);
         final ghs = getGhsDate(date);
-        expect(ghs.era, 12026);
+        expect(ghs.era, 12025);
         expect(ghs.isAuroraWeek, isTrue);
         expect(ghs.day, day);
       }
     });
 
-    test('throws RangeError for invalid components', () {
+    test('clamps beats near 1000 so parseGhsDate never rolls into the next day (C3)', () {
+      final ghs = getGhsDate(parseGhsDate(12025, 13, 28, 999.999995));
+      expect(ghs.fullDate, '12025.13.28');
+      expect(ghs.beats, '@999');
+      expect(ghs.beatsLong, '@999.99');
+    });
+
+    test('throws RangeError for invalid components and out-of-range eras (C2)', () {
       expect(() => parseGhsDate(12026, 14, 1), throwsRangeError);
       expect(() => parseGhsDate(12026, 1, 29), throwsRangeError);
-      expect(() => parseGhsDate(12026, null, 8), throwsRangeError);
-      expect(() => parseGhsDate(12025, null, 1), throwsRangeError); // no Aurora
+      expect(() => parseGhsDate(12025, null, 8), throwsRangeError);
+      expect(() => parseGhsDate(12026, null, 1), throwsRangeError); // no Aurora
       expect(() => parseGhsDate(12026, 1, 1, 1000), throwsRangeError);
+      expect(() => isAuroraYear(maxEra + 1), throwsRangeError);
+      expect(() => isAuroraYear(minEra - 1), throwsRangeError);
+      expect(() => getYearStartMs(maxEra + 1), throwsRangeError);
+      expect(() => parseGhsDate(maxEra + 1, 1, 1), throwsRangeError);
+    });
+
+    test('round-trips at minEra and maxEra', () {
+      final minStart = parseGhsDate(minEra, 1, 1);
+      expect(getGhsDate(minStart).era, minEra);
+      expect(getGhsDate(minStart).dayOfYear, 1);
+
+      final maxEnd = parseGhsDate(maxEra, 13, 28, 999.99);
+      expect(getGhsDate(maxEnd).era, maxEra);
+      expect(getGhsDate(maxEnd).day, 28);
     });
   });
 
@@ -233,7 +267,7 @@ void main() {
     late GhsDateResult marchSample;
 
     setUp(() {
-      aprilSample = getGhsDate(DateTime.utc(2026, 4, 18, 17, 16)); // GHS April
+      aprilSample = getGhsDate(DateTime.utc(2026, 4, 21, 17, 16)); // GHS April
       marchSample = getGhsDate(DateTime.utc(2026, 3, 25, 17, 16)); // GHS March
     });
 
@@ -258,6 +292,115 @@ void main() {
     test('short format uses 2-digit year', () {
       final result = formatGhs(marchSample, GhsFormat.short);
       expect(result, contains("'26"));
+    });
+  });
+
+  group('parseGhsString & getSolarNoonBeat', () {
+    test('parses core, Aurora, prefixed, and spaceless GHS strings', () {
+      final d = parseGhsString('12026.01.15 @685');
+      expect(d, isNotNull);
+      expect(d!.era, 12026);
+      expect(d.month, 1);
+      expect(d.day, 15);
+      expect(d.beats, 685.0);
+
+      final aurora = parseGhsString('GHS 12025.A.03@500.25');
+      expect(aurora, isNotNull);
+      expect(aurora!.era, 12025);
+      expect(aurora.month, isNull);
+      expect(aurora.day, 3);
+      expect(aurora.beats, 500.25);
+
+      expect(parseGhsString('2026-03-23'), isNull);
+      expect(() => parseGhsString('12026.14.01'), throwsRangeError);
+    });
+
+    test('parses UI form components via parseGhsComponents', () {
+      final d = parseGhsComponents(era: '12026', month: '1', day: '1', beats: '500');
+      expect(getGhsDate(d).fullDate, '12026.01.01');
+      expect(getGhsDate(d).beats, '@500');
+    });
+
+    test('computes solar noon beat from longitude', () {
+      expect(getSolarNoonBeat(0), 500);
+      expect(getSolarNoonBeat(180), 0);
+      expect(getSolarNoonBeat(-180), 0);
+      expect(getSolarNoonBeat(140), 111);
+      expect(getSolarNoonBeat(151), 81);
+      expect(() => getSolarNoonBeat(361), throwsRangeError);
+    });
+  });
+
+  group('test/fixtures/vectors.json conformance', () {
+    final vectorsFile = File('test/fixtures/vectors.json');
+    final vectors =
+        jsonDecode(vectorsFile.readAsStringSync()) as Map<String, dynamic>;
+
+    test('matches canonical constants', () {
+      final c = vectors['constants'] as Map<String, dynamic>;
+      expect(epochYearHe, c['epochYearHE']);
+      expect(epochUnixDay, c['epochUnixDay']);
+      expect(epochMs, c['epochMs']);
+      expect(epsilon, c['epsilon']);
+      expect(cycleYears, c['cycleYears']);
+      expect(cycleDays, c['cycleDays']);
+      expect(minEra, c['minEra']);
+      expect(maxEra, c['maxEra']);
+    });
+
+    test('matches all yearStart vectors', () {
+      for (final raw in vectors['yearStarts'] as List<dynamic>) {
+        final v = raw as Map<String, dynamic>;
+        final era = v['era'] as int;
+        expect(isAuroraYear(era), v['isAuroraYear'], reason: 'era $era');
+        expect(getDaysInYear(era), v['daysInYear'], reason: 'era $era');
+        expect(getYearStartMs(era), v['startMs'], reason: 'era $era');
+      }
+    });
+
+    test('matches all conversion and formatting vectors', () {
+      for (final raw in vectors['conversions'] as List<dynamic>) {
+        final v = raw as Map<String, dynamic>;
+        final ms = v['ms'] as int;
+        final ghs =
+            getGhsDate(DateTime.fromMillisecondsSinceEpoch(ms, isUtc: true));
+        expect(ghs.era, v['era'], reason: 'ms $ms');
+        expect(ghs.month, v['month'], reason: 'ms $ms');
+        expect(ghs.monthName, v['monthName'], reason: 'ms $ms');
+        expect(ghs.day, v['day'], reason: 'ms $ms');
+        expect(ghs.dayOfYear, v['dayOfYear'], reason: 'ms $ms');
+        expect(ghs.weekOfYear, v['weekOfYear'], reason: 'ms $ms');
+        expect(ghs.quarter, v['quarter'], reason: 'ms $ms');
+        expect(ghs.weekday, v['weekday'], reason: 'ms $ms');
+        expect(ghs.isAuroraWeek, v['isAuroraWeek'], reason: 'ms $ms');
+        expect(ghs.isAuroraYearFlag, v['isAuroraYear'], reason: 'ms $ms');
+        expect(ghs.beats, v['beats'], reason: 'ms $ms');
+        expect(ghs.beatsLong, v['beatsLong'], reason: 'ms $ms');
+        expect(ghs.beatsExact, (v['beatsExact'] as num).toDouble(), reason: 'ms $ms');
+        expect(ghs.fullDate, v['fullDate'], reason: 'ms $ms');
+
+        final fmt = v['formatted'] as Map<String, dynamic>;
+        expect(formatGhs(ghs, GhsFormat.core), fmt['core'], reason: 'ms $ms');
+        expect(formatGhs(ghs, GhsFormat.ui), fmt['ui'], reason: 'ms $ms');
+        expect(formatGhs(ghs, GhsFormat.text), fmt['text'], reason: 'ms $ms');
+        expect(formatGhs(ghs, GhsFormat.short), fmt['short'], reason: 'ms $ms');
+      }
+    });
+
+    test('rejects all invalidParseInputs vectors with RangeError', () {
+      for (final raw in vectors['invalidParseInputs'] as List<dynamic>) {
+        final v = raw as Map<String, dynamic>;
+        final era = v['era'] as int;
+        final monthRaw = v['month'];
+        final int? month = monthRaw == 'A' ? null : monthRaw as int;
+        final day = v['day'] as int;
+        final beats = (v['beats'] as num).toDouble();
+        expect(
+          () => parseGhsDate(era, month, day, beats),
+          throwsRangeError,
+          reason: v['label'] as String,
+        );
+      }
     });
   });
 }

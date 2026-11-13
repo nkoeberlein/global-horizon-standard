@@ -1,6 +1,6 @@
 # GHS Timestamp Format Specification
 
-The Global Horizon Standard (GHS) defines three official formatting levels to balance machine precision, formal readability, and everyday brevity. Documentation, software, and human communication must adhere to these standards to ensure global consistency.
+The Global Horizon Standard (GHS) defines four official formatting levels to balance machine precision, dashboard clarity, formal readability, and everyday brevity. Documentation, software, and human communication must adhere to these standards to ensure global consistency.
 
 ## 1. The 3-Letter Month Standard
 
@@ -28,37 +28,51 @@ To save space and ensure global compatibility in programming and user interfaces
 
 ---
 
-## Ebene 1: Official & Machine (GHS Core)
+## Level 1: Official & Machine (`core`)
 
 This is the primary standard for IT, databases, logs, contracts, and historical documents. It follows a **Big-Endian** (largest to smallest) structure for perfect chronological sorting. The format is designed to be easily parsed by machines and humans. Time details are in @Beats and are optional. The space between date and time is optional.
 
-- **Standard Year**: `YYYY.MM.DD [@Beats]`
-- **Aurora Week**: `YYYY.A.DD [@Beats]`
+- **Standard Year**: `YYYYY.MM.DD [@Beats]`
+- **Aurora Week**: `YYYYY.A.DD [@Beats]`
 
 | Component | Format | Example |
 |-----------|--------|---------|
 | Standard  | `12026.01.15 @685` | 15 March 12026 at @685 |
-| Aurora    | `12026.A.03 @685`  | Aurora 3, 12026 at @685 |
+| Aurora    | `12025.A.03 @685`  | Aurora 3, 12025 at @685 |
 
 **Rules:**
 - **Dots (.)** separate date components.
-- **Leading zeros** are mandatory for month and day digits (`01.09`).
+- **Leading zeros** are mandatory for month and day digits (`01.09`), and the year is padded to 5 digits (`00500.01.15`).
 - **@ symbol** marks the transition to decimal time (Beats).
-- **Human Era (HE)**: The full 5-digit year must be used for long-term data integrity.
+- **Human Era (HE)**: The full 5-digit year must be used for long-term data integrity and lexicographic sorting.
 
 ---
 
-## Ebene 2: Formal Text (GHS Text)
+## Level 2: Dashboard & Interface (`ui`)
+
+Designed for status bars, terminal clocks, and web dashboards where both a human-readable date and the current @Beat are displayed together.
+
+- **Standard Year**: `D Mon YYYYY @Beats`
+- **Aurora Week**: `AD Aur YYYYY @Beats`
+
+| Component | Format | Example |
+|-----------|--------|---------|
+| Standard  | `15 Mar 12026 @685` | Day, 3-letter month, era, and beats. |
+| Aurora    | `A3 Aur 12025 @685` | `A` prefix and `Aur` abbreviation for leap weeks. |
+
+---
+
+## Level 3: Formal Text (`text`)
 
 Designed for documents, articles, letters, and invitations. It uses a **Little-Endian** (smallest to largest) order for natural reading flow and global understanding.
 
-- **Standard Year**: `D Month YYYY`
-- **Aurora Week**: `Aurora D, YYYY`
+- **Standard Year**: `D Month YYYYY`
+- **Aurora Week**: `Aurora D, YYYYY`
 
 | Component | Format | Example |
 |-----------|--------|---------|
 | Standard  | `15 March 12026` | Elegant and clean data. |
-| Aurora    | `Aurora 3, 12026` | Standalone phrasing for leap weeks. |
+| Aurora    | `Aurora 3, 12025` | Standalone phrasing for leap weeks. |
 
 **Rules:**
 - **Suffix-free**: Do not use "15th" or "of".
@@ -67,9 +81,9 @@ Designed for documents, articles, letters, and invitations. It uses a **Little-E
 
 ---
 
-## Ebene 3: Everyday Shorthand (GHS Short)
+## Level 4: Everyday Shorthand (`short`)
 
-Used for UI, dashboards, message stamps, widgets, and handwritten notes. It prioritizes brevity and removes leading zeros for a more human feel.
+Used for UI widgets, message stamps, and handwritten notes. It prioritizes brevity and removes leading zeros on the day for a more human feel, while keeping a two-digit year suffix (`'01`–`'99`).
 
 - **Full Short**: `D Mon 'YY`
 - **Contextual**: `D Mon` (if the current year is obvious)
@@ -78,7 +92,7 @@ Used for UI, dashboards, message stamps, widgets, and handwritten notes. It prio
 | Component | Format | Example |
 |-----------|--------|---------|
 | Standard  | `15 Mar '26` | Ultra compact. |
-| Aurora    | `A3 '26` | `A` prefix distinguishes it from months. |
+| Aurora    | `A3 '25` | `A` prefix distinguishes it from months. |
 | Minimal   | `15 Mar` | Year omitted in context. |
 
 ---

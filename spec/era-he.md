@@ -2,13 +2,14 @@
 
 ## 1. Definition
 
-The Global Horizon Standard uses the **Human Era (HE)** as its epoch. The conversion is simple:
+The Global Horizon Standard uses the **Human Era (HE)** as its epoch. A GHS year *N* HE begins at the GHS new year in March of Gregorian year *N* − 10,000 and runs into the following March:
 
 ```
-Year HE = Gregorian Year + 10,000
+Year HE = Gregorian Year + 10,000   (from GHS 01.01 in March through 31 December)
+Year HE = Gregorian Year + 9,999    (from 1 January until the GHS new year in March)
 ```
 
-The current year (2026 CE) is **12,026 HE**.
+For example, the GHS year **12,026 HE** begins on 23 March 2026 (`12026.01.01`) and ends on 21 March 2027 (`12026.13.28`). Consequently, a date in early 2027 such as `2027-01-15` falls in month 11 of `12026 HE` (`12026.11.20` — "20 January 12026").
 
 ## 2. Rationale
 

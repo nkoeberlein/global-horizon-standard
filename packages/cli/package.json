@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "commander": "^15.0.0",
-    "ghs-time": "*"
+    "ghs-time": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

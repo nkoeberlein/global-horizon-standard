@@ -41,3 +41,10 @@ export const DAYS_PER_NORMAL_YEAR = 364;
 
 /** Days in an Aurora year (364 + 7-day Aurora Week). */
 export const DAYS_PER_AURORA_YEAR = 371;
+
+/**
+ * Minimum and maximum Human Era years whose every instant is a valid
+ * JavaScript Date (within ±8.64e15 ms of the Unix epoch).
+ */
+export const MIN_ERA = -261_820;
+export const MAX_ERA = 285_759;
